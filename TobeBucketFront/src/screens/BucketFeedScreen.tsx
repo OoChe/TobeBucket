@@ -1,12 +1,12 @@
 import React from 'react';
 import { View, Text } from 'react-native';
 
-const LoginScreen = () => {
+const BucketFeedScreen = () => {
   return (
     <View>
-      <Text>Login Screen</Text>
+      <Text>BucketFeed Screen</Text>
     </View>
   );
 };
 
-export default LoginScreen;
+export default BucketFeedScreen;

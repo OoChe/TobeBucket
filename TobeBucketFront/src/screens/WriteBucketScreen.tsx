@@ -1,12 +1,12 @@
 import React from 'react';
 import { View, Text } from 'react-native';
 
-const LoginScreen = () => {
+const WriteBucketScreen = () => {
   return (
     <View>
-      <Text>Login Screen</Text>
+      <Text>WriteBucket Screen</Text>
     </View>
   );
 };
 
-export default LoginScreen;
+export default WriteBucketScreen;
