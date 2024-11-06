@@ -1,28 +1,28 @@
-import React, {useState} from 'react';
-import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
+import React from 'react';
+import {View, Text, StyleSheet} from 'react-native';
 
-const PageTitle = () => {
+interface PageTitleProps {
+  title: string;
+  colorCode: string;
+}
+
+interface CircleProps {
+  colorCode: string;
+}
+
+const PageTitle = ({title, colorCode}: PageTitleProps) => {
   return (
     <View style={styles.container}>
-      <Text
-        style={{
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'flex-start',
-          fontFamily: 'Pretendard-Bold',
-          fontSize: 24,
-          textAlign: 'center',
-        }}
-        numberOfLines={1}>
-        나의 버킷
+      <Text style={styles.titleFont} numberOfLines={1}>
+        {title}
       </Text>
-      <Circle />
+      <Circle colorCode={colorCode} />
     </View>
   );
 };
 
-const Circle = () => {
-  return <View style={styles.circle} />;
+const Circle = ({colorCode}: CircleProps) => {
+  return <View style={[styles.circle, {backgroundColor: colorCode}]} />;
 };
 
 const styles = StyleSheet.create({
@@ -36,9 +36,16 @@ const styles = StyleSheet.create({
   circle: {
     width: 8,
     height: 8,
-    borderRadius: 100 / 2,
-    backgroundColor: '#B6E7CC',
+    borderRadius: 8 / 2,
     marginLeft: 5,
+  },
+  titleFont: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'flex-start',
+    fontFamily: 'Pretendard-Bold',
+    fontSize: 24,
+    textAlign: 'center',
   },
 });
 

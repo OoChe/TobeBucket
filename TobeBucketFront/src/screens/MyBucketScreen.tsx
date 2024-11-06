@@ -16,7 +16,7 @@ const MyBucketScreen = () => {
       <ScrollView
         scrollEnabled={true}
         contentInsetAdjustmentBehavior="automatic">
-        <PageTitle/>
+        <PageTitle title='나의 버킷' colorCode='#B6E7CC'/>
         {/* 나의 버킷 타이틀 추가 */}
         <ViewMyBucketToggle />
         <Text
@@ -28,20 +28,15 @@ const MyBucketScreen = () => {
             alignItems: 'center',
             fontFamily: 'Inter',
             fontSize: 16,
-            fontWeight: '600',
-            lineHeight: 19.364,
             color: '#707070',
             position: 'relative',
             textAlign: 'center',
-            zIndex: 6,
             marginTop: 90,
-            marginRight: 0,
-            marginBottom: 0,
             marginLeft: 77,
-          }}
-          numberOfLines={1}>
+          }}>
           아직 작성한 버킷이 없어요
         </Text>
+        {/* 슬퍼하는 버킷이 이미지 추가 */}
         <Text
           style={{
             display: 'flex',
@@ -51,18 +46,12 @@ const MyBucketScreen = () => {
             alignItems: 'center',
             fontFamily: 'Inter',
             fontSize: 24,
-            fontWeight: '600',
-            lineHeight: 24,
             color: '#000000',
             position: 'relative',
             textAlign: 'center',
-            zIndex: 7,
             marginTop: 13,
-            marginRight: 0,
-            marginBottom: 0,
             marginLeft: 3,
-          }}
-          numberOfLines={1}>
+          }}>
           버킷을 작성하러 가볼까요?
         </Text>
         <View
@@ -70,39 +59,24 @@ const MyBucketScreen = () => {
             width: 145,
             height: 30,
             backgroundColor: '#1e6969',
-            borderTopLeftRadius: 10.769,
-            borderTopRightRadius: 10.769,
-            borderBottomRightRadius: 10.769,
-            borderBottomLeftRadius: 10.769,
-            borderWidth: 1.077,
+            borderRadius: 10,
+            borderWidth: 1,
             borderColor: '#1e6969',
             borderStyle: 'solid',
             position: 'relative',
-            zIndex: 4,
             marginTop: 35,
-            marginRight: 0,
-            marginBottom: 0,
             marginLeft: 125,
           }}>
           <Text
             style={{
               display: 'flex',
-              width: '93.42%',
-              height: '65.38%',
               justifyContent: 'center',
               alignItems: 'center',
-              fontFamily: 'Pretendard Variable',
-              fontSize: 14.000000953674316,
-              fontWeight: '400',
-              lineHeight: 16.707,
+              fontFamily: 'Pretendard-Regular',
+              fontSize: 14,
               color: '#ffffff',
-              position: 'absolute',
-              top: '11.79%',
-              left: '1.89%',
               textAlign: 'center',
-              zIndex: 5,
-            }}
-            numberOfLines={1}>
+            }}>
             버킷 작성하러가기
           </Text>
         </View>
