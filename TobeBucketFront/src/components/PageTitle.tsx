@@ -1,3 +1,4 @@
+// 각각의 페이지에 표시되는 제목 컴포넌트
 import React from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 
@@ -9,7 +10,7 @@ interface PageTitleProps {
 interface CircleProps {
   colorCode: string;
 }
-
+// 제목과 오른쪽 위 포인트컬러 지정
 const PageTitle = ({title, colorCode}: PageTitleProps) => {
   return (
     <View style={styles.container}>
