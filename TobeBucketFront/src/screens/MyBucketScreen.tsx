@@ -3,75 +3,47 @@ import {
   View,
   Text,
   Button,
-  ImageBackground,
+  Image,
   SafeAreaView,
   ScrollView,
 } from 'react-native';
 import ViewMyBucketToggle from '../components/ViewMyBucketToggle.tsx';
-import PageTitle from '../components/PageTitle.tsx'
+import PageTitle from '../components/PageTitle.tsx';
+import CryingBucket from '../assets/images/CryingBucketImg.png';
+import styles from '../styles/MyBucketScreen.styles.ts';
 
+// Toggle의 상태(달성 예정/달성 완료)에 따라 화면 변경 구현
+// 작성한 버킷이 존재할 경우, 존재하는 버킷 리스트를 표시
 const MyBucketScreen = () => {
   return (
     <SafeAreaView>
+      <PageTitle title="나의 버킷" colorCode="#B6E7CC" />
+      <ViewMyBucketToggle />
       <ScrollView
         scrollEnabled={true}
         contentInsetAdjustmentBehavior="automatic">
-        <PageTitle title='나의 버킷' colorCode='#B6E7CC'/>
-        {/* 나의 버킷 타이틀 추가 */}
-        <ViewMyBucketToggle />
-        <Text
-          style={{
-            display: 'flex',
-            width: 242,
-            height: 24,
-            justifyContent: 'center',
-            alignItems: 'center',
-            fontFamily: 'Inter',
-            fontSize: 16,
-            color: '#707070',
-            position: 'relative',
-            textAlign: 'center',
-            marginTop: 90,
-            marginLeft: 77,
-          }}>
-          아직 작성한 버킷이 없어요
-        </Text>
-        {/* 슬퍼하는 버킷이 이미지 추가 */}
-        <Text
-          style={{
-            display: 'flex',
-            width: 390,
-            height: 30,
-            justifyContent: 'center',
-            alignItems: 'center',
-            fontFamily: 'Inter',
-            fontSize: 24,
-            color: '#000000',
-            position: 'relative',
-            textAlign: 'center',
-            marginTop: 13,
-            marginLeft: 3,
-          }}>
-          버킷을 작성하러 가볼까요?
-        </Text>
+        <Text style={styles.smallText}>아직 작성한 버킷이 없어요</Text>
+
+        {/* 버킷이를 가운데로 옮기질 못해서 margin으로 설정, 수정 필요 */}
+        <Image source={CryingBucket} style={styles.imageStyle} />
+        <Text style={styles.largeText}>버킷을 작성하러 가볼까요?</Text>
+
+        {/* 버튼 형식 변경 및 컴포넌트로 이동 필요*/}
         <View
           style={{
+            alignContent: 'center',
             width: 145,
             height: 30,
             backgroundColor: '#1e6969',
             borderRadius: 10,
             borderWidth: 1,
             borderColor: '#1e6969',
-            borderStyle: 'solid',
-            position: 'relative',
-            marginTop: 35,
+            marginTop: 10,
             marginLeft: 125,
+            padding: 3,
           }}>
           <Text
             style={{
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
               fontFamily: 'Pretendard-Regular',
               fontSize: 14,
               color: '#ffffff',
@@ -80,46 +52,30 @@ const MyBucketScreen = () => {
             버킷 작성하러가기
           </Text>
         </View>
-        {/* <Button
+        <View
           style={{
+            alignContent: 'center',
             width: 145,
-            height: 31,
-            borderTopLeftRadius: 10.769,
-            borderTopRightRadius: 10.769,
-            borderBottomRightRadius: 10.769,
-            borderBottomLeftRadius: 10.769,
-            borderWidth: 1.077,
+            height: 30,
+            borderWidth: 1,
+            borderRadius: 10,
             borderColor: '#1e6969',
             borderStyle: 'solid',
             position: 'relative',
-            zIndex: 1,
-            marginTop: 20,
-            marginRight: 0,
-            marginBottom: 0,
+            marginTop: 10,
             marginLeft: 125,
+            padding: 3,
           }}>
           <Text
             style={{
-              display: 'flex',
-              width: '93.42%',
-              height: '65.38%',
-              justifyContent: 'center',
-              alignItems: 'center',
               fontFamily: 'Pretendard Variable',
               fontSize: 14,
-              fontWeight: '400',
-              lineHeight: 16.707,
               color: '#1e6969',
-              position: 'absolute',
-              top: '11.91%',
-              left: '1.89%',
               textAlign: 'center',
-              zIndex: 2,
-            }}
-            numberOfLines={1}>
+            }}>
             템플릿 구경하기
           </Text>
-        </Button> */}
+        </View>
       </ScrollView>
     </SafeAreaView>
   );

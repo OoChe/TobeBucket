@@ -14,7 +14,7 @@ interface CircleProps {
 const PageTitle = ({title, colorCode}: PageTitleProps) => {
   return (
     <View style={styles.container}>
-      <Text style={styles.titleFont} numberOfLines={1}>
+      <Text style={styles.titleText} numberOfLines={1}>
         {title}
       </Text>
       <Circle colorCode={colorCode} />
@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
     borderRadius: 8 / 2,
     marginLeft: 5,
   },
-  titleFont: {
+  titleText: {
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'flex-start',
