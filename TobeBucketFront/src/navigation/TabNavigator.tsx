@@ -4,9 +4,9 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import styles from '../styles/TabNavigator.styles';
 import BucketFeedScreen from '../screens/BucketFeedScreen';
 import MyBucketScreen from '../screens/MyBucketScreen';
-import WriteBucketScreen from '../screens/WriteBucketScreen';
 import FriendListScreen from '../screens/FriendListScreen';
 import MyPageScreen from '../screens/MyPageScreen';
+import WriteBucketStackNavigator from './WriteBucketStackNavigator';
 
 
 type TabParamList = {
@@ -72,7 +72,7 @@ const TabNavigator = () => {
 
       <Tab.Screen
         name="WriteBucket"
-        component={WriteBucketScreen}
+        component={WriteBucketStackNavigator}
         options={{ tabBarLabel: '버킷 작성' , headerShown: false}}
       />
 
