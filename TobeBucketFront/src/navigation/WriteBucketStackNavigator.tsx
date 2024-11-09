@@ -12,13 +12,13 @@ const Stack = createStackNavigator<StackParamList>();
 
 const WriteBucketStackNavigator = () => {
   const [bucketInfo, setBucketInfo] = useState({
-      title: '',
-      description: '',
+      bucketName: '',
+      bucketContent: '',
       category: '',
-      isShared: false,
-      milestones: [] as string[],
-      planningDate: null as Date | null,
-      friendList : [] as string[]
+      publicStatus: false,
+      semiGoalTitleList: [] as string[],
+      goalDate: null as Date | null,
+      friendNickNameList : [] as string[]
   });
 
   const sendDataToDB = async () => {
