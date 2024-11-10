@@ -3,101 +3,83 @@ import {
   View,
   Text,
   TouchableOpacity,
-  ImageBackground,
   SafeAreaView,
-  ScrollView,
   StyleSheet,
+  Image,
 } from 'react-native';
-import LinearGradient from 'react-native-linear-gradient';
+import {getCategoryIconById, getCategoryLabelById} from '../data/bucketIcon';
 
 interface bucketShortProps {
   title: string;
   description: string;
   date: Date;
+  category: number;
 }
 
-export const MyBucketShort = ({title, description, date}: bucketShortProps) => {
+export const MyBucketShort = ({
+  title,
+  description,
+  date,
+  category,
+}: bucketShortProps) => {
   return (
     <SafeAreaView>
-      <View
-        style={{
-          width: 346,
-          height: 108,
-          position: 'relative',
-          margin: 'auto',
-          marginBottom: '20',
-        }}>
+      <View style={styles.bucketContainer}>
         <View
           style={{
-            width: '100%',
-            height: '100%',
-            backgroundColor: '#ffffff',
-            borderTopLeftRadius: 10,
-            borderTopRightRadius: 10,
-            borderBottomRightRadius: 10,
-            borderBottomLeftRadius: 10,
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            zIndex: 3,
+            flexDirection: 'row',
+            marginTop: 5,
+            marginLeft: 13,
           }}>
           <View
             style={{
-              width: 241,
-              height: 38.423,
-              position: 'relative',
-              zIndex: 8,
-              marginTop: 10.385,
-              marginRight: 0,
-              marginBottom: 0,
-              marginLeft: 16,
-            }}>
-            {/* 아이콘 */}
-            <Text style={styles.titleText}>{title}</Text>
-            <Text style={styles.descriptionText}>{description}</Text>
-          </View>
-          <Text
-            style={{
               display: 'flex',
-              width: 23,
-              height: 10.385,
               justifyContent: 'center',
               alignItems: 'center',
-              fontFamily: 'Pretendard',
-              fontSize: 10,
-              fontWeight: '500',
-              lineHeight: 10.385,
-              color: '#000000',
-              position: 'relative',
-              textAlign: 'center',
-              zIndex: 18,
-              marginTop: -6.346,
-              marginRight: 0,
-              marginBottom: 0,
-              marginLeft: 23,
             }}>
-            여행
-          </Text>
-          <View
-            style={{
-              flexDirection: 'row',
-              width: 286,
-              position: 'relative',
-              marginTop: 6.5,
-              marginRight: 0,
-              marginBottom: 0,
-              marginLeft: 26,
-            }}>
-            <TouchableOpacity style={styles.button}>
-              <Text style={styles.buttonText}>수정하기</Text>-
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.button}>
-              <Text style={styles.buttonText}>삭제하기</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.button}>
-              <Text style={styles.buttonText}>달성 기록</Text>
-            </TouchableOpacity>
+            <Image
+              source={getCategoryIconById(category)}
+              style={{
+                position: 'relative',
+                marginTop: 10,
+              }}
+            />
+            <Text // 왼쪽 아이콘 영역
+              style={{
+                fontFamily: 'Pretendard-Regular',
+                fontSize: 10,
+                color: '#000000',
+                position: 'relative',
+                textAlign: 'center',
+                marginTop: 3,
+              }}>
+              {getCategoryLabelById(category)}
+            </Text>
           </View>
+          <View // 제목, 설명, 날짜 영역
+            style={{
+              width: 241,
+              position: 'relative',
+              marginLeft: 20,
+            }}>
+            <Text style={styles.titleText}>{title}</Text>
+            <Text style={styles.descriptionText}>{description}</Text>
+            <Text style={styles.dateText}>목표 달성 날짜 : {date}</Text>
+          </View>
+        </View>
+        {/* 아래 버튼 영역 */}
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity style={styles.button}>
+            <Text style={styles.buttonText}>달성 기록</Text>
+          </TouchableOpacity>
+          <View style={styles.divider} />
+          <TouchableOpacity style={styles.button}>
+            <Text style={styles.buttonText}>수정하기</Text>-
+          </TouchableOpacity>
+          <View style={styles.divider} />
+          <TouchableOpacity style={styles.button}>
+            <Text style={styles.buttonText}>삭제하기</Text>
+          </TouchableOpacity>
         </View>
       </View>
     </SafeAreaView>
@@ -105,8 +87,14 @@ export const MyBucketShort = ({title, description, date}: bucketShortProps) => {
 };
 
 const styles = StyleSheet.create({
-  bucketContainer:{
-
+  bucketContainer: {
+    width: 360,
+    height: 108,
+    position: 'relative',
+    backgroundColor: '#ffffff',
+    borderRadius: 10,
+    margin: 'auto',
+    marginBottom: 10,
   },
   titleText: {
     display: 'flex',
@@ -114,9 +102,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     fontFamily: 'Pretendard-Bold',
     fontSize: 15,
-    position: 'absolute',
+    position: 'relative',
     top: '10%',
-    left: '23%',
   },
   descriptionText: {
     display: 'flex',
@@ -124,9 +111,27 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     fontFamily: 'Pretendard-Regular',
     fontSize: 13,
-    position: 'absolute',
-    top: '70%',
-    left: '23%',
+    position: 'relative',
+    top: '10%',
+  },
+  dateText: {
+    display: 'flex',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    fontFamily: 'Pretendard-Regular',
+    fontSize: 10,
+    color: '#6C7278',
+    position: 'relative',
+    top: '13%',
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    position: 'relative',
+    justifyContent: 'space-evenly',
+    borderTopWidth: 1,
+    borderTopColor: '#72777A',
+    marginTop: 10,
+    paddingTop: 3,
   },
   buttonText: {
     fontFamily: 'Pretendard-Medium',
@@ -134,10 +139,12 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   button: {
-    paddingVertical: 4,
-    paddingHorizontal: 6,
-    marginRight: 3,
-    marginBottom: 3,
+    color: '#333333',
+    marginHorizontal: 15,
+  },
+  divider: {
+    height: 1,
+    backgroundColor: '#72777A',
   },
   icon: {
     fontSize: 15,
@@ -148,3 +155,5 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
 });
+
+export default MyBucketShort;

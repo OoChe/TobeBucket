@@ -74,16 +74,16 @@ const WriteBucketScreen = ({ bucketInfo, setBucketInfo, sendDataToDB }) => {
       <Text style={styles.sectionTitle}>3. 카테고리 선택</Text>
 
       <View style={styles.categoryContainer}>
-            {categories.map((category, index) => (
-              <CategoryButton
-                key={category.id}
-                icon={category.icon}
-                label={category.label}
-                borderColor={category.borderColor}
-                onPress={() => handleCategorySelect(category.id)}
-                isSelected={bucketInfo.category === category.id} // 선택된 경우 스타일 적용
-              />
-            ))}
+        {categories.slice(0, -1).map((category, index) => (
+          <CategoryButton
+            key={category.id}
+            icon={category.icon}
+            label={category.label}
+            borderColor={category.borderColor}
+            onPress={() => handleCategorySelect(category.id)}
+            isSelected={bucketInfo.category === category.id} // 선택된 경우 스타일 적용
+          />
+        ))}
       </View>
 
       {/* Share Toggle */}
@@ -107,6 +107,5 @@ const WriteBucketScreen = ({ bucketInfo, setBucketInfo, sendDataToDB }) => {
     </ScrollView>
   );
 };
-
 
 export default WriteBucketScreen;
