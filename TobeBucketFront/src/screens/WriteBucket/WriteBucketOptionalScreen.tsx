@@ -1,14 +1,9 @@
-import React, { useState }from 'react';
-import { View, Text, TextInput, TouchableOpacity, Switch, ScrollView, Modal, Button } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import styles from '../../styles/WriteBucketOptionalScreen.styles';
-import DatePicker from  '../../components/DatePicker';
-import { Picker } from '@react-native-picker/picker';
-import PageTitle from '../../components/PageTitle';
-
-
 /*
  NOTICE : handleSubmit 함수 내에서 작성 완료 후 이동할 페이지 설정 논의 필요, Test 필수
+
+ [버킷리스트 작성하기(선택) 스크린]
+ - 구성 : 헤더, 중간 목표, 달성 날짜, 친구 태그 입력, 버튼(뒤로, 작성 완료)
+ - 함수
  1) 중간 목표
   - addGoal: 새로운 빈 중간 목표를 추가/semiGoalTitleList 업데이트
   - removeGoal: 선택한 중간 목표를 삭제/ semiGoalTitleList 업데이트
@@ -24,6 +19,13 @@ import PageTitle from '../../components/PageTitle';
   - handleSubmit: 입력된 모든 데이터를 확인하여 공백이 아닌 중간 목표만을 bucketInfo에 저장 후 전송
  */
 
+import React, { useState }from 'react';
+import { View, Text, TextInput, TouchableOpacity, Switch, ScrollView, Modal, Button } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import styles from '../../styles/WriteBucketOptionalScreen.styles';
+import DatePicker from  '../../components/DatePicker';
+import { Picker } from '@react-native-picker/picker';
+import PageTitle from '../../components/PageTitle';
 
 const DUMMY_FRIEND_LIST = ["햄햄일", "햄햄이", "햄햄삼", "햄햄사"];
 
@@ -95,7 +97,8 @@ const WriteBucketOptionalScreen = ({ bucketInfo, setBucketInfo, sendDataToDB }) 
 
   return (
     <View style = {styles.main}>
-       <PageTitle title="버킷리스트 작성하기" colorCode="#EE4963" />
+      {/* 헤더 */}
+      <PageTitle title="버킷리스트 작성하기" colorCode="#EE4963" />
       <ScrollView contentContainerStyle={styles.container}>
         <Text style={styles.subTitle}>다음은 버킷리스트 작성에 관한 선택 항목입니다.</Text>
 
@@ -129,9 +132,10 @@ const WriteBucketOptionalScreen = ({ bucketInfo, setBucketInfo, sendDataToDB }) 
           />
         </View>
 
-        <Text style={styles.sectionTitle}>8. 친구 태그</Text>
 
         {/* 친구 태그 목록 */}
+        <Text style={styles.sectionTitle}>8. 친구 태그</Text>
+
         {friendTags.length > 0 && (
             <View style={styles.friendTagsContainer}>
                {friendTags.map((friend, index) => (

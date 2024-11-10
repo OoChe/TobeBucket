@@ -1,12 +1,7 @@
-import React from 'react';
-import { View, Text, TextInput, TouchableOpacity, Switch, ScrollView, Alert } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import styles from '../../styles/WriteBucketScreen.styles';
-import CategoryButton from '../../components/CategoryButton';
-import PageTitle from '../../components/PageTitle';
-import { categories } from '../../data/bucketCategories';
-
 /*
+ [버킷리스트 작성하기(필수) 스크린]
+ - 구성 : 헤더, 템플릿 구경하기, 버킷리스트 제목, 설명, 카테고리 선택, 공유 토글, 버튼(다음 단계)
+ - 함수
  1) 카테고리 선택
  - handleCategorySelect: 선택된 카테고리를 bucketInfo의 category에 저장
 
@@ -17,6 +12,13 @@ import { categories } from '../../data/bucketCategories';
  - handleNextStep: bucketInfo를 전송 후 다음 화면 이동
  */
 
+import React from 'react';
+import { View, Text, TextInput, TouchableOpacity, Switch, ScrollView, Alert } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import styles from '../../styles/WriteBucketScreen.styles';
+import CategoryButton from '../../components/CategoryButton';
+import PageTitle from '../../components/PageTitle';
+import { categories } from '../../data/bucketCategories';
 
 const WriteBucketScreen = ({ bucketInfo, setBucketInfo, sendDataToDB }) => {
   const navigation = useNavigation();
@@ -61,71 +63,73 @@ const WriteBucketScreen = ({ bucketInfo, setBucketInfo, sendDataToDB }) => {
 
   return (
     <View style={styles.main}>
+        {/* 헤더 */}
         <PageTitle title="버킷리스트 작성하기" colorCode="#EE4963" />
-
         <ScrollView contentContainerStyle={styles.container}>
-              {/* Title */}
-              <Text style={styles.subTitle}>다음은 버킷리스트 작성에 관한 필수 항목입니다.</Text>
+          <Text style={styles.subTitle}>다음은 버킷리스트 작성에 관한 필수 항목입니다.</Text>
 
-              {/* Template Prompt */}
-              <View style={styles.templateContainer}>
-                <Text style={styles.templateText}>참고할 만한 템플릿이 필요하신가요?</Text>
-                <TouchableOpacity style={styles.templateButton}>
-                  <Text style={styles.templateButtonText}>템플릿 구경하기</Text>
-                </TouchableOpacity>
-              </View>
+          {/* 템플릿 구경하기 */}
+          <View style={styles.templateContainer}>
+            <Text style={styles.templateText}>참고할 만한 템플릿이 필요하신가요?</Text>
+            <TouchableOpacity
+              style={styles.templateButton}
+              onPress={() => navigation.navigate('ViewTemplate')}
+            >
+            <Text style={styles.templateButtonText}>템플릿 구경하기</Text>
+            </TouchableOpacity>
+          </View>
 
-              {/* Input Fields */}
-              <Text style={styles.sectionTitle}>1. 버킷리스트 제목</Text>
-              <TextInput
-                style={styles.input}
-                placeholder="버킷 리스트 제목"
-                onChangeText={(text) => setBucketInfo((prevData) => ({ ...prevData, bucketName: text }))}
-              />
+          {/* 버킷리스트 제목 */}
+          <Text style={styles.sectionTitle}>1. 버킷리스트 제목</Text>
+          <TextInput
+            style={styles.input}
+            placeholder="버킷 리스트 제목"
+            onChangeText={(text) => setBucketInfo((prevData) => ({ ...prevData, bucketName: text }))}
+          />
 
-              <Text style={styles.sectionTitle}>2. 버킷리스트에 관한 간단한 설명</Text>
-              <TextInput
-                style={[styles.input, styles.textArea]}
-                placeholder="버킷 리스트 설명"
-                onChangeText={(text) => setBucketInfo((prevData) => ({ ...prevData, bucketContent: text }))}
-                multiline={true}
-              />
+          {/* 버킷리스트 설명 */}
+          <Text style={styles.sectionTitle}>2. 버킷리스트에 관한 간단한 설명</Text>
+          <TextInput
+            style={[styles.input, styles.textArea]}
+            placeholder="버킷 리스트 설명"
+            onChangeText={(text) => setBucketInfo((prevData) => ({ ...prevData, bucketContent: text }))}
+            multiline={true}
+          />
 
-              {/* Category Selection */}
-              <Text style={styles.sectionTitle}>3. 카테고리 선택</Text>
+          {/* 버킷리스트 카테고리 선택 */}
+          <Text style={styles.sectionTitle}>3. 카테고리 선택</Text>
+          <View style={styles.categoryContainer}>
+                {categories.map((category, index) => (
+                  <CategoryButton
+                    key={category.id}
+                    icon={category.icon}
+                    label={category.label}
+                    borderColor={category.borderColor}
+                    onPress={() => handleCategorySelect(category.id)}
+                    isSelected={bucketInfo.category === category.id}
+                  />
+                ))}
+          </View>
 
-              <View style={styles.categoryContainer}>
-                    {categories.map((category, index) => (
-                      <CategoryButton
-                        key={category.id}
-                        icon={category.icon}
-                        label={category.label}
-                        borderColor={category.borderColor}
-                        onPress={() => handleCategorySelect(category.id)}
-                        isSelected={bucketInfo.category === category.id}
-                      />
-                    ))}
-              </View>
+          {/* 버킷리스트 공유 토글 */}
+          <Text style={styles.sectionTitle}>4. 버킷리스트 공유하기</Text>
 
-              {/* Share Toggle */}
-              <Text style={styles.sectionTitle}>4. 버킷리스트 공유하기</Text>
+          <Switch
+            value={bucketInfo.publicStatus}
+            onValueChange={(value) =>
+                setBucketInfo((prevData) => ({ ...prevData, publicStatus: value }))
+            }
+            style={styles.switch}
+          />
 
-              <Switch
-                value={bucketInfo.publicStatus}
-                onValueChange={(value) =>
-                    setBucketInfo((prevData) => ({ ...prevData, publicStatus: value }))
-                }
-                style={styles.switch}
-              />
-
-              {/* Next Button */}
-              <TouchableOpacity
-                 style={styles.nextButton}
-                 onPress={handleNextStep}
-              >
-                <Text style={styles.nextButtonText}>다음 단계</Text>
-              </TouchableOpacity>
-            </ScrollView>
+          {/* 버튼 */}
+          <TouchableOpacity
+             style={styles.nextButton}
+             onPress={handleNextStep}
+          >
+            <Text style={styles.nextButtonText}>다음 단계</Text>
+          </TouchableOpacity>
+        </ScrollView>
 
     </View>
   );
