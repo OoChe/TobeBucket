@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native';
+import {StyleSheet} from 'react-native';
 
 const styles = StyleSheet.create({
   headerContainer: {
@@ -17,11 +17,10 @@ const styles = StyleSheet.create({
     width: 32,
     height: 32,
     marginRight: 8,
-    resizeMode: 'contain'
+    resizeMode: 'contain',
   },
   title: {
     fontSize: 25,
-    fontWeight: 'bold',
     fontFamily: 'PaytoneOne-Regular',
   },
   bellIcon: {

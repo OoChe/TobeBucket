@@ -1,18 +1,23 @@
 import React from 'react';
-import { TouchableOpacity, Text, StyleSheet } from 'react-native';
+import {TouchableOpacity, Text, StyleSheet} from 'react-native';
 
-const CustomButton = ({ text, color, filled = true }) => {
+interface CustomButtonProps {
+  text: string;
+  colorCode: string;
+  filled: boolean;
+}
+
+const CustomButton = ({text, colorCode, filled = true}: CustomButtonProps) => {
   return (
     <TouchableOpacity
       style={[
         styles.button,
         {
-          backgroundColor: filled ? color : 'transparent',
-          borderColor: color,
+          backgroundColor: filled ? colorCode : 'transparent',
+          borderColor: colorCode,
         },
-      ]}
-    >
-      <Text style={[styles.buttonText, { color: filled ? '#FFFFFF' : color }]}>
+      ]}>
+      <Text style={[styles.buttonText, {color: filled ? '#FFFFFF' : colorCode}]}>
         {text}
       </Text>
     </TouchableOpacity>
