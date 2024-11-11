@@ -15,6 +15,4 @@ public class UserLogin {
 
     @Column(length = 255, nullable = false)
     private String pwd;
-
-    // Getter, Setter
 }
