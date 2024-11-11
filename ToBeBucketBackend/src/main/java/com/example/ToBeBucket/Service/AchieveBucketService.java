@@ -4,8 +4,12 @@ import com.example.ToBeBucket.DTO.AchieveBucketDTO;
 import com.example.ToBeBucket.DTO.SemiGoalDTO;
 import com.example.ToBeBucket.Entity.Bucket;
 import com.example.ToBeBucket.Entity.BucketAchievement;
+import com.example.ToBeBucket.Entity.BucketSemiGoal;
+import com.example.ToBeBucket.Entity.Sticker;
 import com.example.ToBeBucket.Repository.AcheiveBucketRepository;
 import com.example.ToBeBucket.Repository.BucketRepository;
+import com.example.ToBeBucket.Repository.BucketSemiGoalRepository;
+import com.example.ToBeBucket.Repository.StickerRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -16,6 +20,8 @@ import org.springframework.stereotype.Service;
 public class AchieveBucketService {
     private final AcheiveBucketRepository achieveBucketRepository;
     private final BucketRepository bucketRepository;
+    private final BucketSemiGoalRepository bucketSemiGoalRepository;
+    private final StickerRepository stickerRepository;
 
     public void saveAchieveBucket(AchieveBucketDTO achieveBucketDTO) {
         // DTO에서 Entity로 변환
@@ -42,8 +48,17 @@ public class AchieveBucketService {
         achieveBucketRepository.save(achieveBucket);
     }
 
-    public void saveSemiGoalAhcivement(SemiGoalDTO semiGoalDTO){
+    public void saveSemiGoalAchievement(SemiGoalDTO semiGoalDTO){
+        BucketSemiGoal bucketSemiGoal = bucketSemiGoalRepository.findById(semiGoalDTO.getSemiGoalId())
+                .orElseThrow(() -> new IllegalArgumentException("Invalid semiGoalId: " + semiGoalDTO.getSemiGoalId()));
 
+        Sticker sticker = stickerRepository.findById(semiGoalDTO.getStickerId())
+                .orElseThrow(() -> new IllegalArgumentException("Invalid stickerId: " + semiGoalDTO.getStickerId()));
+
+        // Sticker, AchieveDate 추가하기
+        bucketSemiGoal.setSticker(sticker);
+        bucketSemiGoal.setAchieveDate(semiGoalDTO.getAchieveDate());
+        bucketSemiGoalRepository.save(bucketSemiGoal);
     }
 
 }
