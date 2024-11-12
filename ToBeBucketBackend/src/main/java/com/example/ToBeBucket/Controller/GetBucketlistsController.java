@@ -25,6 +25,12 @@ public class GetBucketlistsController {
     @GetMapping("/tobebucket/bucketlists")
     public ResponseEntity<Map<String, Object>> getBucketLists(
             @RequestBody GetBucketDTO getBucketDTO) {
+        if (getBucketDTO == null) {
+            log.error("Request Body is missing");
+            return ResponseEntity.badRequest().body(Map.of("message", "Request Body is missing"));
+        }
+        log.info("Received Request: userId={}, achieveStatus={}",
+                getBucketDTO.getUserId(), getBucketDTO.getAchieveStatus());
         Map<String, Object> response = new LinkedHashMap<>();
         try {
             List<?> bucketList = getBucketlistsService.getBucketlists(getBucketDTO);
