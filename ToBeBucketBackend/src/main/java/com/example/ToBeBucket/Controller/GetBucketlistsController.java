@@ -32,9 +32,9 @@ public class GetBucketlistsController {
         log.info("Received Request: userId={}, achieveStatus={}",
                 getBucketDTO.getUserId(), getBucketDTO.getAchieveStatus());
         Map<String, Object> response = new LinkedHashMap<>();
+        String userId = getBucketDTO.getUserId();
+        Boolean achieveStatus = getBucketDTO.getAchieveStatus();
         try {
-            String userId = getBucketDTO.getUserId();
-            Boolean achieveStatus = getBucketDTO.getAchieveStatus();
             List<?> bucketList = getBucketlistsService.getBucketlists(getBucketDTO);
             response.put("code", "SU");
             response.put("message", getBucketDTO.getAchieveStatus()
