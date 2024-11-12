@@ -23,7 +23,7 @@ public class GetBucketlistsController {
     private final GetBucketlistsService getBucketlistsService;
 
     @GetMapping("/tobebucket/bucketlists")
-    public ResponseEntity<Map<String, Object>> getBucketLists(
+    public ResponseEntity<Map<String, Object>> getBucketlists(
             @RequestBody GetBucketDTO getBucketDTO) {
         if (getBucketDTO == null) {
             log.error("Request Body is missing");
