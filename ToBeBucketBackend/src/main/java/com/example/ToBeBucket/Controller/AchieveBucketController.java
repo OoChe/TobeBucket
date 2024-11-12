@@ -29,11 +29,6 @@ public class AchieveBucketController {
         try {
             //request한 것 DTO로 가져오기
             Integer bucketId = achieveBucketDTO.getBucketId();
-            LocalDate achieveDate = achieveBucketDTO.getAchieveDate();
-            Integer stickerId = achieveBucketDTO.getStickerId();
-
-            String goalReview = achieveBucketDTO.getGoalReview();
-            String achievementMedia = achieveBucketDTO.getAchievementMedia();
 
             // 서비스 호출해서 DB에 저장
             achieveBucketService.saveAchieveBucket(achieveBucketDTO);
