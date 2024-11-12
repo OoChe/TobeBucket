@@ -2,7 +2,7 @@ package com.example.ToBeBucket.Service;
 
 import com.example.ToBeBucket.DTO.AchieveBucketDTO;
 import com.example.ToBeBucket.Entity.BucketAchievement;
-import com.example.ToBeBucket.Repository.AcheiveBucketRepository;
+import com.example.ToBeBucket.Repository.AchieveBucketRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class AchieveBucketService {
-    private final AcheiveBucketRepository achieveBucketRepository;
+    private final AchieveBucketRepository achieveBucketRepository;
 
     public void saveAchieveBucket(AchieveBucketDTO achieveBucketDTO) {
         // DTO에서 Entity로 변환

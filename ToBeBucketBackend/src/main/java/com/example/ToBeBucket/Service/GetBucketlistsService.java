@@ -1,9 +1,7 @@
 package com.example.ToBeBucket.Service;
 
 import com.example.ToBeBucket.DTO.GetBucketDTO;
-import com.example.ToBeBucket.Entity.Bucket;
-import com.example.ToBeBucket.Entity.BucketAchievement;
-import com.example.ToBeBucket.Repository.AcheiveBucketRepository;
+import com.example.ToBeBucket.Repository.AchieveBucketRepository;
 import com.example.ToBeBucket.Repository.GetNotAchvBucketlistsRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,7 +17,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class GetBucketlistsService {
     private final GetNotAchvBucketlistsRepository getNotAchvBucketlistsRepository;
-    private final AcheiveBucketRepository acheiveBucketRepository;
+    private final AchieveBucketRepository acheiveBucketRepository;
     public List<Map<String, Object>> getBucketlists(GetBucketDTO getBucketDTO) {
         if (Boolean.FALSE.equals(getBucketDTO.getAchieveStatus())) { // 미달성 버킷 조회
             return getNotAchvBucketlistsRepository.findAllByUserIdAndAchieveStatus(getBucketDTO.getUserId(), false)
@@ -35,7 +33,7 @@ public class GetBucketlistsService {
                     })
                     .collect(Collectors.toList());
         } else { // 달성한 버킷 조회
-            return acheiveBucketRepository.findAllByUserId(getBucketDTO.getUserId())
+            return acheiveBucketRepository.findAllByBucket_UserId(getBucketDTO.getUserId())
                     .stream()
                     .map(bucketAchievement -> {
                         Map<String, Object> map = new LinkedHashMap<>();
