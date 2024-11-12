@@ -7,9 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@Table(
-        name = "UserProfile",
-        uniqueConstraints = @UniqueConstraint(columnNames = {"userId", "mbti"}) // userId와 mbti 복합 유니크 제약 추가
+@Table(name = "UserProfile", uniqueConstraints = @UniqueConstraint(columnNames = {"userId", "mbti"}) // userId와 mbti 복합 유니크 제약 추가
 )
 public class UserProfile {
     @Id
