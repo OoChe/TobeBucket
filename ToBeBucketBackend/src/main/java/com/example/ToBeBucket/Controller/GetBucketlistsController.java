@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -25,12 +26,6 @@ public class GetBucketlistsController {
     @GetMapping("/tobebucket/bucketlists")
     public ResponseEntity<Map<String, Object>> getBucketlists(
             @RequestBody GetBucketDTO getBucketDTO) {
-        if (getBucketDTO == null) {
-            log.error("Request Body is missing");
-            return ResponseEntity.badRequest().body(Map.of("message", "Request Body is missing"));
-        }
-        log.info("Received Request: userId={}, achieveStatus={}",
-                getBucketDTO.getUserId(), getBucketDTO.getAchieveStatus());
         Map<String, Object> response = new LinkedHashMap<>();
         String userId = getBucketDTO.getUserId();
         Boolean achieveStatus = getBucketDTO.getAchieveStatus();
