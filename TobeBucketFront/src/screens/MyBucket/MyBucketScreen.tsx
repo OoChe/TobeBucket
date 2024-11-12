@@ -1,3 +1,17 @@
+/*
+ [내 버킷리스트 보기(달성 예정) 스크린]
+ - 구성 : 헤더, 템플릿 구경하기, 버킷리스트 제목, 설명, 카테고리 선택, 공유 토글, 버튼(다음 단계)
+ - 함수
+ 1) 카테고리 선택
+ - handleCategorySelect: 선택된 카테고리를 bucketInfo의 category에 저장
+
+ 2) 필수 입력 확인
+ - validateInputs: 누락된 필드 확인/Alert 메시지 출력
+
+ 3) 제출
+ - handleNextStep: bucketInfo를 전송 후 다음 화면 이동
+ */
+
 import React, {useState, useEffect} from 'react';
 import {
   SafeAreaView,
@@ -10,9 +24,11 @@ import {
 import ViewMyBucketToggle from '../../components/ViewMyBucketToggle';
 import PageTitle from '../../components/PageTitle';
 import CustomButton from '../../components/CustomButton';
+import CategoryButton from '../../components/CategoryButton';
+import MyBucketShort from '../../components/MyBucketShort.tsx';
+import {categories} from '../../data/bucketCategories';
 import CryingBucket from '../../assets/images/cryingBucketImg.png';
 import styles from '../../styles/MyBucketScreen.styles';
-import MyBucketShort from '../../components/MyBucketShort.tsx';
 
 // 임시 데이터 생성
 const unachievedData = [
@@ -52,7 +68,6 @@ const achievedData = [
 ];
 
 // Toggle의 상태(달성 예정/달성 완료)에 따라 화면 변경 구현
-// 작성한 버킷이 존재할 경우, 존재하는 버킷 리스트를 표시
 const MyBucketScreen = () => {
   const [bucketList, setBucketList] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -73,13 +88,15 @@ const MyBucketScreen = () => {
       // }
 
       // 데이터를 임의로 가져온 것처럼 설정
-      if (viewMode == 'upcoming') setBucketList(unachievedData);
-      else setBucketList(achievedData);
+      // if (viewMode == 'upcoming') setBucketList(unachievedData);
+      // else setBucketList(achievedData);
       setLoading(false);
     };
 
     fetchBucketList();
   }, []);
+
+  const handleCategorySelect = (categoryId: string) => {};
 
   return (
     <SafeAreaView>
@@ -90,17 +107,36 @@ const MyBucketScreen = () => {
           <ActivityIndicator size="large" color="#1e6969" />
         </View>
       ) : bucketList && bucketList.length > 0 ? (
-        <ScrollView contentInsetAdjustmentBehavior="automatic">
-          {bucketList.map(item => (
-            <MyBucketShort
-              key={item.id}
-              title={item.bucketName}
-              description={item.bucketContent}
-              date={item.goalDate}
-              category={item.category}
-            />
-          ))}
-        </ScrollView>
+        <View style={styles.bucketListContainer}>
+          <ScrollView
+            style={styles.categoryContainer}
+            horizontal={true}
+            showsHorizontalScrollIndicator={false} // 스크롤바 표시 여부
+          >
+            {[categories[6], ...categories.slice(0, 6)].map(
+              (category, index) => (
+                <CategoryButton
+                  icon={category.icon}
+                  label={category.label}
+                  borderColor={category.borderColor}
+                  onPress={() => handleCategorySelect(category.id)}
+                  isSelected={false} // 선택된 경우 스타일 적용 bucketInfo.category === category.id
+                />
+              ),
+            )}
+          </ScrollView>
+          <ScrollView contentInsetAdjustmentBehavior="automatic">
+            {bucketList.map(item => (
+              <MyBucketShort
+                key={item.id}
+                title={item.bucketName}
+                description={item.bucketContent}
+                date={item.goalDate}
+                category={item.category}
+              />
+            ))}
+          </ScrollView>
+        </View>
       ) : (
         <ScrollView contentInsetAdjustmentBehavior="automatic">
           <Text style={styles.smallText}>아직 작성한 버킷이 없어요</Text>

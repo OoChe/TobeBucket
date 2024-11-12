@@ -1,3 +1,10 @@
+/*
+ [버튼 컴포넌트]
+  - 파라미터
+    1) text : 버튼 내 텍스트 내용
+    2) colorCode : 버튼 선/면 색상
+    3) filled : 색상 채우기 여부
+ */
 import React from 'react';
 import {TouchableOpacity, Text, StyleSheet} from 'react-native';
 

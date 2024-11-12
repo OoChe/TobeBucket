@@ -6,7 +6,7 @@ export const categories = [
   { id: 'culture', icon: '🎬', label: '문화/예술', borderColor: '#B0E1C4' },
   { id: 'shopping', icon: '🛍️', label: '쇼핑', borderColor: '#A6DAFB' },
   { id: 'hobby', icon: '🎧', label: '취미', borderColor: '#C2AEFB' },
-  { id: 'showall', icon: '🔍', label: '전체 보기', borderColor: '#888888' },
+  { id: 'showall', icon: '🔍', label: '전체 보기', borderColor: '#CCCCCC' },
 ];
 
 // 특정 카테고리를 가져오는 헬퍼 함수
