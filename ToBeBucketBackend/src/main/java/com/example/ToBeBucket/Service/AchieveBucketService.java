@@ -14,7 +14,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
 
 @Slf4j
 @Service
@@ -36,8 +35,10 @@ public class AchieveBucketService {
 
         if (achieveBucket != null) {
             //이미 달성기록한 거 수정하는 경우 >> 근데 수정가능하게 할지 말지 고려필요
+
             achieveBucket.setStickerId(achieveBucketDTO.getStickerId());
-            achieveBucket.setAchieveDate(achieveBucketDTO.getAchieveDate());
+            //achieveBucket.setAchieveDate(achieveBucketDTO.getAchieveDate()); 날짜는 수정 불가능
+            System.out.println("날짜는 수정 불가능합니다.");
             achieveBucket.setGoalReview(achieveBucketDTO.getGoalReview());
             achieveBucket.setAchievementMedia(achieveBucketDTO.getAchievementMedia());
             achieveBucketRepository.save(achieveBucket);
