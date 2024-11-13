@@ -11,9 +11,6 @@ import ViewMyBucketToggle from '../../components/ViewMyBucketToggle';
 import PageTitle from '../../components/PageTitle';
 import CustomButton from '../../components/CustomButton';
 import ViewMyBucketList from '../../components/ViewMyBucketList.tsx';
-import MyBucketShort from '../../components/MyBucketShort.tsx';
-import CategoryButton from '../../components/CategoryButton.tsx';
-import { categories } from '../../data/bucketCategories.ts';
 import CryingBucket from '../../assets/images/cryingBucketImg.png';
 import styles from '../../styles/MyBucketScreen.styles';
 import {unachievedData, achievedData} from '../../data/tempBucketData.ts';
@@ -29,7 +26,7 @@ interface upcomingBucket {
 interface achievedBucket {
   bucketId: number;
   bucketName: string;
-  achieveDate: string;
+  achieveDate: Date;
   category: number;
   achievementMedia: Date;
   recordContent: string;
@@ -90,7 +87,6 @@ const MyBucketScreen = () => {
           <ActivityIndicator size="large" color="#1e6969" />
         </View>
       ) : upcomingBucketList && upcomingBucketList.length > 0 ? (
-        // <MyBucketShort bucketID={3} bucketContent='에라이' bucketName='실패함' goalDate={testDate} category={3}/>
         <ViewMyBucketList bucketList={upcomingBucketList} /> // 버킷리스트가 안보임. 카테고리만 보임. 대체 왜?
       ) : (
         <ScrollView contentInsetAdjustmentBehavior="automatic">
