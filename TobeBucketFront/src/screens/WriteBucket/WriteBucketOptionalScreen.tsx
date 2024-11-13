@@ -1,5 +1,7 @@
 /*
  NOTICE : handleSubmit 함수 내에서 작성 완료 후 이동할 페이지 설정 논의 필요, Test 필수
+ [UPDATE]
+ 24.11.13 - 달성 날짜 형식 변경(YY-MM-DD 문자열), 이전 날짜 선택 불가
 
  [버킷리스트 작성하기(선택) 스크린]
  - 구성 : 헤더, 중간 목표, 달성 날짜, 친구 태그 입력, 버튼(뒤로, 작성 완료)
@@ -15,88 +17,99 @@
   - removeFriendTag: 친구 태그 삭제
   - openFriendPicker: friendPicker 모달 열기/선택된 친구 목록 초기 값 설정
 
- 3) 제출
+ 3) 목표 달성 날짜 선택 :
+  - handleDateChange: 목표 달성 날짜 설정 시 dateString으로 저장
+
+ 4) 제출
   - handleSubmit: 입력된 모든 데이터를 확인하여 공백이 아닌 중간 목표만을 bucketInfo에 저장 후 전송
  */
 
-import React, { useState }from 'react';
-import { View, Text, TextInput, TouchableOpacity, Switch, ScrollView, Modal, Button } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, TextInput, TouchableOpacity, ScrollView, Modal, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import styles from '../../styles/WriteBucketOptionalScreen.styles';
-import DatePicker from  '../../components/DatePicker';
-import { Picker } from '@react-native-picker/picker';
+import DatePicker from '../../components/DatePicker';
 import PageTitle from '../../components/PageTitle';
 
 const DUMMY_FRIEND_LIST = ["햄햄일", "햄햄이", "햄햄삼", "햄햄사"];
 
-const WriteBucketOptionalScreen = ({ bucketInfo, setBucketInfo, sendDataToDB }) => {
-  const [goals, setGoals] = useState<string[]>(['']);
+const WriteBucketOptionalScreen = ({ route, bucketInfo, setBucketInfo, sendDataToDB }) => {
+  const initialBucketInfo = route.params?.bucketInfo || bucketInfo;
+  const [goals, setGoals] = useState(initialBucketInfo.semiGoalData || []);
   const [selectedFriends, setSelectedFriends] = useState<string[]>([]);
   const [showFriendPicker, setShowFriendPicker] = useState(false);
   const [friendTags, setFriendTags] = useState<string[]>([]);
   const navigation = useNavigation();
 
-  {/* 중간 목표 함수 */}
+  // 중간 목표 함수
   const addGoal = () => {
-    const updatedGoals = [...goals, ''];
+    const updatedGoals = [...goals, { semiGoalTitle: '' }];
     setGoals(updatedGoals);
-    setBucketInfo((prevData) => ({ ...prevData, semiGoalTitleList: updatedGoals }));
+    setBucketInfo((prevData) => ({ ...prevData, semiGoalData: updatedGoals }));
   };
 
   const removeGoal = (index: number) => {
     const updatedGoals = goals.filter((_, idx) => idx !== index);
     setGoals(updatedGoals);
-    setBucketInfo((prevData) => ({ ...prevData, semiGoalTitleList: updatedGoals }));
+    setBucketInfo((prevData) => ({ ...prevData, semiGoalData: updatedGoals }));
   };
 
   const handleGoalChange = (text: string, index: number) => {
-    const updatedGoals = goals.map((goal, idx) => (idx === index ? text : goal));
+    const updatedGoals = goals.map((goal, idx) =>
+      idx === index ? { semiGoalTitle: text } : goal
+    );
     setGoals(updatedGoals);
-    setBucketInfo((prevData) => ({ ...prevData, semiGoalTitleList: updatedGoals }));
+    setBucketInfo((prevData) => ({ ...prevData, semiGoalData: updatedGoals }));
   };
 
-  {/* 친구 태그 함수 */}
+  // 친구 태그 함수
   const handleFriendSelect = (friend: string) => {
-      if (selectedFriends.includes(friend)) {
-        setSelectedFriends(selectedFriends.filter((f) => f !== friend));
-      } else {
-        setSelectedFriends([...selectedFriends, friend]);
-      }
-    };
+    if (selectedFriends.includes(friend)) {
+      setSelectedFriends(selectedFriends.filter((f) => f !== friend));
+    } else {
+      setSelectedFriends([...selectedFriends, friend]);
+    }
+  };
 
   const confirmFriendSelection = () => {
-     const newFriends = [...friendTags, ...selectedFriends.filter((f) => !friendTags.includes(f))];
-     setFriendTags(newFriends);
-     setSelectedFriends([]);
-     setBucketInfo((prevData) => ({ ...prevData, friendNickNameList: newFriends }));
-     setShowFriendPicker(false);
+    const newFriends = [...friendTags, ...selectedFriends.filter((f) => !friendTags.includes(f))];
+    setFriendTags(newFriends);
+    setSelectedFriends([]);
+    setBucketInfo((prevData) => ({ ...prevData, friendNickNameList: newFriends }));
+    setShowFriendPicker(false);
   };
 
   const removeFriendTag = (index: number) => {
-      const updatedFriends = friendTags.filter((_, idx) => idx !== index);
-      setFriendTags(updatedFriends);
-      setBucketInfo((prevData) => ({ ...prevData, friendNickNameList: updatedFriends }));
+    const updatedFriends = friendTags.filter((_, idx) => idx !== index);
+    setFriendTags(updatedFriends);
+    setBucketInfo((prevData) => ({ ...prevData, friendNickNameList: updatedFriends }));
   };
 
   const openFriendPicker = () => {
-      setSelectedFriends(friendTags);
-      setShowFriendPicker(true);
+    setSelectedFriends(friendTags);
+    setShowFriendPicker(true);
   };
 
-  {/* 제출 함수 */}
-  const handleSubmit = () => {
-     const filteredGoals = goals.filter(goal => goal.trim() !== "");
-       setBucketInfo((prevData) => ({
-         ...prevData,
-         semiGoalTitleList: filteredGoals,
-       }));
+  // 목표 달성 날짜 선택
+  const handleDateChange = (date) => {
+    const dateString = date.toISOString().split("T")[0];
+    setBucketInfo((prevData) => ({ ...prevData, goalDate: dateString }));
+  };
 
-     sendDataToDB();
-     navigation.navigate('WriteBucketRequired'); // 수정 필요
+  // 제출 함수
+  const handleSubmit = () => {
+    const filteredGoals = goals.filter((goal) => goal.semiGoalTitle.trim() !== "");
+    setBucketInfo((prevData) => ({
+      ...prevData,
+      semiGoalData: filteredGoals,
+    }));
+
+    sendDataToDB();
+    navigation.navigate('WriteBucketRequired'); // 수정 필요
   };
 
   return (
-    <View style = {styles.main}>
+    <View style={styles.main}>
       {/* 헤더 */}
       <PageTitle title="버킷리스트 작성하기" colorCode="#EE4963" />
       <ScrollView contentContainerStyle={styles.container}>
@@ -104,50 +117,46 @@ const WriteBucketOptionalScreen = ({ bucketInfo, setBucketInfo, sendDataToDB }) 
 
         {/* 중간 목표 설정 */}
         <Text style={styles.sectionTitle}>6. 버킷리스트 중간 목표 설정</Text>
-           {goals.map((goal, index) => (
-             <View key={index} style={styles.goalContainer}>
-               <TouchableOpacity onPress={() => removeGoal(index)} style={styles.removeButton}>
-                 <Text style={styles.removeButtonText}>ㅡ</Text>
-               </TouchableOpacity>
-               <TextInput
-                 style={styles.goalInput}
-                 placeholder="중간 목표 입력"
-                 value={goal}
-                 onChangeText={(text) => handleGoalChange(text, index)}
-               />
-             </View>
-           ))}
+        {goals.map((goal, index) => (
+          <View key={index} style={styles.goalContainer}>
+            <TouchableOpacity onPress={() => removeGoal(index)} style={styles.removeButton}>
+              <Text style={styles.removeButtonText}>ㅡ</Text>
+            </TouchableOpacity>
+            <TextInput
+              style={styles.goalInput}
+              placeholder="중간 목표 입력"
+              value={goal.semiGoalTitle}
+              onChangeText={(text) => handleGoalChange(text, index)}
+            />
+          </View>
+        ))}
 
         <TouchableOpacity onPress={addGoal} style={styles.addButton}>
-            <Text style={styles.addButtonText}> + 단계 별 중간 목표</Text>
+          <Text style={styles.addButtonText}> + 단계 별 중간 목표</Text>
         </TouchableOpacity>
 
         {/* 목표 달성 날짜 선택 */}
         <View style={styles.dateSectionContainer}>
           <Text style={styles.sectionTitle}>7. 목표 달성 날짜 선택</Text>
           <DatePicker
-            onDateChange={(date) =>
-              setBucketInfo((prevData) => ({ ...prevData, goalDate: date }))
-            }
+            onDateChange={handleDateChange}
           />
         </View>
 
-
         {/* 친구 태그 목록 */}
         <Text style={styles.sectionTitle}>8. 친구 태그</Text>
-
         {friendTags.length > 0 && (
-            <View style={styles.friendTagsContainer}>
-               {friendTags.map((friend, index) => (
-                 <View key={index} style={styles.friendTag}>
-                   <Text style={styles.friendTagText}>@{friend}</Text>
-                   <TouchableOpacity onPress={() => removeFriendTag(index)} style={styles.removeTagButton}>
-                     <Text style={styles.removeTagText}>X</Text>
-                   </TouchableOpacity>
-                 </View>
-               ))}
-           </View>
-         )}
+          <View style={styles.friendTagsContainer}>
+            {friendTags.map((friend, index) => (
+              <View key={index} style={styles.friendTag}>
+                <Text style={styles.friendTagText}>@{friend}</Text>
+                <TouchableOpacity onPress={() => removeFriendTag(index)} style={styles.removeTagButton}>
+                  <Text style={styles.removeTagText}>X</Text>
+                </TouchableOpacity>
+              </View>
+            ))}
+          </View>
+        )}
 
         {/* 친구 추가 모달 */}
         <TouchableOpacity onPress={openFriendPicker} style={styles.addButton}>
@@ -163,8 +172,8 @@ const WriteBucketOptionalScreen = ({ bucketInfo, setBucketInfo, sendDataToDB }) 
                   key={friend}
                   onPress={() => handleFriendSelect(friend)}
                   style={[
-                      styles.friendItem,
-                      selectedFriends.includes(friend) && styles.selectedFriendItem,
+                    styles.friendItem,
+                    selectedFriends.includes(friend) && styles.selectedFriendItem,
                   ]}
                 >
                   <Text style={styles.friendItemText}>{friend}</Text>
@@ -180,26 +189,18 @@ const WriteBucketOptionalScreen = ({ bucketInfo, setBucketInfo, sendDataToDB }) 
         {/* 버튼 */}
         <View style={styles.buttonContainer}>
           {/* 뒤로 가기 */}
-          <TouchableOpacity
-            style={styles.backButton}
-            onPress={() => navigation.goBack()}
-          >
+          <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
             <Text style={styles.backButtonText}>뒤로 가기</Text>
           </TouchableOpacity>
 
           {/* 작성 완료 */}
-          <TouchableOpacity
-            style={styles.submitButton}
-            onPress={handleSubmit}
-          >
+          <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
             <Text style={styles.submitButtonText}>작성 완료</Text>
           </TouchableOpacity>
         </View>
-
       </ScrollView>
     </View>
   );
 };
-
 
 export default WriteBucketOptionalScreen;

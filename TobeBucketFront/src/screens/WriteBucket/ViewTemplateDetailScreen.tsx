@@ -30,7 +30,6 @@ const ViewTemplateDetailScreen = () => {
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <PageTitle title="템플릿 상세 보기" colorCode="#88B9FF" />
-
       <TemplateDetail templateDetail = {templateDetail}/>
     </ScrollView>
   );

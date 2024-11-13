@@ -14,25 +14,40 @@ import TemplateBucketShort from '../../components/TemplateBucketShort';
 
 const DUMMY_TEMPLATE_LIST = [
   {
+
+    bucketId : 0,
     bucketName: "제주도 한달 살이",
     bucketContent: "재밌당.",
-    semiGoalCnt: 3,
+    semiGoalData: [
+        { semiGoalTitle: "필요한 돈 모으기" },
+        { semiGoalTitle: "구체적인 지역 찾아보기" },
+    ],
     category: 2,
   },
   {
+
+    bucketId : 1,
     bucketName: "제주도 한달 살이",
     bucketContent: "재밌당.",
-    semiGoalCnt: 3,
+    semiGoalData: [
+      { semiGoalTitle: "필요한 돈 모으기" },
+      { semiGoalTitle: "구체적인 지역 찾아보기" },
+      { semiGoalTitle: "숙소 예약하기" },
+    ],
     category: 2,
   },
   {
+    bucketId : 2,
     bucketName: "제주도 한달 살이",
     bucketContent: "재밌당.",
-    semiGoalCnt: 3,
+    semiGoalData: [
+      { semiGoalTitle: "필요한 돈 모으기" },
+    ],
     category: 2,
   },
 
 ];
+
 
 const ViewTemplateScreen = () => {
   const navigation = useNavigation();
@@ -49,14 +64,14 @@ const ViewTemplateScreen = () => {
 
       {/* 템플릿 리스트 */}
       <ScrollView contentContainerStyle={styles.container}>
-        {DUMMY_TEMPLATE_LIST.map((template, index) => (
+        {DUMMY_TEMPLATE_LIST.map((template) => (
           <TemplateBucketShort
-            key={index}
+            key={template.bucketId}
             bucketName={template.bucketName}
             bucketContent={template.bucketContent}
-            semiGoalCnt={template.semiGoalCnt}
+            semiGoalCnt={template.semiGoalData.length}
             category={template.category}
-            onAddPress={() => console.log(`Add Button Pressed`)}
+            onAddPress={() => navigation.navigate('WriteBucketRequired', { template })}
             onCardPress={() => navigation.navigate('ViewTemplateDetail')}
           />
         ))}

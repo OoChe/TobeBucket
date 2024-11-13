@@ -1,5 +1,5 @@
 /*
- [템플릿 상세 조회 컴포넌트]
+ [템플릿 상세 컴포넌트]
   - 파라미터 : templateDetail 객체 (bucketName, bucketContent, category, semiGoalData)
  */
 

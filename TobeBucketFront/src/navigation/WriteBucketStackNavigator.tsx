@@ -21,12 +21,13 @@ const WriteBucketStackNavigator = () => {
       bucketContent: '',
       category: '',
       publicStatus: false,
-      semiGoalTitleList: [] as string[],
-      goalDate: null as Date | null,
+      semiGoalData: [{ semiGoalTitle: "" }] as { semiGoalTitle: string }[],
+      goalDate: null as string | null,
       friendNickNameList : [] as string[]
   });
 
   const sendDataToDB = async () => {
+      // 백엔드 연결 후, WriteBucketScreen에서는 제거 필요
       try {
         console.log('데이터 전송 중:', bucketInfo);
       } catch (error) {
@@ -49,7 +50,7 @@ const WriteBucketStackNavigator = () => {
           <WriteBucketScreen
             {...props}
             bucketInfo={bucketInfo}
-            setBucketInfo={setBucketInfo}
+            setBucketInfo={setBucketInfo} // 직접 전달
             sendDataToDB={sendDataToDB}
           />
         )}
@@ -64,7 +65,7 @@ const WriteBucketStackNavigator = () => {
           <WriteBucketOptionalScreen
             {...props}
             bucketInfo={bucketInfo}
-            setBucketInfo={setBucketInfo}
+            setBucketInfo={setBucketInfo} // 직접 전달
             sendDataToDB={sendDataToDB}
           />
         )}
