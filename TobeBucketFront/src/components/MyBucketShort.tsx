@@ -1,36 +1,35 @@
 /*
- [달성 예정 버킷리스트 컴포넌트]
+ [달성 예정 버킷 컴포넌트]
   - 파라미터
-    1) text : 버튼 내 텍스트 내용
-    2) colorCode : 버튼 선/면 색상
-    3) filled : 색상 채우기 여부
- */
+    1) id: 버킷별 고유번호
+    2) title: 버킷리스트 제목
+    3) description: 버킷리스트 설명
+    4) date: 버킷리스트 목표 달성 희망 날짜
+    5) category: 버킷리스트 카테고리
+  - 
+*/
 import React from 'react';
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  SafeAreaView,
-  StyleSheet,
-  Image,
-} from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native';
 import {getCategoryIconById, getCategoryLabelById} from '../data/bucketIcon';
 
 interface bucketShortProps {
-  title: string;
-  description: string;
-  date: Date;
+  bucketID: number;
+  bucketName: string;
+  bucketContent: string;
+  goalDate: Date;
   category: number;
 }
 
-export const MyBucketShort = ({
-  title,
-  description,
-  date,
-  category,
-}: bucketShortProps) => {
+export const MyBucketShort = ({ bucketID, bucketName, bucketContent, goalDate, category }: bucketShortProps) => {
+  const dateToStr = (goalDate: Date) => { 
+    var year = goalDate.getFullYear();
+    var month = goalDate.getMonth()+1;
+    var day = goalDate.getDate();
+  
+    return year+'.'+month+'.'+day;
+  }
   return (
-    <SafeAreaView>
+    <View>
       <TouchableOpacity style={styles.bucketContainer}>
         <View
           style={{
@@ -46,32 +45,17 @@ export const MyBucketShort = ({
             }}>
             <Image
               source={getCategoryIconById(category)}
-              style={{
-                position: 'relative',
-                marginTop: 10,
-              }}
+              style={styles.icon}
             />
-            <Text // 왼쪽 아이콘 영역
-              style={{
-                fontFamily: 'Pretendard-Regular',
-                fontSize: 10,
-                color: '#000000',
-                position: 'relative',
-                textAlign: 'center',
-                marginTop: 3,
-              }}>
+            <Text style={styles.categoryText}>
               {getCategoryLabelById(category)}
             </Text>
           </View>
-          <View // 제목, 설명, 날짜 영역
-            style={{
-              width: 241,
-              position: 'relative',
-              marginLeft: 20,
-            }}>
-            <Text style={styles.titleText}>{title}</Text>
-            <Text style={styles.descriptionText}>{description}</Text>
-            <Text style={styles.dateText}>목표 달성 날짜 : {date}</Text>
+          <View
+            style={styles.textContainer}>
+            <Text style={styles.titleText}>{bucketName}</Text>
+            <Text style={styles.descriptionText}>{bucketContent}</Text>
+            <Text style={styles.dateText}>목표 달성 날짜 : {dateToStr(goalDate)}</Text>
           </View>
         </View>
         {/* 아래 버튼 영역 */}
@@ -89,7 +73,7 @@ export const MyBucketShort = ({
           </TouchableOpacity>
         </View>
       </TouchableOpacity>
-    </SafeAreaView>
+    </View>
   );
 };
 
@@ -97,11 +81,15 @@ const styles = StyleSheet.create({
   bucketContainer: {
     width: 360,
     height: 108,
-    position: 'relative',
     backgroundColor: '#ffffff',
     borderRadius: 10,
     margin: 'auto',
     marginBottom: 10,
+  },
+  textContainer: {
+    width: 241,
+    position: 'relative',
+    marginLeft: 20,
   },
   titleText: {
     display: 'flex',
@@ -131,6 +119,14 @@ const styles = StyleSheet.create({
     position: 'relative',
     top: '13%',
   },
+  categoryText: {
+    fontFamily: 'Pretendard-Regular',
+    fontSize: 10,
+    color: '#000000',
+    position: 'relative',
+    textAlign: 'center',
+    marginTop: 3,
+  },
   buttonContainer: {
     flexDirection: 'row',
     position: 'relative',
@@ -150,12 +146,12 @@ const styles = StyleSheet.create({
     marginHorizontal: 15,
   },
   divider: {
-    height: 1,
+    height: 10,
     backgroundColor: '#72777A',
   },
   icon: {
-    fontSize: 15,
-    marginRight: 8,
+    position: 'relative',
+    marginTop: 10,
   },
   label: {
     fontSize: 16,

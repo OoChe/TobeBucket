@@ -12,11 +12,13 @@ interface CustomButtonProps {
   text: string;
   colorCode: string;
   filled: boolean;
+  onPress: () => void;
 }
 
-const CustomButton = ({text, colorCode, filled = true}: CustomButtonProps) => {
+const CustomButton = ({text, colorCode, filled = true, onPress}: CustomButtonProps) => {
   return (
     <TouchableOpacity
+      onPress={onPress} // 상위 컴포넌트의 onPress를 실행
       style={[
         styles.button,
         {
@@ -24,7 +26,8 @@ const CustomButton = ({text, colorCode, filled = true}: CustomButtonProps) => {
           borderColor: colorCode,
         },
       ]}>
-      <Text style={[styles.buttonText, {color: filled ? '#FFFFFF' : colorCode}]}>
+      <Text
+        style={[styles.buttonText, {color: filled ? '#FFFFFF' : colorCode}]}>
         {text}
       </Text>
     </TouchableOpacity>

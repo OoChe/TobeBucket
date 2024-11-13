@@ -17,5 +17,5 @@ export const getCategoryIconById = (id: number) => {
   // 특정 id에 해당하는 카테고리 명을 반환하는 함수
 export const getCategoryLabelById = (id: number) => {
   const category = iconCategories.find(category => category.id === id);
-  return category ? category.label : null; // 카테고리 명이 없는 경우 null 반환
+  return category ? category.label : "NULL"; // 카테고리 명이 없는 경우 NULL 글표시로 반환
 };

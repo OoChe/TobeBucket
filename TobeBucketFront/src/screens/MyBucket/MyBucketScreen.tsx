@@ -1,77 +1,50 @@
 /*
  [내 버킷리스트 보기(달성 예정) 스크린]
- - 구성 : 헤더, 템플릿 구경하기, 버킷리스트 제목, 설명, 카테고리 선택, 공유 토글, 버튼(다음 단계)
+ - 구성 : 
  - 함수
- 1) 카테고리 선택
- - handleCategorySelect: 선택된 카테고리를 bucketInfo의 category에 저장
-
- 2) 필수 입력 확인
- - validateInputs: 누락된 필드 확인/Alert 메시지 출력
-
- 3) 제출
- - handleNextStep: bucketInfo를 전송 후 다음 화면 이동
  */
 
 import React, {useState, useEffect} from 'react';
-import {
-  SafeAreaView,
-  ScrollView,
-  Text,
-  View,
-  Image,
-  ActivityIndicator,
-} from 'react-native';
+import {ScrollView, Text, View, Image, ActivityIndicator} from 'react-native';
+import {useNavigation} from '@react-navigation/native';
 import ViewMyBucketToggle from '../../components/ViewMyBucketToggle';
 import PageTitle from '../../components/PageTitle';
 import CustomButton from '../../components/CustomButton';
-import CategoryButton from '../../components/CategoryButton';
+import ViewMyBucketList from '../../components/ViewMyBucketList.tsx';
 import MyBucketShort from '../../components/MyBucketShort.tsx';
-import {categories} from '../../data/bucketCategories';
+import CategoryButton from '../../components/CategoryButton.tsx';
+import { categories } from '../../data/bucketCategories.ts';
 import CryingBucket from '../../assets/images/cryingBucketImg.png';
 import styles from '../../styles/MyBucketScreen.styles';
+import {unachievedData, achievedData} from '../../data/tempBucketData.ts';
 
-// 임시 데이터 생성
-const unachievedData = [
-  {
-    bucketId: 1,
-    bucketName: '제주도 일 년 살이',
-    bucketContent: '제주도에서 일 년 동안 살며 힐링하기',
-    goalDate: '2024-12-31',
-    category: 2,
-  },
-  {
-    bucketId: 2,
-    bucketName: '베이킹 배우기',
-    bucketContent: '롤케이크 직접 만들어보기',
-    goalDate: '2024-11-31',
-    category: 5,
-  },
-];
+interface upcomingBucket {
+  bucketId: number;
+  bucketName: string;
+  bucketContent: string;
+  goalDate: Date;
+  category: number;
+}
 
-const achievedData = [
-  {
-    bucketId: 1,
-    bucketName: '제주도 한 달 살이',
-    achieveDate: '2022-01-01',
-    category: 2,
-    achievementMedia: '',
-    recordContent: '제주도에서 한달 동안 힐링하기 성공했다',
-  },
-  {
-    bucketId: 2,
-    bucketName: '요리 배우기',
-    achieveDate: '2024-11-31',
-    category: 5,
-    achievementMedia: '',
-    recordContent: '제주도에서 한달 동안 힐링하기 성공했다',
-  },
-];
+interface achievedBucket {
+  bucketId: number;
+  bucketName: string;
+  achieveDate: string;
+  category: number;
+  achievementMedia: Date;
+  recordContent: string;
+}
 
 // Toggle의 상태(달성 예정/달성 완료)에 따라 화면 변경 구현
 const MyBucketScreen = () => {
-  const [bucketList, setBucketList] = useState(null);
+  const testDate = new Date();
+  const [upcomingBucketList, setUpcomingBucketList] =
+    useState<upcomingBucket[]>();
+  const [achievedBucketList, setAchievedBucketList] =
+    useState<achievedBucket[]>();
   const [loading, setLoading] = useState(true);
   const [viewMode, setViewMode] = useState('upcoming'); // 'upcoming' or 'achieved'
+  const navigation = useNavigation();
 
   useEffect(() => {
     // 서버에서 버킷리스트 데이터 가져오기
@@ -88,55 +61,37 @@ const MyBucketScreen = () => {
       // }
 
       // 데이터를 임의로 가져온 것처럼 설정
-      // if (viewMode == 'upcoming') setBucketList(unachievedData);
-      // else setBucketList(achievedData);
+      if (viewMode == 'upcoming') setUpcomingBucketList(unachievedData);
+      else setAchievedBucketList(achievedData);
       setLoading(false);
+      console.log(upcomingBucketList)
     };
 
     fetchBucketList();
-  }, []);
+  }, [viewMode]);
 
-  const handleCategorySelect = (categoryId: string) => {};
-
+  const handleWriteBucket = () => {
+    navigation.navigate('WriteBucket');
+  };
+  const handleViewTemplate = () => {
+    // sendDataToDB();
+    // navigation.navigate('ViewTemplate');
+  };
+  const handleMyBucketInfo = () => {
+    // sendDataToDB();
+    navigation.navigate('MyBucketInfo');
+  };
   return (
-    <SafeAreaView>
+    <View style={{flex: 1}}>
       <PageTitle title="나의 버킷" colorCode="#B6E7CC" />
       <ViewMyBucketToggle onSelect={setViewMode} />
       {loading ? (
         <View style={styles.loadingContainer}>
           <ActivityIndicator size="large" color="#1e6969" />
         </View>
-      ) : bucketList && bucketList.length > 0 ? (
-        <View style={styles.bucketListContainer}>
-          <ScrollView
-            style={styles.categoryContainer}
-            horizontal={true}
-            showsHorizontalScrollIndicator={false} // 스크롤바 표시 여부
-          >
-            {[categories[6], ...categories.slice(0, 6)].map(
-              (category, index) => (
-                <CategoryButton
-                  icon={category.icon}
-                  label={category.label}
-                  borderColor={category.borderColor}
-                  onPress={() => handleCategorySelect(category.id)}
-                  isSelected={false} // 선택된 경우 스타일 적용 bucketInfo.category === category.id
-                />
-              ),
-            )}
-          </ScrollView>
-          <ScrollView contentInsetAdjustmentBehavior="automatic">
-            {bucketList.map(item => (
-              <MyBucketShort
-                key={item.id}
-                title={item.bucketName}
-                description={item.bucketContent}
-                date={item.goalDate}
-                category={item.category}
-              />
-            ))}
-          </ScrollView>
-        </View>
+      ) : upcomingBucketList && upcomingBucketList.length > 0 ? (
+        // <MyBucketShort bucketID={3} bucketContent='에라이' bucketName='실패함' goalDate={testDate} category={3}/>
+        <ViewMyBucketList bucketList={upcomingBucketList} /> // 버킷리스트가 안보임. 카테고리만 보임. 대체 왜?
       ) : (
         <ScrollView contentInsetAdjustmentBehavior="automatic">
           <Text style={styles.smallText}>아직 작성한 버킷이 없어요</Text>
@@ -146,15 +101,17 @@ const MyBucketScreen = () => {
             text="버킷 작성하러가기"
             colorCode="#1e6969"
             filled={true}
+            onPress={() => handleWriteBucket()}
           />
           <CustomButton
             text="템플릿 구경하기"
             colorCode="#1e6969"
             filled={false}
+            onPress={() => handleViewTemplate()}
           />
         </ScrollView>
       )}
-    </SafeAreaView>
+    </View>
   );
 };
 
