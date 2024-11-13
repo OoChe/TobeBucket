@@ -11,26 +11,6 @@ type StackParamList = {
 const Stack = createStackNavigator<StackParamList>();
 
 const MyBucketStackNavigator = () => {
-  const [bucketInfo, setBucketInfo] = useState({
-      title: '',
-      description: '',
-      category: '',
-      isShared: false,
-      milestones: [] as string[],
-      planningDate: null as Date | null,
-      friendList : [] as string[]
-  });
-  const [category, setCategory] = useState();
-
-  const sendDataToDB = async () => {
-      try {
-        console.log('데이터 전송 중:', bucketInfo);
-      } catch (error) {
-        console.error('데이터 전송 오류:', error);
-      }
-  };
-
-
   return (
     <Stack.Navigator>
       <Stack.Screen

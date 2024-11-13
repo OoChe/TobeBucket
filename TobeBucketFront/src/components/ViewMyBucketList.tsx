@@ -4,13 +4,13 @@
 2) 달성 예정 버킷리스트 목록
 */
 import React from 'react';
-import {View, ScrollView, TouchableOpacity, StyleSheet} from 'react-native';
+import {View, ScrollView, StyleSheet} from 'react-native';
 import MyBucketShort from './MyBucketShort';
 import CategoryButton from './CategoryButton';
 import {categories} from '../data/bucketCategories';
 
 interface upcomingBucket {
-  bucketID: number;
+  bucketId: number;
   bucketName: string;
   bucketContent: string;
   goalDate: Date;
@@ -42,9 +42,9 @@ const ViewMyBucketList = ({bucketList}: upcomingBucketList) => {
       </ScrollView>
       <ScrollView>
         {bucketList.map(item => (
-          <View key={item.bucketID}>
+          <View key={item.bucketId}>
             <MyBucketShort
-              bucketID={item.bucketID}
+              bucketID={item.bucketId}
               bucketName={item.bucketName}
               bucketContent={item.bucketContent}
               goalDate={item.goalDate}

@@ -9,8 +9,9 @@
   - 
 */
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native';
-import {getCategoryIconById, getCategoryLabelById} from '../data/bucketIcon';
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { CategoryIcon } from './CategoryIcon';
 
 interface bucketShortProps {
   bucketID: number;
@@ -21,6 +22,8 @@ interface bucketShortProps {
 }
 
 export const MyBucketShort = ({ bucketID, bucketName, bucketContent, goalDate, category }: bucketShortProps) => {
+  const navigation = useNavigation();
+
   const dateToStr = (goalDate: Date) => { 
     var year = goalDate.getFullYear();
     var month = goalDate.getMonth()+1;
@@ -28,34 +31,26 @@ export const MyBucketShort = ({ bucketID, bucketName, bucketContent, goalDate, c
   
     return year+'.'+month+'.'+day;
   }
+  const handleMyBucketInfo = () => {
+    // sendDataToDB();
+    navigation.navigate('MyBucketInfo');
+  };
+
   return (
     <View>
-      <TouchableOpacity style={styles.bucketContainer}>
+      <TouchableOpacity style={styles.bucketContainer} onPress={handleMyBucketInfo}>
         <View
           style={{
             flexDirection: 'row',
             marginTop: 5,
             marginLeft: 13,
           }}>
-          <View
-            style={{
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}>
-            <Image
-              source={getCategoryIconById(category)}
-              style={styles.icon}
-            />
-            <Text style={styles.categoryText}>
-              {getCategoryLabelById(category)}
-            </Text>
-          </View>
+          <CategoryIcon category={category}/>
           <View
             style={styles.textContainer}>
-            <Text style={styles.titleText}>{bucketName}</Text>
-            <Text style={styles.descriptionText}>{bucketContent}</Text>
-            <Text style={styles.dateText}>목표 달성 날짜 : {dateToStr(goalDate)}</Text>
+            <Text style={styles.titleText} numberOfLines={1}>{bucketName}</Text>
+            <Text style={styles.descriptionText} numberOfLines={1}>{bucketContent}</Text>
+            <Text style={styles.dateText}>목표 날짜 : {dateToStr(goalDate)}</Text>
           </View>
         </View>
         {/* 아래 버튼 영역 */}
@@ -75,7 +70,7 @@ export const MyBucketShort = ({ bucketID, bucketName, bucketContent, goalDate, c
       </TouchableOpacity>
     </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
   bucketContainer: {
@@ -104,6 +99,7 @@ const styles = StyleSheet.create({
     display: 'flex',
     justifyContent: 'flex-start',
     alignItems: 'center',
+    width: 270,
     fontFamily: 'Pretendard-Regular',
     fontSize: 13,
     position: 'relative',

@@ -28,13 +28,12 @@ interface achievedBucket {
   bucketName: string;
   achieveDate: Date;
   category: number;
-  achievementMedia: Date;
+  achievementMedia: string;
   recordContent: string;
 }
 
 // Toggle의 상태(달성 예정/달성 완료)에 따라 화면 변경 구현
 const MyBucketScreen = () => {
-  const testDate = new Date();
   const [upcomingBucketList, setUpcomingBucketList] =
     useState<upcomingBucket[]>();
   const [achievedBucketList, setAchievedBucketList] =
@@ -73,10 +72,6 @@ const MyBucketScreen = () => {
   const handleViewTemplate = () => {
     // sendDataToDB();
     // navigation.navigate('ViewTemplate');
-  };
-  const handleMyBucketInfo = () => {
-    // sendDataToDB();
-    navigation.navigate('MyBucketInfo');
   };
   return (
     <View style={{flex: 1}}>

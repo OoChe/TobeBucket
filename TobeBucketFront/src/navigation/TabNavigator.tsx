@@ -3,7 +3,7 @@ import {Image, View} from 'react-native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import styles from '../styles/TabNavigator.styles';
 import BucketFeedScreen from '../screens/BucketFeedScreen';
-import MyBucketScreen from '../screens/MyBucket/MyBucketScreen';
+import MyBucketStackNavigator from './MyBucketStackNavigator';
 import FriendListScreen from '../screens/FriendListScreen';
 import MyPageScreen from '../screens/MyPageScreen';
 import WriteBucketStackNavigator from './WriteBucketStackNavigator';
@@ -58,7 +58,7 @@ const TabNavigator = () => {
       })}>
       <Tab.Screen
         name="MyBucket"
-        component={MyBucketScreen}
+        component={MyBucketStackNavigator}
         options={{tabBarLabel: '나의 버킷', headerShown: false}}
       />
 
