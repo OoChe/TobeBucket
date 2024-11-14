@@ -26,8 +26,7 @@ public class GetBucketlistsController {
     private final GetBucketlistsService getBucketlistsService;
 
     @GetMapping("/tobebucket/bucketlists")
-    public ResponseEntity<Map<String, Object>> getBucketlists(
-            @RequestBody GetBucketDTO getBucketDTO) {
+    public ResponseEntity<Map<String, Object>> getBucketlists(GetBucketDTO getBucketDTO) {
         Map<String, Object> response = new LinkedHashMap<>();
         try {
             List<?> bucketList = getBucketlistsService.getBucketlists(getBucketDTO);

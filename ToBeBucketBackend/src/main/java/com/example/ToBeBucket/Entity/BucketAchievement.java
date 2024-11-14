@@ -15,6 +15,12 @@ public class BucketAchievement {
     @Column(name = "bucketId")
     private Integer bucketId;
 
+    @OneToOne
+    @JoinColumn(name = "bucketId", referencedColumnName = "bucketId")
+    @MapsId
+    private Bucket bucket;
+
+
     @Column(name = "achieveDate", nullable = false)
     private LocalDate achieveDate;
 
@@ -26,10 +32,6 @@ public class BucketAchievement {
 
     @Column(name = "stickerId", nullable = false)
     private Integer stickerId;
-
-    @OneToOne
-    @JoinColumn(name = "bucketId", referencedColumnName = "bucketId", insertable = false, updatable = false)
-    private Bucket bucket;
 
     @ManyToOne
     @JoinColumn(name = "stickerId", referencedColumnName = "stickerId", insertable = false, updatable = false)
