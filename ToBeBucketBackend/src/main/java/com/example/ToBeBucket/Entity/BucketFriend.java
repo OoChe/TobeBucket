@@ -7,7 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@Table(name = "BucketFriend")
+@Table(name="BucketFriend")
 public class BucketFriend {
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -24,7 +24,9 @@ public class BucketFriend {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id; // 기본키를 위한 ID, 복합 키 대신 사용할 수 있음. (이 필드는 복합 키 대신 사용할 수 있음)
+    @Column(name="bucket_friend_id")
+    private Integer bucket_friend_id; // 복합 키
+    // 기본키를 위한 ID, 복합 키 대신 사용할 수 있음. (이 필드는 복합 키 대신 사용할 수 있음)
 
     // 복합키를 사용하려면, 복합키 클래스를 생성해야 합니다.
 }
