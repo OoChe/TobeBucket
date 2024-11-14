@@ -16,7 +16,7 @@ public class Bucket {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "bucketId", nullable = false)
-    private Integer bucketId;
+    private Long bucketId;
 
     @Column(name = "userId", length = 255, nullable = false)
     private String userId;
