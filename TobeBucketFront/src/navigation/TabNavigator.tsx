@@ -4,16 +4,16 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import styles from '../styles/TabNavigator.styles';
 import BucketFeedScreen from '../screens/BucketFeedScreen';
 import MyBucketScreen from '../screens/MyBucketScreen';
-import FriendListScreen from '../screens/FriendListScreen';
 import MyPageScreen from '../screens/MyPageScreen';
 import WriteBucketStackNavigator from './WriteBucketStackNavigator';
+import FriendListStackNavigator from './FriendListStackNavigator';
 
 
 type TabParamList = {
   BucketFeed: undefined;
   MyBucket: undefined;
   WriteBucket: undefined;
-  FriendList: undefined;
+  FriendLists: undefined;
   MyPage: undefined;
 };
 
@@ -32,7 +32,7 @@ const TabNavigator = () => {
                  iconSource = require('../assets/icons/feed.png');
             } else if (route.name === 'WriteBucket') {
                  iconSource = require('../assets/icons/bucket.png');
-            } else if (route.name === 'FriendList') {
+            } else if (route.name === 'FriendLists') {
                  iconSource = require('../assets/icons/friend.png');
             } else if (route.name === 'MyPage') {
                  iconSource = require('../assets/icons/setting.png');
@@ -77,8 +77,8 @@ const TabNavigator = () => {
       />
 
       <Tab.Screen
-        name="FriendList"
-        component={FriendListScreen}
+        name="FriendLists"
+        component={FriendListStackNavigator}
         options={{ tabBarLabel: '친구 목록' , headerShown: false}}
       />
 
