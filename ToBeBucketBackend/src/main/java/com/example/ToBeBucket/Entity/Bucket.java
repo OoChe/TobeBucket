@@ -34,10 +34,10 @@ public class Bucket {
     private Integer category;
 
     @Column(name = "createDate", nullable = false)
-    private LocalDateTime createDate;
+    private String createDate;
 
     @Column(name = "goalDate")
-    private LocalDate goalDate;
+    private String goalDate;
 
     @Column(name = "achieveStatus", nullable = false)
     private Boolean achieveStatus = false;

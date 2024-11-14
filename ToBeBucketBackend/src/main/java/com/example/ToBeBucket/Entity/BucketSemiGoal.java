@@ -23,9 +23,6 @@ public class BucketSemiGoal {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "stickerId", referencedColumnName = "stickerId")
     private Sticker sticker; // 외래 키: 스티커 ID
-//
-//    @Column(name = "stickerId", nullable = true)
-//    private Integer stickerId;
 
     @Column(nullable = false, length = 255)
     private String semiGoalTitle; // 중간목표 제목
