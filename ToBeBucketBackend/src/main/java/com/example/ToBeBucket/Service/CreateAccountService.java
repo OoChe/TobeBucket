@@ -5,6 +5,7 @@ import com.example.ToBeBucket.Entity.UserLogin;
 import com.example.ToBeBucket.Entity.UserProfile;
 import com.example.ToBeBucket.Repository.CreateAccountRepository;
 import com.example.ToBeBucket.Repository.UserProfileRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -18,7 +19,7 @@ public class CreateAccountService {
 
     private final CreateAccountRepository createAccountRepository;
     private final UserProfileRepository userProfileRepository;
-
+    @Transactional
     public void createAccount(CreateAccountDTO createAccountDTO) {
         Optional<UserLogin> existingUser = createAccountRepository.findById(createAccountDTO.getUserId());
         Optional<UserProfile> existingProfile = userProfileRepository.findByNickname(createAccountDTO.getNickname());
