@@ -1,5 +1,5 @@
 /*
-  NOTICE : 카테고리 별 조회 OR 검색 기능 추가 예정
+  NOTICE : 카테고리 별 조회 기능 추가 예정
 
  [템플릿 목록 조회 스크린]
   - 구성 : 헤더, 템플릿 목록
@@ -14,8 +14,6 @@ import TemplateBucketShort from '../../components/TemplateBucketShort';
 
 const DUMMY_TEMPLATE_LIST = [
   {
-
-    bucketId : 0,
     bucketName: "제주도 한달 살이",
     bucketContent: "재밌당.",
     semiGoalData: [
@@ -25,8 +23,6 @@ const DUMMY_TEMPLATE_LIST = [
     category: 2,
   },
   {
-
-    bucketId : 1,
     bucketName: "제주도 한달 살이",
     bucketContent: "재밌당.",
     semiGoalData: [
@@ -37,7 +33,6 @@ const DUMMY_TEMPLATE_LIST = [
     category: 2,
   },
   {
-    bucketId : 2,
     bucketName: "제주도 한달 살이",
     bucketContent: "재밌당.",
     semiGoalData: [
@@ -64,9 +59,9 @@ const ViewTemplateScreen = () => {
 
       {/* 템플릿 리스트 */}
       <ScrollView contentContainerStyle={styles.container}>
-        {DUMMY_TEMPLATE_LIST.map((template) => (
+        {DUMMY_TEMPLATE_LIST.map((template, index) => (
           <TemplateBucketShort
-            key={template.bucketId}
+            key={index}
             bucketName={template.bucketName}
             bucketContent={template.bucketContent}
             semiGoalCnt={template.semiGoalData.length}
