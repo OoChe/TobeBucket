@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -29,5 +30,14 @@ public class AlarmService {
         alarmDTO.setAlarmContent(userAlarm.getAlarmContent());
         alarmDTO.setReadStatus(userAlarm.getReadStatus());
         return alarmDTO;
+    }
+
+    public void deleteAlarmsById(List<AlarmDTO.AlarmIdWrapper> alarmIdList) {
+        alarmIdList.forEach(alarmIdWrapper -> {
+            Integer alarmId = alarmIdWrapper.getAlarmId(); // alarmId 추출
+            if (alarmId != null && alarmRepository.existsById(alarmId)) {
+                alarmRepository.deleteById(alarmId);
+            }
+        });
     }
 }
