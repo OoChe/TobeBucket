@@ -12,12 +12,13 @@ import lombok.Setter;
         uniqueConstraints = @UniqueConstraint(columnNames = {"userId", "friendId"}) // userId와 friendId에 복합 유니크 제약 추가
 )
 public class UserFriend {
+
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
     private String userId;
-
-    @Id
     private String friendId;
-
     private int friendStatus;
 
     @ManyToOne
