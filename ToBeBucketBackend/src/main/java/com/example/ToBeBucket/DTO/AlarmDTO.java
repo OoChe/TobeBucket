@@ -12,6 +12,7 @@ public class AlarmDTO {
     private String receiveDate;
     private String alarmContent;
     private Boolean readStatus;
+    private List<Integer> readAllAlarm;
     private List<AlarmIdWrapper> alarmIdList;
 
     @Getter

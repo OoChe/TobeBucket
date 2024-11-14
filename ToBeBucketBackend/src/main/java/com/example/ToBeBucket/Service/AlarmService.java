@@ -3,10 +3,12 @@ package com.example.ToBeBucket.Service;
 import com.example.ToBeBucket.DTO.AlarmDTO;
 import com.example.ToBeBucket.Entity.UserAlarm;
 import com.example.ToBeBucket.Repository.AlarmRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.beans.Transient;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -39,5 +41,17 @@ public class AlarmService {
                 alarmRepository.deleteById(alarmId);
             }
         });
+    }
+
+    @Transactional
+    public void markAlarmAsRead(Integer alarmId) {
+        if (alarmRepository.existsById(alarmId)) {
+            alarmRepository.updateReadStatus(alarmId,true);
+        }
+    }
+
+    @Transactional
+    public void markAllAlarmAsRead(List<Integer> readAllAlarm) {
+        alarmRepository.markReadStatusForMultipleAlarms(readAllAlarm, true);
     }
 }
