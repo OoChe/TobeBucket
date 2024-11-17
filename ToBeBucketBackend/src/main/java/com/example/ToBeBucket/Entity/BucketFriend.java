@@ -14,7 +14,7 @@ public class BucketFriend {
     @JoinColumn(name = "userId", nullable = false)
     private UserLogin userLogin; // 외래 키: 사용자 ID
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "bucketId", nullable = false)
     private Bucket bucket; // 외래 키: 버킷 ID
 
