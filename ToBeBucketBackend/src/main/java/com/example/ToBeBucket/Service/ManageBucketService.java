@@ -90,19 +90,54 @@ public class ManageBucketService {
 
         updateBucketDetails(bucket, editBucketDTO);
         updateBucketFriends(bucket, user, editBucketDTO.getFriendNickNameList());
+        updateBucketSemiGoal(bucket, editBucketDTO.getSemiGoalData());
     }
 
-    // 버킷 세부내용 & 카테고리 수정
+    // 버킷 세부내용 & 카테고리 수정 & 목표 달성 날짜 수정
     private void updateBucketDetails(Bucket bucket, EditBucketDTO editBucketDTO) {
         if (editBucketDTO.getBucketContent() != null) {
-            bucket.setBucketName(editBucketDTO.getBucketContent());
+            bucket.setBucketContent(editBucketDTO.getBucketContent());
         }
         if (editBucketDTO.getCategory() != null) {
             bucket.setCategory(editBucketDTO.getCategory());
         }
+        if (editBucketDTO.getGoalDate() != null) {
+            bucket.setGoalDate(editBucketDTO.getGoalDate());
+        }
         bucketRepository.save(bucket);
     }
+    //버킷 중간목표 수정
+    private void updateBucketSemiGoal(Bucket bucket, List<SemiGoalTitleDTO> semiGoalData) {
+        // 현재 가지고 있는 중간 목표 목록 가져오기
+        List<BucketSemiGoal> currentSemiGoals = bucketSemiGoalRepository.findByBucket(bucket);
 
+        if (semiGoalData != null && !semiGoalData.isEmpty()) {
+            //new 중간 목표 추가
+            for (SemiGoalTitleDTO semiGoalTitleDTO : semiGoalData) {
+                String semiGoalTitle = semiGoalTitleDTO.getSemiGoalTitle();
+                boolean exists = currentSemiGoals.stream()
+                        .anyMatch(semiGoal -> semiGoal.getSemiGoalTitle().equals(semiGoalTitle));
+                if (!exists) {
+                    BucketSemiGoal bucketSemiGoal = new BucketSemiGoal();
+                    bucketSemiGoal.setSemiGoalTitle(semiGoalTitle);
+                    bucketSemiGoal.setBucket(bucket);
+                    bucketSemiGoalRepository.save(bucketSemiGoal);
+                }
+            }
+            // 삭제
+            List<String> newSemiGoalTitles = semiGoalData.stream()
+                    .map(SemiGoalTitleDTO::getSemiGoalTitle)
+                    .toList();
+            for (BucketSemiGoal currentSemiGoal : currentSemiGoals) {
+                if (!newSemiGoalTitles.contains(currentSemiGoal.getSemiGoalTitle())) {
+                    bucketSemiGoalRepository.delete(currentSemiGoal);
+                }
+            }
+        } else { //전체 삭제인 경우
+            bucketSemiGoalRepository.deleteAll(currentSemiGoals);
+        }
+    }
+    
     // 친구 목록 수정
     private void updateBucketFriends(Bucket bucket, UserLogin user, List<String> newFriendNickNameList) {
         List<BucketFriend> currentFriends = bucketFriendRepository.findByBucket(bucket);
