@@ -93,6 +93,14 @@ public class ManageBucketService {
         updateBucketSemiGoal(bucket, editBucketDTO.getSemiGoalData());
     }
 
+    //버킷 삭제하기
+    public void deleteBucket(Integer bucketId) {
+        Bucket bucket = bucketRepository.findById(bucketId)
+                .orElseThrow(() -> new RuntimeException("없는 버킷입니다."));
+        bucketRepository.delete(bucket);
+    }
+
+
     // 버킷 세부내용 & 카테고리 수정 & 목표 달성 날짜 수정
     private void updateBucketDetails(Bucket bucket, EditBucketDTO editBucketDTO) {
         if (editBucketDTO.getBucketContent() != null) {
@@ -137,7 +145,7 @@ public class ManageBucketService {
             bucketSemiGoalRepository.deleteAll(currentSemiGoals);
         }
     }
-    
+
     // 친구 목록 수정
     private void updateBucketFriends(Bucket bucket, UserLogin user, List<String> newFriendNickNameList) {
         List<BucketFriend> currentFriends = bucketFriendRepository.findByBucket(bucket);
@@ -163,7 +171,6 @@ public class ManageBucketService {
             }
         }
     }
-
     private void addNewFriends(Bucket bucket, UserLogin user, List<BucketFriend> currentFriends, List<String> newFriendNickNameList) {
         for (String newFriendNickname : newFriendNickNameList) {
             boolean isFriendExist = isFriendExist(currentFriends, newFriendNickname);
@@ -183,13 +190,11 @@ public class ManageBucketService {
             }
         }
     }
-
     private String getNicknameByUserId(String userId) {
         UserProfile userProfile = userProfileRepository.findByUserId(userId)
                 .orElseThrow(() -> new RuntimeException("UserPrfile 없음"));
         return userProfile.getNickname();
     }
-
     private boolean isFriendExist(List<BucketFriend> currentFriends, String newFriendNickname) {
         return currentFriends.stream()
                 .anyMatch(friend -> getNicknameByUserId(friend.getFriend().getUserId()).equals(newFriendNickname));

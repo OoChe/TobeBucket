@@ -48,10 +48,26 @@ public class ManageBucketController {
         try {
             // 서비스 호출해서 DB에 저장
             manageBucketService.editBucket(userId, bucketId, editBucketDTO);
-
             //response해주기
             response.put("code", "SU");
             response.put("message", "Success.");
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            response.put("code", "DE");
+            response.put("message", e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        }
+    }
+
+    @DeleteMapping("/tobebucket/bucket-delete/{bucketId}")
+    public ResponseEntity<Map<String,Object>> deleteBucket(@PathVariable Integer bucketId){
+        Map<String,Object> response = new LinkedHashMap<>();
+        try {
+            // 서비스 호출해서 DB에서 삭제하기
+            manageBucketService.deleteBucket(bucketId);
+            //response해주기
+            response.put("code", "SU");
+            response.put("message", "Delete Success.");
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             response.put("code", "DE");
