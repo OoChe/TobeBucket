@@ -21,6 +21,7 @@ public class ManageBucketService {
     private final BucketFriendRepository bucketFriendRepository;
     private final UserLoginRepository userLoginRepository;
     private final BucketSemiGoalRepository bucketSemiGoalRepository;
+    private final UserBucketRepository userBucketRepository;
 
     //버킷 새로 만들기
     @Transactional
@@ -32,6 +33,12 @@ public class ManageBucketService {
                 .orElseThrow(() -> new RuntimeException("사용자 프로필 정보 없음"));
         Bucket bucket = getBucket(userId, writeBucketDTO, userProfile);
         bucketRepository.save(bucket);
+
+        // UserBucket에 userId와 friendId 추가
+        UserBucket userBucket = new UserBucket();
+        userBucket.setUserId(user);  // 현재 사용자 추가
+        userBucket.setBucketId(bucket); // 버킷 추가
+        userBucketRepository.save(userBucket);  // userId와 bucketId 관계 저장
 
         //BucketFriend 생성할지 말지 결정
         if (writeBucketDTO.getFriendNickNameList() != null) {
@@ -47,6 +54,12 @@ public class ManageBucketService {
                     bucketFriend.setFriend(friend);
 
                     bucketFriendRepository.save(bucketFriend);
+
+                    // UserBucket 저장 (userId와 friendId 연결)
+                    UserBucket friendUserBucket = new UserBucket();
+                    friendUserBucket.setUserId(friend);
+                    friendUserBucket.setBucketId(bucket);
+                    userBucketRepository.save(friendUserBucket);
                 }
         }
         //SemiGoalBucket 생성할지 말지 결정
@@ -152,22 +165,31 @@ public class ManageBucketService {
 
         // 친구 목록이 비어있거나 null이면 기존 친구 삭제
         if (newFriendNickNameList == null || newFriendNickNameList.isEmpty()) {
-            deleteAllFriends(currentFriends);
+            deleteAllFriends(currentFriends, bucket, user);
         } else {
-            deleteOldFriends(currentFriends, newFriendNickNameList);
+            deleteOldFriends(currentFriends, newFriendNickNameList, bucket, user);
             addNewFriends(bucket, user, currentFriends, newFriendNickNameList);
         }
     }
-    private void deleteAllFriends(List<BucketFriend> currentFriends) {
-        bucketFriendRepository.deleteAll(currentFriends);
+
+    private void deleteAllFriends(List<BucketFriend> currentFriends, Bucket bucket, UserLogin user) {
+        for (BucketFriend currentFriend : currentFriends) {
+            bucketFriendRepository.delete(currentFriend);
+
+            // UserBucket에서도 삭제
+            deleteUserBucketRelation(currentFriend.getFriend(), bucket);
+        }
     }
-    private void deleteOldFriends(List<BucketFriend> currentFriends, List<String> newFriendNickNameList) {
+    private void deleteOldFriends(List<BucketFriend> currentFriends, List<String> newFriendNickNameList, Bucket bucket, UserLogin user){
         for (BucketFriend currentFriend : currentFriends) {
             String currentNickname = getNicknameByUserId(currentFriend.getFriend().getUserId());
 
-            //이전에는 추가했었다가 이번에는 빼려고 하는 경우
+            // 이전에는 추가했었다가 이번에는 빼려고 하는 경우
             if (!newFriendNickNameList.contains(currentNickname)) {
                 bucketFriendRepository.delete(currentFriend);
+
+                // UserBucket에서도 삭제
+                deleteUserBucketRelation(currentFriend.getFriend(), bucket);
             }
         }
     }
@@ -187,6 +209,9 @@ public class ManageBucketService {
                 bucketFriend.setFriend(friend);
 
                 bucketFriendRepository.save(bucketFriend);
+
+                // UserBucket에도 친구 추가
+                addUserToBucket(friend, bucket);  // 친구 추가
             }
         }
     }
@@ -198,6 +223,16 @@ public class ManageBucketService {
     private boolean isFriendExist(List<BucketFriend> currentFriends, String newFriendNickname) {
         return currentFriends.stream()
                 .anyMatch(friend -> getNicknameByUserId(friend.getFriend().getUserId()).equals(newFriendNickname));
+    }
+    private void deleteUserBucketRelation(UserLogin user, Bucket bucket) {
+        List<UserBucket> userBuckets = userBucketRepository.findByUserIdAndBucketId(user, bucket);
+        userBucketRepository.deleteAll(userBuckets);
+    }
+    private void addUserToBucket(UserLogin user, Bucket bucket) {
+        UserBucket userBucket = new UserBucket();
+        userBucket.setUserId(user);
+        userBucket.setBucketId(bucket);
+        userBucketRepository.save(userBucket);
     }
 
 }
