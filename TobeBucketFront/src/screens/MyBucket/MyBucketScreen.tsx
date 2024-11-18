@@ -43,7 +43,7 @@ const MyBucketScreen = () => {
       if (mode === 'upcoming') {
         setUpcomingBucketList(unachievedData);
       } else {
-        setAchievedBucketList(null);
+        setAchievedBucketList(achievedData);
       }
     } catch (error) {
       console.error(`Failed to fetch ${mode} bucket list:`, error);

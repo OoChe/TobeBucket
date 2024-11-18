@@ -28,7 +28,6 @@ const styles = StyleSheet.create({
   categoryText: {
     fontFamily: 'Pretendard-Regular',
     fontSize: 10,
-    color: '#000000',
     position: 'relative',
     textAlign: 'center',
     marginTop: 3,

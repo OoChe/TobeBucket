@@ -3,7 +3,7 @@
 1) 카테고리 스크롤바 표시
 2) 달성 예정 버킷리스트 목록
 */
-import React from 'react';
+import React, {useState} from 'react';
 import {View, ScrollView, StyleSheet} from 'react-native';
 import MyBucketShort from './MyBucketShort';
 import HorizontalCategory from './HorizontalCategory';
@@ -21,12 +21,22 @@ interface upcomingBucketList {
 }
 
 const ViewMyBucketList = ({bucketList}: upcomingBucketList) => {
-  const handleCategorySelect = (categoryId: string) => {};
+  const [selectedCategory, setSelectedCategory] = useState<number>(6);
+  
+  const handleCategorySelect = (categoryId: number) => {
+    setSelectedCategory(categoryId);
+    console.log(categoryId);
+  };
+
+  const filteredBucketList = selectedCategory === 6
+    ? bucketList // 전체보기 선택 시 모든 버킷리스트 표시
+    : bucketList.filter(item => item.category === selectedCategory);
+
   return (
     <View style={styles.bucketListContainer}>
-      <HorizontalCategory/>
+      <HorizontalCategory onSelectCategory={handleCategorySelect}/>
       <ScrollView>
-        {bucketList.map(item => (
+        {filteredBucketList.map(item => (
           <View key={item.bucketId}>
             <MyBucketShort
               bucketID={item.bucketId}

@@ -1,16 +1,32 @@
 /*
 [버킷리스트 카테고리 스크롤바 컴포넌트]
-구현할 내용
-1) 카테고리 선택 시 선택했다는 게 보이도록 표현
-2) 상위 컴포넌트에서 선택한 카테고리 정보를 전달
-- 처음에 있던 WriteBucketScreen.tsx 파일에 있는 내용 참조
+1) 변수
+- selectedCategory
+  : 선택된 카테고리 항목(default: 전체 보기[6])
+2) 함수/인터페이스
+- HorizontalCategoryProps
+  : 부모 컴포넌트에 카테고리 정보를 전달하는 함수
+  기본값은 전체보기[6]으로 설정
+- handleCategorySelect()
+  : 선택된 카테고리 상태를 업데이트한 후,
+  부모 컴포넌트에 선택된 카테고리 전달
 */
-import React from 'react';
+import Reac, {useState} from 'react';
 import {View, ScrollView, StyleSheet} from 'react-native';
 import CategoryButton from './CategoryButton';
 import {categories} from '../data/bucketCategories';
 
-const HorizontalCategory = () => {
+interface HorizontalCategoryProps{
+  onSelectCategory: (categoryId: number) => void;
+}
+
+const HorizontalCategory = ({onSelectCategory} : HorizontalCategoryProps) => {
+  const [selectedCategory, setSelectedCategory] = useState<number>(6);
+
+  const handleCategorySelect = (categoryId: number) => {
+    setSelectedCategory(categoryId);
+    onSelectCategory(categoryId);
+  }
   return (
     <View>
       <ScrollView
@@ -18,13 +34,13 @@ const HorizontalCategory = () => {
         horizontal={true}
         showsHorizontalScrollIndicator={false}
       >
-        {[categories[6], ...categories.slice(0, 6)].map(category => (
+        {[categories[6], ...categories.slice(0, 6)].map((category, index) => (
           <CategoryButton
             icon={category.icon}
             label={category.label}
             borderColor={category.borderColor}
-            onPress={() => handleCategorySelect(category.id)}
-            isSelected={false} // 선택된 경우 스타일 적용 bucketInfo.category === category.id
+            onPress={() => handleCategorySelect((index+6)%7)}
+            isSelected={selectedCategory === ((index+6)%7)}
           />
         ))}
       </ScrollView>
