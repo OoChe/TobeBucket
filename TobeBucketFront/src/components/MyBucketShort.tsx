@@ -4,7 +4,7 @@
     1) id: 버킷별 고유번호
     2) title: 버킷리스트 제목
     3) description: 버킷리스트 설명
-    4) date: 버킷리스트 목표 달성 희망 날짜
+    4) date: 버킷리스트 목표 달성 희망 날짜 - string으로 변경할 것
     5) category: 버킷리스트 카테고리
   - 
 */
@@ -17,20 +17,13 @@ interface bucketShortProps {
   bucketID: number;
   bucketName: string;
   bucketContent: string;
-  goalDate: Date;
+  goalDate: string;
   category: number;
 }
 
 export const MyBucketShort = ({ bucketID, bucketName, bucketContent, goalDate, category }: bucketShortProps) => {
   const navigation = useNavigation();
 
-  const dateToStr = (goalDate: Date) => { 
-    var year = goalDate.getFullYear();
-    var month = goalDate.getMonth()+1;
-    var day = goalDate.getDate();
-  
-    return year+'.'+month+'.'+day;
-  }
   const handleMyBucketInfo = () => {
     // sendDataToDB();
     navigation.navigate('MyBucketInfo');
@@ -50,7 +43,7 @@ export const MyBucketShort = ({ bucketID, bucketName, bucketContent, goalDate, c
             style={styles.textContainer}>
             <Text style={styles.titleText} numberOfLines={1}>{bucketName}</Text>
             <Text style={styles.descriptionText} numberOfLines={1}>{bucketContent}</Text>
-            <Text style={styles.dateText}>목표 날짜 : {dateToStr(goalDate)}</Text>
+            <Text style={styles.dateText}>목표 날짜 : {goalDate}</Text>
           </View>
         </View>
         {/* 아래 버튼 영역 */}

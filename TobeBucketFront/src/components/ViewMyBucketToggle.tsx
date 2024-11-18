@@ -1,13 +1,17 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 
 const ViewMyBucketToggle = ({ onSelect }) => {
   const [selectedTab, setSelectedTab] = useState('upcoming');
 
-  const handleToggle = (tab) => {
+  const handleToggle = (tab: string) => {
     setSelectedTab(tab);
-    onSelect(tab); // 부모 컴포넌트(MyBucketScreen)로 선택된 탭 전달
-  };
+    if (onSelect) {
+      onSelect(tab); // 부모 컴포넌트(MyBucketScreen)로 선택된 탭 전달
+    }  };
+  useEffect(() => {
+    console.log(selectedTab);
+  }, [selectedTab]);
 
   return (
     <View style={styles.container}>

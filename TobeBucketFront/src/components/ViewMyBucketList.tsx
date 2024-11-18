@@ -6,14 +6,13 @@
 import React from 'react';
 import {View, ScrollView, StyleSheet} from 'react-native';
 import MyBucketShort from './MyBucketShort';
-import CategoryButton from './CategoryButton';
-import {categories} from '../data/bucketCategories';
+import HorizontalCategory from './HorizontalCategory';
 
 interface upcomingBucket {
   bucketId: number;
   bucketName: string;
   bucketContent: string;
-  goalDate: Date;
+  goalDate: string;
   category: number;
 }
 
@@ -25,21 +24,7 @@ const ViewMyBucketList = ({bucketList}: upcomingBucketList) => {
   const handleCategorySelect = (categoryId: string) => {};
   return (
     <View style={styles.bucketListContainer}>
-      <ScrollView
-        style={styles.categoryContainer}
-        horizontal={true}
-        showsHorizontalScrollIndicator={false} // 스크롤바 표시 여부
-      >
-        {[categories[6], ...categories.slice(0, 6)].map(category => (
-          <CategoryButton
-            icon={category.icon}
-            label={category.label}
-            borderColor={category.borderColor}
-            onPress={() => handleCategorySelect(category.id)}
-            isSelected={false} // 선택된 경우 스타일 적용 bucketInfo.category === category.id
-          />
-        ))}
-      </ScrollView>
+      <HorizontalCategory/>
       <ScrollView>
         {bucketList.map(item => (
           <View key={item.bucketId}>

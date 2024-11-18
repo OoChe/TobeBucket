@@ -14,7 +14,6 @@ import ViewMyBucketList from '../../components/ViewMyBucketList.tsx';
 import CryingBucket from '../../assets/images/cryingBucketImg.png';
 import styles from '../../styles/MyBucketScreen.styles';
 import {unachievedData, achievedData} from '../../data/tempBucketData.ts';
-
 interface upcomingBucket {
   bucketId: number;
   bucketName: string;
@@ -26,7 +25,7 @@ interface upcomingBucket {
 interface achievedBucket {
   bucketId: number;
   bucketName: string;
-  achieveDate: Date;
+  achieveDate: string;
   category: number;
   achievementMedia: string;
   recordContent: string;
@@ -42,29 +41,28 @@ const MyBucketScreen = () => {
   const [viewMode, setViewMode] = useState('upcoming'); // 'upcoming' or 'achieved'
   const navigation = useNavigation();
 
-  useEffect(() => {
-    // 서버에서 버킷리스트 데이터 가져오기
-    const fetchBucketList = async () => {
-      setLoading(true);
-      // try {
+  const fetchBucketList = async (mode: 'upcoming' | 'achieved') => {
+    setLoading(true);
+    try{
       //   const response = await fetch('YOUR_SERVER_API_ENDPOINT');
       //   const data = await response.json();
-      //   setBucketList(data); // 데이터가 있으면 상태에 저장
-      // } catch (error) {
-      //   console.error('Failed to fetch bucket list:', error);
-      // } finally {
-      //   setLoading(false); // 로딩 완료 상태 설정
-      // }
 
-      // 데이터를 임의로 가져온 것처럼 설정
-      if (viewMode == 'upcoming') setUpcomingBucketList(unachievedData);
+      if (mode === 'upcoming') setUpcomingBucketList(unachievedData);
       else setAchievedBucketList(achievedData);
+    }
+    catch(error){
+      console.error('Failed to fetch ${mode} bucket list: ', error);
+    } finally{
       setLoading(false);
-      console.log(upcomingBucketList)
-    };
-
-    fetchBucketList();
+    }
+  }
+  useEffect(() => {
+    fetchBucketList(viewMode);
   }, [viewMode]);
+
+  const getCurrentBucketList = () => {
+    return viewMode === 'upcoming' ? upcomingBucketList : achievedBucketList;
+  };
 
   const handleWriteBucket = () => {
     navigation.navigate('WriteBucket');
@@ -81,8 +79,8 @@ const MyBucketScreen = () => {
         <View style={styles.loadingContainer}>
           <ActivityIndicator size="large" color="#1e6969" />
         </View>
-      ) : upcomingBucketList && upcomingBucketList.length > 0 ? (
-        <ViewMyBucketList bucketList={upcomingBucketList} /> // 버킷리스트가 안보임. 카테고리만 보임. 대체 왜?
+      ) : getCurrentBucketList() && getCurrentBucketList().length > 0 ? (
+        <ViewMyBucketList bucketList={getCurrentBucketList()} />
       ) : (
         <ScrollView contentInsetAdjustmentBehavior="automatic">
           <Text style={styles.smallText}>아직 작성한 버킷이 없어요</Text>

@@ -2,747 +2,147 @@ import React from 'react';
 import {
   View,
   Text,
-  ImageBackground,
+  Image,
   SafeAreaView,
   ScrollView,
+  StyleSheet,
+  TouchableOpacity,
 } from 'react-native';
+import dots from '../../assets/icons/dots.png';
+import CategoryButton from '../../components/CategoryButton';
+import StickerEmpty from '../../components/StickerEmpty';
+import MilestoneShort from '../../components/MilestoneShort';
 
 const MyBucketInfoScreen = () => {
+  const circle = (size: number) => {
+    const styles = StyleSheet.create({
+      container: {
+        borderRadius: size / 2,
+      },
+    });
+  };
   return (
     <SafeAreaView>
       <ScrollView
         scrollEnabled={true}
         contentInsetAdjustmentBehavior="automatic">
-        <View
-          style={{
-            width: 389.345,
-            height: 692,
-            position: 'relative',
-            marginTop: 0,
-            marginRight: 'auto',
-            marginBottom: 0,
-            marginLeft: 'auto',
-          }}>
-          <View
-            style={{
-              display: 'flex',
-              width: 72,
-              height: 21,
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              position: 'relative',
-              zIndex: 39,
-              marginTop: 0,
-              marginRight: 0,
-              marginBottom: 0,
-              marginLeft: 3.345,
-            }}>
+        <View>
+          {/* 뒤로 가는 컴포넌트 */}
+          <View style={styles.titleContainer}>
             <View
               style={{
-                width: 21,
-                height: 21,
-                flexShrink: 0,
-                position: 'relative',
-                overflow: 'hidden',
-                zIndex: 39,
-              }}>
-              {/* <Image source='../'> */}
-            </View>
-            <Text
-              style={{
-                height: 14,
-                flexShrink: 0,
-                fontFamily: 'Inter',
-                fontSize: 9,
-                fontWeight: '500',
-                lineHeight: 14,
-                color: '#878787',
-                position: 'relative',
-                textAlign: 'left',
-                zIndex: 17,
-              }}
-              numberOfLines={1}>
-              뒤로가기
-            </Text>
-          </View>
-          <View
-            style={{
-              width: 349,
-              height: 49,
-              position: 'relative',
-              zIndex: 45,
-              marginTop: 12,
-              marginRight: 0,
-              marginBottom: 0,
-              marginLeft: 19.345,
-            }}>
-            {/* <ImageBackground
-              style={{
-                width: '14.04%',
-                height: '100%',
-                position: 'absolute',
-                top: 0,
-                left: '85.1%',
-                zIndex: 38,
-              }}
-              source={require('./assets/images/612a264c-c452-4647-9a78-7703eed4a33d.png')}
-            /> */}
-            <Text
-              style={{
-                display: 'flex',
-                height: '63.27%',
-                justifyContent: 'flex-start',
-                alignItems: 'flex-start',
-                fontFamily: 'Inter',
-                fontSize: 28,
-                fontWeight: '700',
-                lineHeight: 31,
-                color: '#3f6262',
-                position: 'absolute',
-                top: '6.12%',
-                left: 0,
-                textAlign: 'left',
-                zIndex: 13,
-              }}
-              numberOfLines={1}>
-              제주도 두 달 살이
-            </Text>
-            {/* <ImageBackground
-              style={{
-                width: '13.47%',
-                height: '65.31%',
-                fontFamily: 'Pretendard Variable',
-                fontSize: 39,
-                fontWeight: '400',
-                lineHeight: 12,
-                position: 'absolute',
-                top: '16.33%',
-                left: '86.53%',
-                zIndex: 45,
-              }}
-              source={require('./assets/images/89f2511d-cd66-4f4e-b1ca-0af9609a88de.png')}
-            />
-          </View> */}
-            <Text
-              style={{
-                display: 'flex',
-                width: 273,
-                height: 31,
-                justifyContent: 'flex-start',
-                alignItems: 'flex-start',
-                fontFamily: 'Inter',
-                fontSize: 13,
-                fontWeight: '500',
-                lineHeight: 15.733,
-                color: '#878787',
-                position: 'relative',
-                textAlign: 'left',
-                zIndex: 16,
-                marginTop: -9,
-                marginRight: 0,
-                marginBottom: 0,
-                marginLeft: 19.345,
-              }}>
-              생성일 - 2024.01.30. (일)
-            </Text>
-            <View
-              style={{
-                width: 354,
-                height: 31,
-                position: 'relative',
-                zIndex: 18,
-                marginTop: 6,
-                marginRight: 0,
-                marginBottom: 0,
-                marginLeft: 16.345,
+                marginHorizontal: 15,
               }}>
               <Text
                 style={{
-                  display: 'flex',
-                  height: '100%',
-                  justifyContent: 'flex-start',
-                  alignItems: 'flex-start',
-                  fontFamily: 'Inter',
+                  fontFamily: 'Pretendard-ExtraBold',
                   fontSize: 28,
-                  fontWeight: '700',
-                  lineHeight: 31,
-                  position: 'absolute',
-                  top: 0,
-                  left: 0,
-                  textAlign: 'left',
-                  zIndex: 14,
-                }}
-                numberOfLines={1}>
+                  color: '#3f6262',
+                }}>
+                제주도 두 달 살이
+              </Text>
+              <Text
+                style={{
+                  fontFamily: 'Pretendard-Light',
+                  fontSize: 13,
+                  color: '#878787',
+                  marginBottom: 10
+                }}>
+                생성일 - 2024.01.30. (일)
+              </Text>
+            </View>
+            <StickerEmpty />
+          </View>
+          {/* #edf7f2 */}
+          <View style={styles.contentContainer}>
+            <View
+              style={{
+                flexDirection: 'row',
+                position: 'relative',
+                marginTop: 12,
+              }}>
+              <Text
+                style={{
+                  fontFamily: 'Pretendard-ExtraBold',
+                  fontSize: 28,
+                  marginRight: 5,
+                }}>
                 D-0000
               </Text>
-              <View
-                style={{
-                  width: '6.78%',
-                  height: '77.42%',
-                  position: 'absolute',
-                  top: '9.68%',
-                  left: '93.22%',
-                  overflow: 'hidden',
-                  zIndex: 18,
-                }}>
-                {/* <ImageBackground
-                style={{
-                  width: 3.42,
-                  height: 17.5,
-                  position: 'relative',
-                  zIndex: 19,
-                  marginTop: 3.25,
-                  marginRight: 0,
-                  marginBottom: 0,
-                  marginLeft: 10.29,
-                }}
-                source={require('./assets/images/9903db19-add1-4cab-9933-d2472e1adafa.png')}
-              /> */}
-              </View>
               <Text
                 style={{
-                  display: 'flex',
-                  height: '64.52%',
-                  justifyContent: 'flex-start',
-                  alignItems: 'center',
-                  fontFamily: 'Inter',
+                  fontFamily: 'Pretendard-Bold',
                   fontSize: 14,
-                  fontWeight: '600',
-                  lineHeight: 16.943,
                   color: '#1e6969',
-                  position: 'absolute',
-                  top: '35.48%',
-                  left: '33.05%',
-                  textAlign: 'left',
-                  zIndex: 15,
-                }}
-                numberOfLines={1}>
-                2024.1.08 목표
-              </Text>
-            </View>
-            <Text
-              style={{
-                height: 21,
-                fontFamily: 'Inter',
-                fontSize: 18,
-                fontWeight: '700',
-                lineHeight: 21,
-                color: '#000000',
-                position: 'relative',
-                textAlign: 'left',
-                zIndex: 23,
-                marginTop: 11,
-                marginRight: 0,
-                marginBottom: 0,
-                marginLeft: 20.345,
-              }}
-              numberOfLines={1}>
-              세부 설명
-            </Text>
-            <View
-              style={{
-                width: 363,
-                height: 67,
-                backgroundColor: '#ffffff',
-                borderTopLeftRadius: 10,
-                borderTopRightRadius: 10,
-                borderBottomRightRadius: 10,
-                borderBottomLeftRadius: 10,
-                position: 'relative',
-                zIndex: 22,
-                marginTop: 4,
-                marginRight: 0,
-                marginBottom: 0,
-                marginLeft: 12.345,
-              }}>
-              <Text
-                style={{
-                  display: 'flex',
-                  width: 322,
-                  height: '76.12%',
-                  justifyContent: 'flex-start',
-                  alignItems: 'flex-start',
-                  fontFamily: 'Pretendard Variable',
-                  fontSize: 13,
-                  fontWeight: '400',
-                  lineHeight: 12,
-                  color: '#000000',
-                  position: 'absolute',
-                  top: '13.43%',
-                  left: '3.86%',
-                  textAlign: 'left',
-                  zIndex: 22,
+                  marginTop: 15,
                 }}>
+                2024.01.08 목표
+              </Text>
+              <TouchableOpacity>
+              <Image source={dots} style={{marginLeft: 120, marginTop: 5}}/>
+              </TouchableOpacity>
+            </View>
+            <Text style={styles.middleText}>세부 설명</Text>
+            <View style={styles.textContainer}>
+              <Text style={styles.normalText}>
                 제주도에서 한달 동안 살며 힐링하기
               </Text>
             </View>
-            <Text
-              style={{
-                height: 31,
-                fontFamily: 'Inter',
-                fontSize: 18,
-                fontWeight: '700',
-                lineHeight: 21.784,
-                color: '#000000',
-                position: 'relative',
-                textAlign: 'left',
-                zIndex: 26,
-                marginTop: 6,
-                marginRight: 0,
-                marginBottom: 0,
-                marginLeft: 20.345,
-              }}
-              numberOfLines={1}>
-              카테고리
-            </Text>
-            <View
-              style={{
-                width: 363,
-                height: 64,
-                backgroundColor: '#ffffff',
-                borderTopLeftRadius: 10,
-                borderTopRightRadius: 10,
-                borderBottomRightRadius: 10,
-                borderBottomLeftRadius: 10,
-                position: 'relative',
-                zIndex: 34,
-                marginTop: 227,
-                marginRight: 0,
-                marginBottom: 0,
-                marginLeft: 12.345,
-              }}>
-              <Text
-                style={{
-                  display: 'flex',
-                  height: '48.44%',
-                  justifyContent: 'flex-start',
-                  alignItems: 'center',
-                  fontFamily: 'Inter',
-                  fontSize: 18,
-                  fontWeight: '700',
-                  lineHeight: 21.784,
-                  color: '#000000',
-                  position: 'absolute',
-                  top: '12.5%',
-                  left: '3.86%',
-                  textAlign: 'left',
-                  zIndex: 36,
-                }}
-                numberOfLines={1}>
-                구체적인 지역 찾아보기
-              </Text>
-              {/* <ImageBackground
-              style={{
-                width: '13.5%',
-                height: '76.56%',
-                position: 'absolute',
-                top: '12.5%',
-                left: '82.09%',
-                zIndex: 35,
-              }}
-              source={require('./assets/images/cc15d4f9-8d4f-4a70-a582-8af3404c1109.png')}
+            <Text style={styles.middleText}>카테고리</Text>
+            {/* <CategoryButton
+              icon={bucketInfo.category.icon}
+              label={bucketInfo.category.label}
+              borderColor={bucketInfo.category.borderColor}
+              onPress={() => handleCategorySelect(bucketInfo.category.id)}
+              isSelected={false} // 선택된 경우 스타일 적용 bucketInfo.category === category.id
             /> */}
-              <Text
-                style={{
-                  display: 'flex',
-                  width: 262.386,
-                  height: '48.44%',
-                  justifyContent: 'flex-start',
-                  alignItems: 'center',
-                  fontFamily: 'Inter',
-                  fontSize: 14,
-                  fontWeight: '500',
-                  lineHeight: 16.943,
-                  color: '#000000',
-                  position: 'absolute',
-                  top: '43.75%',
-                  left: '3.86%',
-                  textAlign: 'left',
-                  zIndex: 37,
-                }}>
-                2024.08.30
-              </Text>
-            </View>
-            <Text
-              style={{
-                height: 31,
-                fontFamily: 'Inter',
-                fontSize: 18,
-                fontWeight: '700',
-                lineHeight: 21.784,
-                color: '#000000',
-                position: 'relative',
-                textAlign: 'left',
-                zIndex: 27,
-                marginTop: 8,
-                marginRight: 0,
-                marginBottom: 0,
-                marginLeft: 20.345,
-              }}
-              numberOfLines={1}>
-              달성 후기
-            </Text>
+            <Text style={styles.middleText}>함께하는 친구</Text>
+            {/* 함께 하는 친구 목록 */}
             <View
               style={{
-                width: 363,
-                height: 70,
-                backgroundColor: '#ffffff',
-                borderTopLeftRadius: 10,
-                borderTopRightRadius: 10,
-                borderBottomRightRadius: 10,
-                borderBottomLeftRadius: 10,
-                position: 'relative',
-                zIndex: 12,
-                marginTop: 1,
-                marginRight: 0,
-                marginBottom: 0,
-                marginLeft: 12.345,
+                flexDirection: 'row',
+                alignItems: 'center',
+                flexWrap: 'wrap',
               }}>
-              <Text
-                style={{
-                  display: 'flex',
-                  width: 334,
-                  height: '82.86%',
-                  justifyContent: 'flex-start',
-                  alignItems: 'flex-start',
-                  fontFamily: 'Pretendard Variable',
-                  fontSize: 13,
-                  fontWeight: '400',
-                  lineHeight: 15,
-                  color: '#000000',
-                  position: 'absolute',
-                  top: '17.14%',
-                  left: '3.86%',
-                  textAlign: 'left',
-                  zIndex: 12,
-                }}>
+              <View style={styles.friendBox}>
+                <Text style={styles.friendText}>@햄햄이</Text>
+              </View>
+              <View style={styles.friendBox}>
+                <Text style={styles.friendText}>@햄햄삼</Text>
+              </View>
+              <View style={styles.friendBox}>
+                <Text style={styles.friendText}>@햄햄오오</Text>
+              </View>
+            </View>
+
+            <Text style={styles.middleText}>중간 목표</Text>
+            <View>
+              <MilestoneShort
+                text="필요한 돈 모으기"
+                isSticker={false}
+                onPress={null}
+              />
+              <MilestoneShort
+                text="구체적인 지역 찾아보기"
+                isSticker={false}
+                onPress={null}
+              />
+            </View>
+            <Text style={styles.middleText}>달성 후기</Text>
+            <View style={styles.textContainer}>
+              <Text style={styles.normalText}>
                 제주도에서 한달 동안 힐링하기 성공했다!!! 제주도에서 다양한
                 연령의 사람들을 만나고 나에 대해 고민해본 시간이었다. 제주도에서
-                힐링한 만큼 현실에서도 화이팅해봐야지ㅎㅎ
+                힐링한 만큼 현실에서도 화이팅해봐야지ㅎㅎ 내용이 너무 적은 것
+                같아서 아무래도 조금 더 많이 올려보겠습니다. 스크롤이 잘
+                되는지는 확인해봐야죠 그죠? 그런고로 교수님의 말씀을 적어보도록
+                하겠습니다. 일본에서는 네트워크 자체가 부실하다보니까 땅 밑에
+                있는 걸 올려놓을 수가 없는거야 일본은 주민등록번호가 없는거야.
+                고유 아이디가 없는거지. 일본인은 맨날 들고 다녀 너덜너덜해지면
+                재발급하는거야 게다가 양식이 또 다른거야, 우리나라랑 다르게
+                지자체마다 다 다른거야
               </Text>
             </View>
-            {/* <ImageBackground
-            style={{
-              width: '100%',
-              height: '85.84%',
-              position: 'absolute',
-              top: '14.16%',
-              left: 0,
-            }}
-            source={require('./assets/images/21296a3f-5b15-4368-a3a7-719cd08741ae.png')}
-          /> */}
-            <View
-              style={{
-                width: '96.32%',
-                height: '33.67%',
-                position: 'absolute',
-                top: '40.75%',
-                left: '3.17%',
-                zIndex: 41,
-              }}>
-              {/* <ImageBackground
-              style={{
-                width: '1.2%',
-                height: '102.15%',
-                position: 'absolute',
-                top: '-1.07%',
-                left: '99.33%',
-                zIndex: 41,
-              }}
-              source={require('./assets/images/be2472b8-5f6e-470f-8862-fb6bd402c401.png')}
-            /> */}
-              <View
-                style={{
-                  width: '96.8%',
-                  height: '27.47%',
-                  backgroundColor: '#ffffff',
-                  borderTopLeftRadius: 10,
-                  borderTopRightRadius: 10,
-                  borderBottomRightRadius: 10,
-                  borderBottomLeftRadius: 10,
-                  position: 'absolute',
-                  top: '65.67%',
-                  left: 0,
-                  zIndex: 29,
-                }}>
-                <Text
-                  style={{
-                    display: 'flex',
-                    height: '48.44%',
-                    justifyContent: 'flex-start',
-                    alignItems: 'center',
-                    fontFamily: 'Inter',
-                    fontSize: 18,
-                    fontWeight: '700',
-                    lineHeight: 21.784,
-                    color: '#000000',
-                    position: 'absolute',
-                    top: '12.5%',
-                    left: '3.86%',
-                    textAlign: 'left',
-                    zIndex: 31,
-                  }}
-                  numberOfLines={1}>
-                  필요한 돈 모으기
-                </Text>
-                {/* <ImageBackground
-                style={{
-                  width: '13.5%',
-                  height: '76.56%',
-                  position: 'absolute',
-                  top: '12.5%',
-                  left: '82.09%',
-                  zIndex: 30,
-                }}
-                source={require('./assets/images/34122f14-3279-4218-ab89-728c0d76236d.png')}
-              />
-              <ImageBackground
-                style={{
-                  width: '12.95%',
-                  height: '50%',
-                  fontFamily: 'Pretendard Variable',
-                  fontSize: 39,
-                  fontWeight: '400',
-                  lineHeight: 12,
-                  position: 'absolute',
-                  top: '26.56%',
-                  left: '83.75%',
-                  zIndex: 46,
-                }}
-                source={require('./assets/images/419cbe52-d6fa-41d2-ba56-f086396ce3bd.png')}
-              /> */}
-                <Text
-                  style={{
-                    display: 'flex',
-                    width: 262.386,
-                    height: '48.44%',
-                    justifyContent: 'flex-start',
-                    alignItems: 'center',
-                    fontFamily: 'Inter',
-                    fontSize: 14,
-                    fontWeight: '500',
-                    lineHeight: 16.943,
-                    color: '#000000',
-                    position: 'absolute',
-                    top: '43.75%',
-                    left: '3.86%',
-                    textAlign: 'left',
-                    zIndex: 32,
-                  }}>
-                  2024.05.30
-                </Text>
-              </View>
-            </View>
-            <View
-              style={{
-                display: 'flex',
-                width: '26.37%',
-                height: '3.9%',
-                flexDirection: 'row',
-                justifyContent: 'center',
-                alignItems: 'center',
-                backgroundColor: '#ffe296',
-                borderTopLeftRadius: 10,
-                borderTopRightRadius: 10,
-                borderBottomRightRadius: 10,
-                borderBottomLeftRadius: 10,
-                borderWidth: 1,
-                borderColor: '#ffe295',
-                borderStyle: 'solid',
-                position: 'absolute',
-                top: '40.75%',
-                left: '5.23%',
-                zIndex: 44,
-              }}>
-              <Text
-                style={{
-                  display: 'flex',
-                  width: 101.558,
-                  height: 27,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  flexShrink: 0,
-                  fontFamily: 'Pretendard',
-                  fontSize: 14,
-                  fontWeight: '700',
-                  lineHeight: 27,
-                  color: '#000000',
-                  position: 'relative',
-                  textAlign: 'center',
-                  zIndex: 44,
-                }}>
-                ✈️ 여행
-              </Text>
-            </View>
-            <Text
-              style={{
-                display: 'flex',
-                height: '4.48%',
-                justifyContent: 'flex-start',
-                alignItems: 'center',
-                fontFamily: 'Inter',
-                fontSize: 18,
-                fontWeight: '700',
-                lineHeight: 21.784,
-                color: '#000000',
-                position: 'absolute',
-                top: '47.25%',
-                left: '5.23%',
-                textAlign: 'left',
-                zIndex: 25,
-              }}
-              numberOfLines={1}>
-              함께하는 친구
-            </Text>
-            <View
-              style={{
-                display: 'flex',
-                width: '52.91%',
-                height: '2.89%',
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                position: 'absolute',
-                top: '51.73%',
-                left: '5.23%',
-                zIndex: 8,
-              }}>
-              <View
-                style={{
-                  width: 60,
-                  height: 20,
-                  flexShrink: 0,
-                  backgroundColor: '#fafafa',
-                  borderTopLeftRadius: 5.556,
-                  borderTopRightRadius: 5.556,
-                  borderBottomRightRadius: 5.556,
-                  borderBottomLeftRadius: 5.556,
-                  borderWidth: 1.111,
-                  borderColor: '#3f6262',
-                  borderStyle: 'solid',
-                  position: 'relative',
-                  zIndex: 2,
-                }}>
-                <Text
-                  style={{
-                    display: 'flex',
-                    width: '82.3%',
-                    height: '88.89%',
-                    justifyContent: 'center',
-                    alignItems: 'flex-start',
-                    fontFamily: 'Pretendard Variable',
-                    fontSize: 13.333332061767578,
-                    fontWeight: '500',
-                    lineHeight: 15.911,
-                    color: '#000000',
-                    position: 'absolute',
-                    top: '5%',
-                    left: '6.67%',
-                    textAlign: 'center',
-                    zIndex: 3,
-                  }}
-                  numberOfLines={1}>
-                  @햄햄이
-                </Text>
-              </View>
-              <View
-                style={{
-                  width: 62,
-                  height: 20,
-                  flexShrink: 0,
-                  backgroundColor: '#fafafa',
-                  borderTopLeftRadius: 5.556,
-                  borderTopRightRadius: 5.556,
-                  borderBottomRightRadius: 5.556,
-                  borderBottomLeftRadius: 5.556,
-                  borderWidth: 1.111,
-                  borderColor: '#3f6262',
-                  borderStyle: 'solid',
-                  position: 'relative',
-                  zIndex: 5,
-                }}>
-                <Text
-                  style={{
-                    display: 'flex',
-                    width: '82.3%',
-                    height: '88.89%',
-                    justifyContent: 'center',
-                    alignItems: 'flex-start',
-                    fontFamily: 'Pretendard Variable',
-                    fontSize: 13.333332061767578,
-                    fontWeight: '500',
-                    lineHeight: 15.911,
-                    color: '#000000',
-                    position: 'absolute',
-                    top: '5%',
-                    left: '8%',
-                    textAlign: 'center',
-                    zIndex: 6,
-                  }}
-                  numberOfLines={1}>
-                  @햄햄삼
-                </Text>
-              </View>
-              <View
-                style={{
-                  width: 62,
-                  height: 20,
-                  flexShrink: 0,
-                  backgroundColor: '#fafafa',
-                  borderTopLeftRadius: 5.556,
-                  borderTopRightRadius: 5.556,
-                  borderBottomRightRadius: 5.556,
-                  borderBottomLeftRadius: 5.556,
-                  borderWidth: 1.111,
-                  borderColor: '#3f6262',
-                  borderStyle: 'solid',
-                  position: 'relative',
-                  zIndex: 8,
-                }}>
-                <Text
-                  style={{
-                    display: 'flex',
-                    width: '82.3%',
-                    height: '88.89%',
-                    justifyContent: 'center',
-                    alignItems: 'flex-start',
-                    fontFamily: 'Pretendard Variable',
-                    fontSize: 13.333332061767578,
-                    fontWeight: '500',
-                    lineHeight: 15.911,
-                    color: '#000000',
-                    position: 'absolute',
-                    top: '5%',
-                    left: '8%',
-                    textAlign: 'center',
-                    zIndex: 9,
-                  }}
-                  numberOfLines={1}>
-                  @햄햄오
-                </Text>
-              </View>
-            </View>
-            <Text
-              style={{
-                display: 'flex',
-                height: '4.48%',
-                justifyContent: 'flex-start',
-                alignItems: 'center',
-                fontFamily: 'Inter',
-                fontSize: 18,
-                fontWeight: '700',
-                lineHeight: 21.784,
-                color: '#000000',
-                position: 'absolute',
-                top: '57.51%',
-                left: '5.23%',
-                textAlign: 'left',
-                zIndex: 24,
-              }}
-              numberOfLines={1}>
-              중간 목표
-            </Text>
           </View>
         </View>
       </ScrollView>
@@ -751,3 +151,55 @@ const MyBucketInfoScreen = () => {
 };
 
 export default MyBucketInfoScreen;
+
+const styles = StyleSheet.create({
+  titleContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 10,
+    paddingRight: 20
+  },
+  contentContainer: {
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    backgroundColor: '#aaaaaa',
+    paddingLeft: 15
+  },
+  textContainer: {
+    width: 363,
+    minHeight: 60, // 기본 높이 설정
+    backgroundColor: '#ffffff',
+    borderRadius: 10,
+    position: 'relative',
+    paddingHorizontal: 4, // 텍스트 좌우 간격을 위해 추가
+    paddingVertical: 1, // 텍스트 상하 간격을 위해 추가
+    marginBottom: 10
+  },
+  friendBox: {
+    alignSelf: 'flex-start', // 텍스트 길이에 맞춰 가로 길이 조정
+    paddingHorizontal: 8, // 텍스트 좌우 간격을 위해 추가
+    paddingVertical: 1, // 텍스트 상하 간격을 위해 추가
+    backgroundColor: '#fafafa',
+    borderRadius: 5,
+    borderWidth: 1,
+    borderColor: '#3f6262',
+    marginRight: 10,
+  },
+  middleText: {
+    fontFamily: 'Pretendard-Bold',
+    fontSize: 18,
+    position: 'relative',
+    marginVertical: 5,
+  },
+  normalText: {
+    display: 'flex',
+    fontFamily: 'Pretendard-Regular',
+    fontSize: 13,
+    padding: 5,
+  },
+  friendText: {
+    fontFamily: 'Pretendard-Regular',
+    fontSize: 12,
+    textAlign: 'center',
+  },
+});
