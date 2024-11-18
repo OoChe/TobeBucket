@@ -1,34 +1,15 @@
 import { StyleSheet } from 'react-native';
 
 const styles = StyleSheet.create({
+
+  main :  {
+        backgroundColor: '#FBFBFB',
+  },
+
   container: {
     flexGrow: 1,
     paddingHorizontal: 16,
     backgroundColor: '#FBFBFB',
-  },
-
-  titleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    position: 'relative',
-    marginBottom: 10,
-  },
-  mainTitle: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    fontFamily: 'Pretendard-Regular',
-  },
-
-  Dot: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
-    backgroundColor: '#EE4963',
-    marginLeft: 6,
-    marginTop: 2,
-    position: 'absolute',
-    top: 2,
-    right: 163,
   },
 
   subTitle: {
@@ -71,6 +52,7 @@ const styles = StyleSheet.create({
     marginRight: 8,
     fontWeight: 'bold'
   },
+
   removeButtonText: {
     color: '#FFF',
     fontSize: 14,
@@ -93,21 +75,48 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     margin: 8,
   },
+
   addButtonText: {
     color: '#000000',
     fontSize: 16,
   },
 
-  nextButton: {
-    backgroundColor: '#EE4963',
-    paddingVertical: 12,
-    alignItems: 'center',
-    borderRadius: 8,
+  buttonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 20,
   },
-  nextButtonText: {
-    color: '#fff',
+
+  backButton: {
+    backgroundColor: '#FBFBFB', // 뒤로 가기 버튼 색상
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    borderRadius: 8,
+    flex: 1,
+    marginRight: 8,
+    alignItems: 'center',
+    borderColor : '#707070',
+    borderWidth : 2
+  },
+
+  backButtonText: {
+    color: '#333', // 뒤로 가기 버튼 텍스트 색상
     fontSize: 16,
     fontWeight: 'bold',
+  },
+  submitButton: {
+    backgroundColor: '#EE4963', // 작성 완료 버튼 색상
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    borderRadius: 8,
+    flex: 1,
+    alignItems: 'center',
+  },
+  submitButtonText: {
+    color: '#fff', // 작성 완료 버튼 텍스트 색상
+    fontSize: 16,
+    fontWeight: 'bold',
+
   },
 
   dateSectionContainer: {
@@ -139,18 +148,20 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     marginVertical: 8,
+    borderRadius : 10,
+    paddingVertical : 10,
+    paddingHorizontal : 10
   },
 
   friendTag: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#f1f1f1',
-    paddingVertical: 6,
+    backgroundColor: '#FBFBFB',
     paddingHorizontal: 12,
-    borderRadius: 20,
+    borderRadius: 8,
     marginRight: 8,
-    marginBottom: 8,
     borderColor : '#EE4963',
+    borderWidth : 1
 
   },
   friendTagText: {
@@ -187,6 +198,50 @@ const styles = StyleSheet.create({
     flex: 1,
     marginRight: 8,
   },
+
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalContent: {
+    backgroundColor: '#fff',
+    padding: 20,
+    borderRadius: 10,
+    width: '80%',
+  },
+  modalTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 10,
+  },
+  friendItem: {
+    padding: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: '#eee',
+  },
+  selectedFriendItem: {
+    backgroundColor: '#EEE',
+  },
+  friendItemText: {
+    fontSize: 16,
+  },
+
+  confirmButton: {
+    backgroundColor: '#EE4963',
+    paddingVertical: 8,
+    paddingHorizontal: 20,
+    borderRadius: 8,
+    alignItems: 'center',
+    marginTop: 10,
+  },
+
+  buttonText: {
+    color: '#fff',
+    fontWeight: 'bold',
+  }
+
 });
 
 export default styles;

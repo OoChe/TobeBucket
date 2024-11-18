@@ -1,34 +1,15 @@
 import { StyleSheet } from 'react-native';
 
 const styles = StyleSheet.create({
+
+  main :  {
+      backgroundColor: '#FBFBFB',
+  },
+
   container: {
     flexGrow: 1,
     paddingHorizontal: 16,
-    backgroundColor: '#FBFBFB',
-  },
 
-  titleContainer: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      position: 'relative',
-      marginBottom : 10,
-  },
-  mainTitle: {
-      fontSize: 24,
-      fontWeight: 'bold',
-      fontFamily: 'Pretendard-Regular',
-  },
-
-  Dot: {
-      width: 8,
-      height: 8,
-      borderRadius: 4,
-      backgroundColor: '#EE4963',
-      marginLeft: 6,
-      marginTop: 2,
-      position: 'absolute',
-      top: 2,
-      right: 163,
   },
 
   subTitle: {
@@ -87,12 +68,14 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-end',
     marginBottom: 24,
   },
+
   nextButton: {
     backgroundColor: '#EE4963',
     paddingVertical: 12,
     alignItems: 'center',
     borderRadius: 8,
   },
+
   nextButtonText: {
     color: '#fff',
     fontSize: 16,

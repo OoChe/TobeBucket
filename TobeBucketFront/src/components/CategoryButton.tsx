@@ -1,3 +1,13 @@
+/*
+ [카테고리 버튼 컴포넌트]
+  - 파라미터
+    1) icon : 카테고리 제목
+    2) label : 카테고리 설명
+    3) borderColor : 카테고리 색
+    4) onPress : 버튼 클릭 시 함수 처리
+    5) isSelected : 버튼 클릭 여부
+ */
+
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 
@@ -6,18 +16,19 @@ interface CategoryButtonProps {
   label: string;
   borderColor: string;
   onPress: () => void;
-  isSelected: boolean; // 선택 여부
+  isSelected: boolean;
 }
 
 const CategoryButton: React.FC<CategoryButtonProps> = ({ icon, label, borderColor, onPress, isSelected }) => {
 
   return (
+
     <TouchableOpacity
-      onPress={onPress} // 상위 컴포넌트의 onPress를 실행
+      onPress={onPress}
       style={[
         styles.button,
         { borderColor },
-        isSelected && { backgroundColor: borderColor } // 선택된 경우 배경색 적용
+        isSelected && { backgroundColor: borderColor }
       ]}
       activeOpacity={0.4}
     >
