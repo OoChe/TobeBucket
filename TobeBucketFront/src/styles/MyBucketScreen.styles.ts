@@ -40,10 +40,10 @@ const styles = StyleSheet.create({
   largeText: {
     fontFamily: 'Pretendard-Bold',
     fontSize: 24,
-    color: '#000000',
     position: 'relative',
     textAlign: 'center',
     marginBottom: 15,
+    lineHeight: 35
   },
 });
 
