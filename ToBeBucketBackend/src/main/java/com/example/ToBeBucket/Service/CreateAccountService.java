@@ -8,6 +8,7 @@ import com.example.ToBeBucket.Repository.UserProfileRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -19,6 +20,8 @@ public class CreateAccountService {
 
     private final CreateAccountRepository createAccountRepository;
     private final UserProfileRepository userProfileRepository;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
+
     @Transactional
     public void createAccount(CreateAccountDTO createAccountDTO) {
         Optional<UserLogin> existingUser = createAccountRepository.findById(createAccountDTO.getUserId());
@@ -30,7 +33,7 @@ public class CreateAccountService {
         }else{
             UserLogin userLogin = new UserLogin();
             userLogin.setUserId(createAccountDTO.getUserId());
-            userLogin.setPwd(createAccountDTO.getPwd());
+            userLogin.setPwd(bCryptPasswordEncoder.encode(createAccountDTO.getPwd()));
 
             createAccountRepository.save(userLogin);
 
@@ -41,7 +44,7 @@ public class CreateAccountService {
             userProfile.setIntro(createAccountDTO.getIntro());
 
             userProfileRepository.save(userProfile);  // UserProfile 테이블에 저장
-            log.info("UserLogin={}, UserProfile={}", userLogin.getUserId(), userProfile.getNickname());
+
         }
     }
 }
