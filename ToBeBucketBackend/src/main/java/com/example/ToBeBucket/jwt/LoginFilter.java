@@ -11,6 +11,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import java.util.Collection;
 import java.util.Iterator;
@@ -24,6 +25,11 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
         this.authenticationManager = authenticationManager;
         this.jwtUtil = jwtUtil;
+    }
+
+    @Override
+    public void setFilterProcessesUrl(String filterProcessesUrl) {
+        super.setFilterProcessesUrl("/tobebucket/login");
     }
 
     @Override

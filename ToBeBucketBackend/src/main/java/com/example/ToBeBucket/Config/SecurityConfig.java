@@ -77,7 +77,7 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests((auth) -> auth
                         // 로그인 및 회원가입, API 문서 경로는 모두 접근 허용
-                        .requestMatchers("tobebucket/login", "/tobebucket/signup", "/login").permitAll()
+                        .requestMatchers("/tobebucket/login", "/tobebucket/signup").permitAll()
                         .requestMatchers("/swagger", "/swagger-ui.html", "/swagger-ui/**", "/api-docs", "/api-docs/**", "/v3/api-docs/**")
                         .permitAll()
                         // 그 외의 경로는 인증된 사용자만 접근 가능
@@ -85,10 +85,15 @@ public class SecurityConfig {
                         //로그인화면, 회원가입 화면 외에는 전부 authenticated된 사용자만 접근가능하게 한다는 의미
         //필터 추가
             // LoginFilter()는 인자를 받음 (AuthenticationManager() 메소드에 authenticationConfiguration 객체를 넣어야 함) 따라서 등록 필요
-        http
-                .addFilterBefore(new JWTFilter(jwtUtil), LoginFilter.class);
-        http
-                .addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration),jwtUtil), UsernamePasswordAuthenticationFilter.class);
+        LoginFilter loginFilter = new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil);
+        loginFilter.setFilterProcessesUrl("/tobebucket/login"); // 로그인 경로 변경
+        http.addFilterBefore(new JWTFilter(jwtUtil), LoginFilter.class);
+        http.addFilterAt(loginFilter, UsernamePasswordAuthenticationFilter.class);
+
+//        http
+//                .addFilterBefore(new JWTFilter(jwtUtil), LoginFilter.class);
+//        http
+//                .addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration),jwtUtil), UsernamePasswordAuthenticationFilter.class);
 
         //세션 설정
         http
