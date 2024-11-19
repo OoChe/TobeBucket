@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.LinkedHashMap;
@@ -20,12 +21,12 @@ public class ManageBucketController {
     private final ManageBucketService manageBucketService;
 
     //버킷작성하기
-    @PostMapping("/tobebucket/bucket/{userId}/write")
+    @PostMapping("/tobebucket/bucket/write")
     public ResponseEntity<Map<String,Object>> writeNewBucket(
-            @PathVariable String userId,
             @RequestBody WriteBucketDTO writeBucketDTO ){
         Map<String,Object> response = new LinkedHashMap<>();
         try {
+            String userId = SecurityContextHolder.getContext().getAuthentication().getName();
             // 서비스 호출해서 DB에 저장
             manageBucketService.saveNewBucket(userId, writeBucketDTO);
 
@@ -40,12 +41,13 @@ public class ManageBucketController {
         }
     }
 
-    @PatchMapping("/tobebucket/bucket-edit/{userId}/{bucketId}")
+    @PatchMapping("/tobebucket/bucket-edit/{bucketId}")
     public ResponseEntity<Map<String,Object>> editBucket(
-            @PathVariable String userId,@PathVariable Integer bucketId,
+            @PathVariable Integer bucketId,
             @RequestBody EditBucketDTO editBucketDTO){
         Map<String,Object> response = new LinkedHashMap<>();
         try {
+            String userId = SecurityContextHolder.getContext().getAuthentication().getName();
             // 서비스 호출해서 DB에 저장
             manageBucketService.editBucket(userId, bucketId, editBucketDTO);
             //response해주기
