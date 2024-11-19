@@ -1,3 +1,5 @@
+// components/DatePicker.js
+
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, Modal, Platform, StyleSheet } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
@@ -13,21 +15,20 @@ const DatePicker: React.FC<DatePickerProps> = ({ label, onDateChange }) => {
   const [showPicker, setShowPicker] = useState(false);
 
   const handleDateChange = (event: any, selectedDate: Date | undefined) => {
-    const currentDate = selectedDate || date;
     setShowPicker(Platform.OS === 'ios');
-    setDate(currentDate);
     if (selectedDate) {
+      setDate(selectedDate);
       onDateChange(selectedDate); // 선택된 날짜 전달
     }
   };
 
   const toggleDatePicker = () => {
-    if (Platform.OS === 'android') {
-      setShowPicker(true);
-    } else {
-      setShowPicker(!showPicker); // iOS에서만 토글 기능 사용
-    }
+    setShowPicker(true);
   };
+
+  // 최소 날짜를 오늘 날짜로 설정
+  const minimumDate = new Date();
+  minimumDate.setHours(0, 0, 0, 0); // 자정으로 설정하여 시간 부분 제거
 
   return (
     <View style={styles.container}>
@@ -39,15 +40,13 @@ const DatePicker: React.FC<DatePickerProps> = ({ label, onDateChange }) => {
         <Text style={styles.arrow}>⌄</Text>
       </TouchableOpacity>
 
-      {showPicker && Platform.OS === 'android' && (
+      {showPicker && (
         <DateTimePicker
           value={date || new Date()}
           mode="date"
           display="calendar"
-          onChange={(event, selectedDate) => {
-            setShowPicker(false);
-            handleDateChange(event, selectedDate);
-          }}
+          onChange={handleDateChange}
+          minimumDate={minimumDate} // 여기서 최소 날짜 설정
         />
       )}
     </View>
@@ -62,7 +61,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#6e6e6e',
     marginBottom: 5,
-
   },
   datePickerButton: {
     flexDirection: 'row',
@@ -73,17 +71,17 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#dcdcdc',
     borderRadius: 8,
-    flex: 1
+    flex: 1,
   },
   dateText: {
     fontSize: 16,
     color: '#6e6e6e',
-    paddingHorizontal : 15
+    paddingHorizontal: 15,
   },
   arrow: {
     fontSize: 16,
-    color: '#6e6e6e',
-    fontWeight : 'bold'
+    color: '#EE4963',
+    fontWeight: 'bold',
   },
 });
 
