@@ -13,6 +13,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
+import java.io.IOException;
 import java.util.Collection;
 import java.util.Iterator;
 
@@ -38,7 +39,6 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         //클라이언트 요청에서 username, password 추출 (가로채기!)
         String username = obtainUsername(request);
         String password = obtainPassword(request);
-        System.out.println("username:"+username);
 
         //스프링 시큐리티에서 username과 password를 검증하기 위해서는 token에 담아야 함 (DTO같은 개념!)
         UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(username, password, null);
@@ -63,7 +63,16 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         //username과 role 값을 가지고 토큰 발급 요청하는 메서드임.
         String token = jwtUtil.createJwt(username, role, 60*60*1000L);
 
-        response.addHeader("Authorization", "Bearer " + token);
+        try {
+            response.setHeader("Authorization", "Bearer " + token);
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            response.getWriter().write("{\"code\": \"SU\", \"message\": \"Success.\", \"token\": \"" + token + "\"}");
+        } catch (IOException e) {
+            // 예외 처리 (예: 로그 남기기, 또는 다른 응답 반환 등)
+            e.printStackTrace();
+        }
+
     }
 
     //로그인 실패시 실행하는 메소드
