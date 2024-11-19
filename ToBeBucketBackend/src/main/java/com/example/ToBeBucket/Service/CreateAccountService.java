@@ -34,6 +34,7 @@ public class CreateAccountService {
             UserLogin userLogin = new UserLogin();
             userLogin.setUserId(createAccountDTO.getUserId());
             userLogin.setPwd(bCryptPasswordEncoder.encode(createAccountDTO.getPwd()));
+            userLogin.setRole(createAccountDTO.getRole());
 
             createAccountRepository.save(userLogin);
 

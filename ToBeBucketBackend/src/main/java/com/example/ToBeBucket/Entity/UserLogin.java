@@ -15,6 +15,6 @@ public class UserLogin {
 
     @Column(length = 255, nullable = false)
     private String pwd;
-    @Column(length = 45, nullable = true)
-    private String role;
+    @Column(length = 45, nullable = false)
+    private String role="USER";
 }
