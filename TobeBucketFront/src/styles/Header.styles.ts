@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native';
+import {StyleSheet} from 'react-native';
 
 const styles = StyleSheet.create({
   headerContainer: {
@@ -16,8 +16,8 @@ const styles = StyleSheet.create({
   logo: {
     width: 32,
     height: 32,
-    marginRight: 8,
-    resizeMode: 'contain'
+    marginTop: 10,
+    resizeMode: 'contain',
   },
   title: {
     fontSize: 25,

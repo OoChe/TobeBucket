@@ -8,6 +8,19 @@ const styles = StyleSheet.create({
     marginRight: 5,
     marginLeft: 15,
   },
+  loadingContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 150,
+  },
+  categoryContainer: {
+    flexWrap: 'wrap',
+    marginHorizontal: 10,
+    marginBottom: 10,
+  },
+  bucketListContainer: {
+    flexDirection: 'column',
+  },
   smallText: {
     fontFamily: 'Pretendard-Medium',
     fontSize: 16,
@@ -27,10 +40,10 @@ const styles = StyleSheet.create({
   largeText: {
     fontFamily: 'Pretendard-Bold',
     fontSize: 24,
-    color: '#000000',
     position: 'relative',
     textAlign: 'center',
     marginBottom: 15,
+    lineHeight: 35
   },
 });
 

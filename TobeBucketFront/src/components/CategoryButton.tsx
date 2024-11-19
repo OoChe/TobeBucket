@@ -46,21 +46,20 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    width: 115,
-    paddingVertical: 4,
-    paddingHorizontal: 6,
+    width: 100,
+    height: 27,
     borderWidth: 1.5,
     borderRadius: 10,
-    marginRight: 3,
+    marginRight: 12,
     marginBottom: 3,
   },
   icon: {
-    fontSize: 15,
+    fontSize: 14,
     marginRight: 8,
   },
   label: {
-    fontSize: 16,
-    fontWeight: 'bold',
+    fontSize: 14,
+    fontFamily: 'Pretendard-Bold'
   },
 
 });
