@@ -1,6 +1,7 @@
 package com.example.ToBeBucket.jwt;
 
 import com.example.ToBeBucket.DTO.CustomUserDetails;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -16,6 +17,7 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.Map;
 
 public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
@@ -35,13 +37,32 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
+        //username, password custom
+        String userId = null;
+        String pwd = null;
+        try {
+            if (request.getContentType() != null && request.getContentType().contains("application/json")) {
+                //json 타입으로 처리하는 경우
+                ObjectMapper objectMapper = new ObjectMapper();
+                Map<String,String> credentials = objectMapper.readValue(request.getInputStream(), Map.class);
+                userId = credentials.get("userId");
+                pwd = credentials.get("pwd");
+            }else{ //form 데이터로 처리하는 경우
+                userId = request.getParameter("userId");
+                pwd = request.getParameter("pwd");
+            }
+        }
+        catch(IOException e){
+            e.printStackTrace();
+            throw new RuntimeException("login 정보 가져오는데 실패했습니다.");
+        }
 
-        //클라이언트 요청에서 username, password 추출 (가로채기!)
-        String username = obtainUsername(request);
-        String password = obtainPassword(request);
+        if (userId == null || pwd == null) {
+            throw new RuntimeException("값이 제대로 들어오지 않았습니다.");
+        }
 
         //스프링 시큐리티에서 username과 password를 검증하기 위해서는 token에 담아야 함 (DTO같은 개념!)
-        UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(username, password, null);
+        UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(userId, pwd, null);
 
         //token에 담은 검증을 위한 AuthenticationManager로 전달
         return authenticationManager.authenticate(authToken);
@@ -53,7 +74,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         //유저 정보 가져오기
         CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
 
-        String username = customUserDetails.getUsername();
+        String userId = customUserDetails.getUsername();
 
         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
         Iterator<? extends GrantedAuthority> iterator = authorities.iterator();
@@ -61,7 +82,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
         String role = auth.getAuthority();
         //username과 role 값을 가지고 토큰 발급 요청하는 메서드임.
-        String token = jwtUtil.createJwt(username, role, 60*60*1000L);
+        String token = jwtUtil.createJwt(userId, role, 60*60*1000L);
 
         try {
             response.setHeader("Authorization", "Bearer " + token);
