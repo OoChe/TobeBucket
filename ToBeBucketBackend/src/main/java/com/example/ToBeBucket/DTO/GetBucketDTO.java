@@ -7,5 +7,5 @@ import lombok.Setter;
 @Setter
 public class GetBucketDTO {
     private String userId;
-    private Boolean achieveStatus;
+    private Boolean achieveStatus=false;
 }
