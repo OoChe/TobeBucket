@@ -28,10 +28,9 @@ public class GetBucketlistsService {
     private final UserLoginRepository userLoginRepository;
 
     public List<Map<String, Object>> getBucketlists(GetBucketDTO getBucketDTO) {
-        // UserBucket을 이용하여 UserId와 BucketId에 해당하는 버킷 정보를 가져오기
-        UserLogin userLogin = userLoginRepository.findById(getBucketDTO.getUserId())
-                .orElseThrow(() -> new RuntimeException("존재하지 않는 사용자입니다."));
 
+        // UserBucket을 이용하여 UserId와 BucketId에 해당하는 버킷 정보를 가져오기
+        UserLogin userLogin = userLoginRepository.findByUserId(getBucketDTO.getUserId());
         List<UserBucket> userBuckets = userBucketRepository.findByUserId(userLogin);
 
         if (Boolean.FALSE.equals(getBucketDTO.getAchieveStatus())) { // 미달성 버킷 조회
