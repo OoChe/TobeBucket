@@ -14,13 +14,6 @@ import StickerEmpty from '../../components/StickerEmpty';
 import MilestoneShort from '../../components/MilestoneShort';
 
 const MyBucketInfoScreen = () => {
-  const circle = (size: number) => {
-    const styles = StyleSheet.create({
-      container: {
-        borderRadius: size / 2,
-      },
-    });
-  };
   return (
     <SafeAreaView>
       <ScrollView

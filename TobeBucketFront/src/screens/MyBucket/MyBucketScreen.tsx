@@ -5,6 +5,7 @@ import ViewMyBucketToggle from '../../components/ViewMyBucketToggle';
 import PageTitle from '../../components/PageTitle';
 import CustomButton from '../../components/CustomButton';
 import ViewMyBucketList from '../../components/ViewMyBucketList';
+import ViewBucketList from '../../components/ViewBucketList';
 import CryingBucket from '../../assets/images/cryingBucketImg.png';
 import noAchievedBucket from '../../assets/images/noAchievedBucket.png';
 import styles from '../../styles/MyBucketScreen.styles';
@@ -81,7 +82,7 @@ const MyBucketScreen = () => {
       );
     } else if (viewMode === 'achieved') {
       return achievedBucketList && achievedBucketList.length > 0 ? (
-        <ViewMyBucketList bucketList={achievedBucketList} />
+        <ViewBucketList bucketList={achievedBucketList} />
       ) : (
         <ScrollView contentInsetAdjustmentBehavior="automatic">
           <Text style={styles.smallText}>아직 달성한 버킷이 없어요</Text>
