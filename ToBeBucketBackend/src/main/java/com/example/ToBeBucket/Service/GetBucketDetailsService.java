@@ -45,7 +45,9 @@ public class GetBucketDetailsService {
             for (BucketSemiGoal semiGoal : bucketSemiGoals) {
                 Map<String, Object> semiGoalMap = new LinkedHashMap<>();
                 semiGoalMap.put("semiGoalTitle", semiGoal.getSemiGoalTitle());
-                semiGoalMap.put("stickerId", semiGoal.getSticker().getStickerId());
+                if (semiGoal.getSticker() != null) {
+                    semiGoalMap.put("stickerId", semiGoal.getSticker().getStickerId());
+                }
                 semiGoalDataList.add(semiGoalMap);
             }
             bucketDetailMap.put("semiGoalData", semiGoalDataList);
