@@ -8,8 +8,8 @@
     5) isSelected : 버튼 클릭 여부
  */
 
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import React from 'react';
+import { Text, StyleSheet, TouchableOpacity } from 'react-native';
 
 interface CategoryButtonProps {
   icon: string;
@@ -22,7 +22,6 @@ interface CategoryButtonProps {
 const CategoryButton: React.FC<CategoryButtonProps> = ({ icon, label, borderColor, onPress, isSelected }) => {
 
   return (
-
     <TouchableOpacity
       onPress={onPress}
       style={[

@@ -11,7 +11,7 @@
   : 선택된 카테고리 상태를 업데이트한 후,
   부모 컴포넌트에 선택된 카테고리 전달
 */
-import Reac, {useState} from 'react';
+import React, {useState} from 'react';
 import {View, ScrollView, StyleSheet} from 'react-native';
 import CategoryButton from './CategoryButton';
 import {categories} from '../data/bucketCategories';
