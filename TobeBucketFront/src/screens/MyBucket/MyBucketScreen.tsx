@@ -5,7 +5,7 @@ import ViewMyBucketToggle from '../../components/ViewMyBucketToggle';
 import PageTitle from '../../components/PageTitle';
 import CustomButton from '../../components/CustomButton';
 import ViewMyBucketList from '../../components/ViewMyBucketList';
-import CryingBucket from '../../assets/images/cryingBucketImg.png';
+import CryingBucket from '../../assets/images/CryingBucketImg.png';
 import noAchievedBucket from '../../assets/images/noAchievedBucket.png';
 import styles from '../../styles/MyBucketScreen.styles';
 import { unachievedData, achievedData } from '../../data/tempBucketData.ts';

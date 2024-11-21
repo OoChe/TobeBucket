@@ -1,8 +1,6 @@
 /*
-  NOTICE : 뒤로가기, 버킷 리스트 가져오기 버튼 추가 예정
-
  [템플릿 상세 보기 스크린]
- - 구성 : 헤더, 버킷 리스트 제목, 중간 목표, "버튼"
+ - 구성 : 헤더, 버킷 리스트 제목, 중간 목표, 버튼
  */
 
 import React from 'react';
@@ -13,19 +11,12 @@ import styles from '../../styles/ViewTemplateDetailScreen.styles';
 import PageTitle from '../../components/PageTitle';
 import TemplateDetail from '../../components/TemplateDetail';
 
-const DUMMY_TEMPLATE_DETAIL = {
-  bucketName: "제주도 한달 살이",
-  bucketContent: "제주도에서 한 달 동안 살며 힐링하기",
-  category: 2,
-  semiGoalData: [
-    { semiGoalTitle: "필요한 돈 모으기" },
-    { semiGoalTitle: "구체적인 지역 찾아보기" },
-  ],
-};
-
 const ViewTemplateDetailScreen = () => {
   const navigation = useNavigation();
-  const template = DUMMY_TEMPLATE_DETAIL;
+  const route = useRoute();
+  const template = route.params?.template;
+
+//   const template = DUMMY_TEMPLATE_DETAIL;
 
   return (
     <ScrollView contentContainerStyle={styles.container}>

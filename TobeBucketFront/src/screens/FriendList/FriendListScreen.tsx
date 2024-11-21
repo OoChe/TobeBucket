@@ -21,7 +21,6 @@ const DUMMY_FRIEND_LIST = [
 
 
 
-
 const FriendListScreen = () => {
   return (
     <View style={styles.main}>

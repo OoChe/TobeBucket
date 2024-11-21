@@ -67,7 +67,7 @@ const ViewTemplateScreen = () => {
             semiGoalCnt={template.semiGoalData.length}
             category={template.category}
             onAddPress={() => navigation.navigate('WriteBucketRequired', { template })}
-            onCardPress={() => navigation.navigate('ViewTemplateDetail')}
+            onCardPress={() => navigation.navigate('ViewTemplateDetail', { template })}
           />
         ))}
       </ScrollView>

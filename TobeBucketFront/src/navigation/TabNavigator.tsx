@@ -5,7 +5,7 @@ import styles from '../styles/TabNavigator.styles';
 import BucketFeedScreen from '../screens/BucketFeedScreen';
 import MyBucketStackNavigator from './MyBucketStackNavigator';
 import FriendListScreen from '../screens/FriendList/FriendListScreen';
-import MyPageScreen from '../screens/MyPageScreen';
+import MyPageScreen from '../screens/MyPage/MyPageScreen';
 import WriteBucketStackNavigator from './WriteBucketStackNavigator';
 import FriendListStackNavigator from './FriendListStackNavigator';
 
