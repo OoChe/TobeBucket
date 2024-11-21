@@ -28,11 +28,12 @@ public class ManageBucketController {
         try {
             String userId = SecurityContextHolder.getContext().getAuthentication().getName();
             // 서비스 호출해서 DB에 저장
-            manageBucketService.saveNewBucket(userId, writeBucketDTO);
+            Integer bucketId = manageBucketService.saveNewBucket(userId, writeBucketDTO);
 
             //response해주기
             response.put("code", "SU");
             response.put("message", "Success.");
+            response.put("bucketId", bucketId);
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             response.put("code", "DE");
