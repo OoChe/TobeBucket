@@ -5,6 +5,7 @@ import com.example.ToBeBucket.DTO.AchieveBucketDTO;
 import com.example.ToBeBucket.DTO.GetBucketDTO;
 import com.example.ToBeBucket.Service.GetBucketDetailsService;
 import com.example.ToBeBucket.Service.GetBucketlistsService;
+import com.example.ToBeBucket.Service.GetTemplateListsService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -26,7 +27,7 @@ import java.util.Map;
 public class GetBucketlistsController {
     private final GetBucketlistsService getBucketlistsService;
     private final GetBucketDetailsService getBucketDetailsService;
-
+    private final GetTemplateListsService getTemplateListsService;
     //버킷리스트 목록 조회
     @GetMapping("/tobebucket/bucketlists")
     public ResponseEntity<Map<String, Object>> getBucketlists(@RequestBody GetBucketDTO getBucketDTO) {
@@ -47,7 +48,7 @@ public class GetBucketlistsController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
         }
     }
-
+    //버킷 상세 조회
     @GetMapping("/tobebucket/bucketlists/{bucketId}")
     public ResponseEntity<Map<String, Object>> getBucketDetail(@PathVariable Integer bucketId) {
         String userId = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -57,6 +58,24 @@ public class GetBucketlistsController {
             response.put("code", "SU");
             response.put("message", "버킷 디테일 반환 Success.");
             response.put("bucketList", bucketListDetail);
+
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            response.put("code", "DE");
+            response.put("message", e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        }
+    }
+
+    //템플릿버킷리스트 목록 조회
+    @GetMapping("/tobebucket/bucket/search-template")
+    public ResponseEntity<Map<String, Object>> getTemplates() {
+        Map<String, Object> response = new LinkedHashMap<>();
+        try {
+            List<?> templates = getTemplateListsService.getTemplates();
+            response.put("code", "SU");
+            response.put("message", "suceess");
+            response.put("templateList", templates);
 
             return ResponseEntity.ok(response);
         } catch (Exception e) {
