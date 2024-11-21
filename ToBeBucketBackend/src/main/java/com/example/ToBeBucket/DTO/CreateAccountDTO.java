@@ -11,4 +11,5 @@ public class CreateAccountDTO {
     private String nickname;
     private String mbti;
     private String intro;
+    private String role;
 }
