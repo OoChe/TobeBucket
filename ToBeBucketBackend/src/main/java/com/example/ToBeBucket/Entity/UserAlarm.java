@@ -11,10 +11,10 @@ import java.time.LocalDateTime;
 @Table(name = "UserAlarm")
 public class UserAlarm {
 
-    @Id
     @Column(name = "userId", nullable = false)
     private String userId; // 외래 키: 사용자 ID
 
+    @Id
     @Column(name = "alarmId", nullable = false)
     private Integer alarmId; // 알람 ID
 
@@ -25,7 +25,7 @@ public class UserAlarm {
     private Boolean readStatus = false; // 읽음 여부, 기본값 false
 
     @Column(name = "receiveDate", nullable = false)
-    private LocalDateTime receiveDate; // 알람 수신 날짜
+    private String receiveDate; // 알람 수신 날짜
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "userId", insertable = false, updatable = false)
