@@ -27,10 +27,10 @@ public class GetBucketlistsService {
     private final UserBucketRepository userBucketRepository;
     private final UserLoginRepository userLoginRepository;
 
-    public List<Map<String, Object>> getBucketlists(GetBucketDTO getBucketDTO) {
+    public List<Map<String, Object>> getBucketlists(String userId, GetBucketDTO getBucketDTO) {
 
         // UserBucket을 이용하여 UserId와 BucketId에 해당하는 버킷 정보를 가져오기
-        UserLogin userLogin = userLoginRepository.findByUserId(getBucketDTO.getUserId());
+        UserLogin userLogin = userLoginRepository.findByUserId(userId);
         List<UserBucket> userBuckets = userBucketRepository.findByUserId(userLogin);
 
         if (Boolean.FALSE.equals(getBucketDTO.getAchieveStatus())) { // 미달성 버킷 조회
@@ -74,6 +74,7 @@ public class GetBucketlistsService {
                                     map.put("category", bucket.getCategory());
                                     map.put("achievementMedia", bucketAchievement.getAchievementMedia());
                                     map.put("goalReview", bucketAchievement.getGoalReview());
+                                    map.put("stickerId", bucketAchievement.getStickerId());
                                     return map;
                                 })
                                 .collect(Collectors.toList());

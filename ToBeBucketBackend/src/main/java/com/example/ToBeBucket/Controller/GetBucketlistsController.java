@@ -30,9 +30,10 @@ public class GetBucketlistsController {
     //버킷리스트 목록 조회
     @GetMapping("/tobebucket/bucketlists")
     public ResponseEntity<Map<String, Object>> getBucketlists(@RequestBody GetBucketDTO getBucketDTO) {
+        String userId = SecurityContextHolder.getContext().getAuthentication().getName();
         Map<String, Object> response = new LinkedHashMap<>();
         try {
-            List<?> bucketList = getBucketlistsService.getBucketlists(getBucketDTO);
+            List<?> bucketList = getBucketlistsService.getBucketlists(userId, getBucketDTO);
             response.put("code", "SU");
             response.put("message", getBucketDTO.getAchieveStatus()
                     ? "달성 버킷 목록 조회 Success."
