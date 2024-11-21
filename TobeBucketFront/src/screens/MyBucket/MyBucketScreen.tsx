@@ -35,6 +35,15 @@ const MyBucketScreen = () => {
   const [viewMode, setViewMode] = useState<'upcoming' | 'achieved'>('upcoming');
   const navigation = useNavigation();
 
+  const handleWriteBucket = () => {
+    navigation.navigate('WriteBucket');
+  };
+
+  const handleViewTemplate = () => {
+    // sendDataToDB();
+    // navigation.navigate('ViewTemplate');
+  };
+
   const fetchBucketList = async (mode: 'upcoming' | 'achieved') => {
     setLoading(true);
     try {
@@ -92,15 +101,6 @@ const MyBucketScreen = () => {
         </ScrollView>
       );
     }
-  };
-
-  const handleWriteBucket = () => {
-    navigation.navigate('WriteBucket');
-  };
-
-  const handleViewTemplate = () => {
-    // sendDataToDB();
-    // navigation.navigate('ViewTemplate');
   };
 
   return (

@@ -1,30 +1,25 @@
+/* [중간목표 컴포넌트]
+1) 변수
+- text: 중간목표 제목
+*/
 import React from 'react';
-import {TouchableOpacity, View, Image, Text, StyleSheet} from 'react-native';
+import {TouchableOpacity, View, Text, StyleSheet} from 'react-native';
 import StickerEmpty from './StickerEmpty';
 
-const MilestoneShort = ({text, isSticker, onPress}) => {
+interface milestoneProps{
+  title: string,
+  stickerNum: number,
+  onPress: void,
+}
+
+const MilestoneShort = ({title, stickerNum, onPress}: milestoneProps) => {
   return (
     <View
-      style={{
-        width: 363,
-        height: 64,
-        display: 'flex',
-        flexDirection: 'row',
-        justifyContent: 'space-around',
-        backgroundColor: '#ffffff',
-        borderRadius: 10,
-        padding: 8,
-        marginBottom: 10
-      }}>
+      style={styles.container}>
       <Text
-        style={{
-          width: 260,
-          fontFamily: 'Inter',
-          fontSize: 18,
-          fontWeight: '700',
-        }}
+        style={styles.textStyle}
         numberOfLines={1}>
-        {text}
+        {title}
       </Text>
       <StickerEmpty/>
     </View>
@@ -32,6 +27,23 @@ const MilestoneShort = ({text, isSticker, onPress}) => {
 };
 
 const styles = StyleSheet.create({
+  container: {
+    width: 363,
+    height: 64,
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    backgroundColor: '#ffffff',
+    borderRadius: 10,
+    padding: 8,
+    marginBottom: 10
+  },
+  textStyle: {
+    width: 260,
+    fontFamily: 'Inter',
+    fontSize: 18,
+    fontWeight: '700',
+  },
   sticker: {
     width: 100,
     height: 100,

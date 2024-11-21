@@ -14,24 +14,24 @@ import { useNavigation } from '@react-navigation/native';
 import { CategoryIcon } from './CategoryIcon';
 
 interface bucketShortProps {
-  bucketID: number;
+  bucketId: number;
   bucketName: string;
   bucketContent: string;
   goalDate: string;
   category: number;
 }
 
-export const MyBucketShort = ({ bucketID, bucketName, bucketContent, goalDate, category }: bucketShortProps) => {
+export const MyBucketShort = ({ bucketId, bucketName, bucketContent, goalDate, category }: bucketShortProps) => {
   const navigation = useNavigation();
 
-  const handleMyBucketInfo = () => {
-    // sendDataToDB();
-    navigation.navigate('MyBucketInfo');
+  const handleMyBucketInfo = (bucketId: number) => {
+    navigation.navigate('MyBucketDetail', { bucketId });
   };
+  
 
   return (
     <View>
-      <TouchableOpacity style={styles.bucketContainer} onPress={handleMyBucketInfo}>
+      <TouchableOpacity style={styles.bucketContainer} onPress={() => handleMyBucketInfo(bucketId)}>
         <View
           style={{
             flexDirection: 'row',
@@ -53,7 +53,7 @@ export const MyBucketShort = ({ bucketID, bucketName, bucketContent, goalDate, c
           </TouchableOpacity>
           <View style={styles.divider} />
           <TouchableOpacity style={styles.button}>
-            <Text style={styles.buttonText}>수정하기</Text>-
+            <Text style={styles.buttonText}>수정하기</Text>
           </TouchableOpacity>
           <View style={styles.divider} />
           <TouchableOpacity style={styles.button}>

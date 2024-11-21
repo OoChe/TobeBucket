@@ -25,9 +25,9 @@ interface bucketShortProps {
 export const BucketShort = ({ bucketId, bucketName, achieveDate, category, achievementMedia, goalReview,}: bucketShortProps) => {
   const navigation = useNavigation();
 
-  const handleMyBucketInfo = () => {
+  const handleMyBucketInfo = (bucketId: number) => {
     // sendDataToDB();
-    navigation.navigate('MyBucketInfo');
+    navigation.navigate('MyBucketDetail', { bucketId });
   };
   useEffect(() => {
     console.log(achievementMedia);
