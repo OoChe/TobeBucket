@@ -29,4 +29,20 @@ public class ProcessFriendService {
             throw new RuntimeException("Failed to delete friend relationship.");
         }
     }
+
+    @Transactional
+    public void addFriend(String userId, String friendId) {
+        try {
+            // 새로운 UserFriend 엔티티 생성
+            UserFriend newFriend = new UserFriend();
+            newFriend.setUserId(userId);
+            newFriend.setFriendId(friendId);
+            newFriend.setFriendStatus(0);
+
+            processFriendRepository.save(newFriend);
+
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to add friend.");
+        }
+    }
 }
