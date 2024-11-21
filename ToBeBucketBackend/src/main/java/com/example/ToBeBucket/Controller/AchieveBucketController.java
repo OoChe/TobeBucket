@@ -50,12 +50,13 @@ public class AchieveBucketController {
     public ResponseEntity<Map<String,Object>> recordBucketAchievement(
             @RequestBody AchieveBucketDTO achieveBucketDTO){
         Map<String,Object> response = new LinkedHashMap<>();
+        String userId = SecurityContextHolder.getContext().getAuthentication().getName();
         try {
             //request한 것 DTO로 가져오기
             Integer bucketId = achieveBucketDTO.getBucketId();
 
             // 서비스 호출해서 DB에 저장
-            achieveBucketService.saveAchieveBucket(achieveBucketDTO);
+            achieveBucketService.saveAchieveBucket(userId, achieveBucketDTO);
 
             //response해주기
             response.put("code", "SU");
@@ -92,9 +93,10 @@ public class AchieveBucketController {
     public ResponseEntity<Map<String,Object>> recordSemiGoal(
             @RequestBody SemiGoalDTO semiGoalDTO){
         Map<String,Object> response = new LinkedHashMap<>();
+        String userId = SecurityContextHolder.getContext().getAuthentication().getName();
         try {
             // 서비스 호출해서 DB에 저장
-            achieveBucketService.saveSemiGoalAchievement(semiGoalDTO);
+            achieveBucketService.saveSemiGoalAchievement(userId, semiGoalDTO);
 
             //response해주기
             response.put("code", "SU");
