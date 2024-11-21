@@ -1,10 +1,14 @@
 import React, { useState } from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import FriendListScreen from '../screens/FriendList/FriendListScreen';
+import SearchFriendScreen from '../screens/FriendList/SearchFriendScreen';
+import ViewFriendBucketScreen from '../screens/FriendList/ViewFriendBucketScreen';
 
 
 type StackParamList = {
   FriendList: undefined;
+  SearchFriend: undefined;
+  FriendBucket: undefined;
 };
 
 const Stack = createStackNavigator<StackParamList>();
@@ -31,6 +35,22 @@ const FriendListStackNavigator = () => {
       <Stack.Screen
         name="FriendList"
         component={FriendListScreen}
+        options={{ headerShown: false }}
+      >
+      </Stack.Screen>
+
+
+      <Stack.Screen
+        name="SearchFriend"
+        component={SearchFriendScreen}
+        options={{ headerShown: false }}
+      >
+      </Stack.Screen>
+
+
+      <Stack.Screen
+        name="FriendBucket"
+        component={ViewFriendBucketScreen}
         options={{ headerShown: false }}
       >
       </Stack.Screen>

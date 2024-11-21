@@ -29,7 +29,7 @@ const WriteBucketScreen = ({ bucketInfo, setBucketInfo, sendDataToDB }) => {
   const template = route.params?.template;
 
   useEffect(() => {
-      {/* 템플릿이 전달된 경우, 입력 값 전달 */}
+   {/* 템플릿이 전달된 경우, 입력 값 전달 */}
     if (template) {
       console.log('템플릿 로드:', template);
       setBucketInfo((prevData) => ({
