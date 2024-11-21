@@ -1,34 +1,37 @@
 package com.example.ToBeBucket.Controller;
 
-import com.example.ToBeBucket.DTO.AlarmDTO;
-import com.example.ToBeBucket.Service.AlarmService;
+import com.example.ToBeBucket.DTO.ProcessFriendDTO;
+import com.example.ToBeBucket.Service.ProcessFriendService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 @RestController
 @Slf4j
 @RequiredArgsConstructor
-public class ViewAlarmController {
-
-    private final AlarmService alarmService;
-
-    @GetMapping("/tobebucket/alarm")
-    public ResponseEntity<Map<String, Object>> viewAlarm() {
+public class DeleteFriendController {
+    private final ProcessFriendService processFriendService;
+    @DeleteMapping("/tobebucket/friendlist/delete")
+    public ResponseEntity<Map<String, Object>> deleteFriend(
+            @RequestBody ProcessFriendDTO processFriendDTO) {
         Map<String, Object> response = new LinkedHashMap<>();
         try {
-            List<AlarmDTO> alarmList = alarmService.getAlarms();
+            String userId = SecurityContextHolder.getContext().getAuthentication().getName();
+
+            processFriendService.deleteFriendByUserId(userId, processFriendDTO.getFriendId());
 
             response.put("code", "SU");
             response.put("message", "Success.");
-            response.put("alarmList", alarmList);
 
             return ResponseEntity.ok(response);
         }
