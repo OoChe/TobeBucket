@@ -18,6 +18,8 @@ public class UserProfile {
 
     private String intro;
     private String mbti;
+    private Integer userPoint;
+    private Integer stickerProcess;
     private String profileImage;
 
     @OneToOne
