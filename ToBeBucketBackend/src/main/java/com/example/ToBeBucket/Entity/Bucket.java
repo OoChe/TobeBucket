@@ -16,7 +16,7 @@ public class Bucket {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "bucketId", nullable = false)
-    private Long bucketId;
+    private Integer bucketId;
 
     @Column(name = "userId", length = 255, nullable = false)
     private String userId;
@@ -34,10 +34,10 @@ public class Bucket {
     private Integer category;
 
     @Column(name = "createDate", nullable = false)
-    private LocalDateTime createDate;
+    private String createDate;
 
     @Column(name = "goalDate")
-    private LocalDate goalDate;
+    private String goalDate;
 
     @Column(name = "achieveStatus", nullable = false)
     private Boolean achieveStatus = false;

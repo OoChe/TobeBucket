@@ -25,8 +25,5 @@ public class BucketFriend {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="bucket_friend_id")
-    private Integer bucket_friend_id; // 복합 키
-    // 기본키를 위한 ID, 복합 키 대신 사용할 수 있음. (이 필드는 복합 키 대신 사용할 수 있음)
-
-    // 복합키를 사용하려면, 복합키 클래스를 생성해야 합니다.
+    private Integer bucket_friend_id;
 }
