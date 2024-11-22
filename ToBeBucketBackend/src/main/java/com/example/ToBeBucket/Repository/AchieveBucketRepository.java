@@ -10,5 +10,6 @@ import java.util.Optional;
 public interface AchieveBucketRepository extends JpaRepository<BucketAchievement, Integer> {
     Optional<BucketAchievement> findByBucketId(Integer bucketId);
     List<BucketAchievement> findByBucket(Bucket bucket);
+    List<BucketAchievement> findAllByBucketIn(List<Bucket> buckets);
 }
 

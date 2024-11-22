@@ -3,8 +3,10 @@ package com.example.ToBeBucket.Controller;
 
 import com.example.ToBeBucket.DTO.AchieveBucketDTO;
 import com.example.ToBeBucket.DTO.GetBucketDTO;
+import com.example.ToBeBucket.Entity.GetMBTIbucketDTO;
 import com.example.ToBeBucket.Service.GetBucketDetailsService;
 import com.example.ToBeBucket.Service.GetBucketlistsService;
+import com.example.ToBeBucket.Service.GetMbtiBucketListsService;
 import com.example.ToBeBucket.Service.GetTemplateListsService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,6 +30,7 @@ public class GetBucketlistsController {
     private final GetBucketlistsService getBucketlistsService;
     private final GetBucketDetailsService getBucketDetailsService;
     private final GetTemplateListsService getTemplateListsService;
+    private final GetMbtiBucketListsService getMbtiBucketListsService;
     //버킷리스트 목록 조회
     @GetMapping("/tobebucket/bucketlists")
     public ResponseEntity<Map<String, Object>> getBucketlists(@RequestBody GetBucketDTO getBucketDTO) {
@@ -76,6 +79,24 @@ public class GetBucketlistsController {
             response.put("code", "SU");
             response.put("message", "suceess");
             response.put("templateList", templates);
+
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            response.put("code", "DE");
+            response.put("message", e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        }
+    }
+
+    //MBTI 버킷 목록 조회
+    @GetMapping("/tobebucket/feed/mbti")
+    public ResponseEntity<Map<String, Object>> getMBTIbuckets(@RequestBody GetMBTIbucketDTO getMBTIbucketDTO) {
+        Map<String, Object> response = new LinkedHashMap<>();
+        try {
+            List<?> mbtiBuckets = getMbtiBucketListsService.getMbtiBucketLists(getMBTIbucketDTO.getMbti());
+            response.put("code", "SU");
+            response.put("message", "suceess");
+            response.put("bcketList", mbtiBuckets);
 
             return ResponseEntity.ok(response);
         } catch (Exception e) {

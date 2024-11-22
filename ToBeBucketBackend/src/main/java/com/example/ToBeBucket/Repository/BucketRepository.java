@@ -9,4 +9,5 @@ import java.util.List;
 public interface BucketRepository extends JpaRepository<Bucket, Integer> {
     Bucket findByBucketId(int bucketId);
     List<Bucket> findAllByUserId(String userId);
+    List<Bucket> findAllByMbtiAndPublicStatus(String mbti, Boolean publicStatus);
 }
