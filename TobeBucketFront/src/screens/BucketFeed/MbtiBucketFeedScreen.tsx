@@ -1,6 +1,6 @@
 // [MBTI 버킷 피드 화면]
 import React, {useState, useEffect} from 'react';
-import {View, Text, StyleSheet, ScrollView, Alert} from 'react-native';
+import {View, Text, ScrollView, Alert} from 'react-native';
 import axios from 'axios';
 import styles from '../../styles/MbtiBucketFeedScreen.styles';
 import PageTitle from '../../components/PageTitle';
@@ -74,7 +74,7 @@ const MbtiBucketFeedScreen = () => {
   }, [selectedTypes]);
 
   return (
-    <View>
+    <View style={styles.main}>
       <PageTitle title="MBTI 버킷 피드" colorCode="#ff8736" />
       <View style={{paddingHorizontal: 10}}>
         <View style={styles.buttonGroup}>
@@ -104,9 +104,9 @@ const MbtiBucketFeedScreen = () => {
           </View>
         </View>
         <View style={styles.borderLine} />
-        <Text style={styles.MbtiText}>{mbtiString}</Text>
         {/* MBTI 버킷리스트 목록 */}
         <ScrollView>
+          <Text style={styles.MbtiText}>{mbtiString}</Text>
           {MBTIBucket.map((bucket, index) => (
             <MbtiFeedShort
               key={index}

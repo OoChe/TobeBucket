@@ -1,7 +1,11 @@
+// [친구 버킷 피드 화면]
 import React from 'react';
 import {useNavigation} from '@react-navigation/native';
-import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
+import {View, ScrollView} from 'react-native';
 import PageTitle from '../../components/PageTitle';
+import FriendFeedShort from '../../components/FriendFeedShort';
+import {FriendBucket} from '../../data/tempBucketData';
+import styles from '../../styles/FriendBucketFeedScreen.styles';
 
 const FriendBucketFeedScreen = () => {
   const navigation = useNavigation();
@@ -10,42 +14,22 @@ const FriendBucketFeedScreen = () => {
       <View>
         <PageTitle title="친구 버킷 피드" colorCode="#ff8736" />
       </View>
+      <ScrollView>
+        {FriendBucket.map((bucket, index) => (
+          <FriendFeedShort
+            key={index}
+            nickname={bucket.nickname}
+            mbti={bucket.mbti}
+            profileImage={bucket.profileImage}
+            bucketName={bucket.bucketName}
+            bucketContent={bucket.bucketContent}
+            achieveDate={bucket.achieveDate}
+            achievementMedia={bucket.achievementMedia}
+          />
+        ))}
+      </ScrollView>
     </View>
   );
 };
 
 export default FriendBucketFeedScreen;
-
-const styles = StyleSheet.create({
-  main: {
-    minHeight: 1000,
-    backgroundColor: '#FBFBFB',
-  },
-  smallText: {
-    height: 15,
-    fontFamily: 'Pretendard-Regular',
-    fontSize: 12,
-    position: 'relative',
-    textAlign: 'left',
-    marginLeft: 15,
-    marginTop: 5,
-  },
-  buttonContainer: {
-    width: 150,
-    height: 85,
-    borderRadius: 20,
-    borderWidth: 1,
-    borderColor: '#ff8736',
-    borderStyle: 'solid',
-    justifyContent: 'center',
-    backgroundColor: '#FBFBFB',
-    elevation: 7,
-  },
-  buttonText: {
-    display: 'flex',
-    fontFamily: 'Inter',
-    fontSize: 20,
-    fontWeight: '700',
-    textAlign: 'center',
-  },
-});

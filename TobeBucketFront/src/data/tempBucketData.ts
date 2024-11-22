@@ -1,15 +1,8 @@
 /*
 [테스트용 버킷리스트 임시 데이터]
 - 백 연결 시 삭제
-- 구성: 달성 예정 버킷 리스트, 달성한 버킷 리스트
-- 파라미터 값
-  1) bucketID : 버킷리스트 고유 값
-  2) bucketName: 버킷리스트 제목
-  3) bucketConeten: 버킷리스트 세부 내용
-  4) goalDate: 버킷리스트 목표 날짜 - 월 표기 시 0~11 범위 내로 작성 필요
-  5) category: 카테고리 0~5
-- 사용 화면: MyBucketScreen.tsx
 */
+// 달성하지 못한 버킷리스트 데이터
 export const unachievedData = [
   {
     bucketId: 1,
@@ -34,6 +27,7 @@ export const unachievedData = [
   },
 ];
 
+// 달성한 버킷리스트 데이터데이터
 export const achievedData = [
   {
     bucketId: 10,
@@ -63,6 +57,7 @@ export const achievedData = [
   },
 ];
 
+// 달성한 버킷 목록 세부 내용
 export const achievedDetailData = {
   bucketId: 1,
   bucketName: '제주도 일 년 살이',
@@ -82,7 +77,65 @@ export const achievedDetailData = {
   goalReview:
     '제주도에서 한달 동안 힐링하기 성공했다. 긴 내용이 있다면 얘가 어떻게 될 지 파악해야 하기 때문에 일부러 길게 적어보고 있다. 사실 저는 제주도를 한 번도 가보지 못했어요. 제주도보다 일본이 더 값싼 시절에 가서 제주도를 한 번도 못가봤어요 하지만 가보고 싶다는 로망도? 있기는 합니다 제주도 바다 제주도 귤 귤이 요즘 제철이더라고요 귤 맛있어요',
 };
-export const FriendBucket = [{}, {}];
+// 친구 버킷리스트 목록
+export const FriendBucket = [
+  {
+    nickname: 'user1',
+    mbti: 'INTP',
+    profileImage: 'https://i.pinimg.com/236x/2f/55/97/2f559707c3b04a1964b37856f00ad608.jpg',
+    bucketName: '제주도 한달 살이',
+    bucketContent: '재밌당.',
+    achieveDate: new Date(2023, 11, 18),
+    achievementMedia: '',
+  },
+  {
+    nickname: 'user2',
+    mbti: 'INTJ',
+    profileImage: 'https://i.pinimg.com/236x/2f/55/97/2f559707c3b04a1964b37856f00ad608.jpg',
+    bucketName: '제주도',
+    bucketContent: '재밌.',
+    achieveDate: new Date(2024, 12, 8),
+    achievementMedia: '',
+  },
+  {
+    nickname: 'user2',
+    mbti: 'INTJ',
+    profileImage: 'https://i.pinimg.com/236x/2f/55/97/2f559707c3b04a1964b37856f00ad608.jpg',
+    bucketName: '제주도',
+    bucketContent: '재밌.',
+    achieveDate: new Date(2024, 12, 8),
+    achievementMedia: '',
+  },
+  {
+    nickname: 'user2',
+    mbti: 'INTJ',
+    profileImage: 'https://i.pinimg.com/236x/2f/55/97/2f559707c3b04a1964b37856f00ad608.jpg',
+    bucketName: '제주도',
+    bucketContent: '재밌.',
+    achieveDate: new Date(2024, 12, 8),
+    achievementMedia: '',
+  },
+  {
+    nickname: 'user2',
+    mbti: 'INTJ',
+    profileImage: 'https://i.pinimg.com/236x/2f/55/97/2f559707c3b04a1964b37856f00ad608.jpg',
+    bucketName: '제주도',
+    bucketContent: '재밌.',
+    achieveDate: new Date(2024, 12, 8),
+    achievementMedia: '',
+  },
+  {
+    nickname: 'user2',
+    mbti: 'INTJ',
+    profileImage: 'https://i.pinimg.com/236x/2f/55/97/2f559707c3b04a1964b37856f00ad608.jpg',
+    bucketName: '제주도',
+    bucketContent: '재밌.',
+    achieveDate: new Date(2024, 12, 8),
+    achievementMedia: '',
+  },
+];
+
+// MBTI별 버킷 데이터
 export const MBTIBucket = [
   {
     bucketName: '제주도 한달 살이',

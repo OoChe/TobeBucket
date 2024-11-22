@@ -1,56 +1,74 @@
 /*
- [달성한 버킷, 피드 버킷 컴포넌트]
-  - 파라미터
-    1) id: 버킷별 고유번호
-    2) title: 버킷리스트 제목
-    3) achieveDate: 버킷리스트 달성 일자
-    4) category: 버킷리스트 카테고리
-    5) achievementMedia: 버킷리스트에 첨부한 사진 이미지
-  - 
+ [친구 피드 버킷 컴포넌트]
+1) 파라미터
+  - id: 버킷별 고유번호
+  - title: 버킷리스트 제목
+  - achieveDate: 버킷리스트 달성 일자
+  - category: 버킷리스트 카테고리
+  - achievementMedia: 버킷리스트에 첨부한 사진 이미지
+- 
 */
-import React, {useEffect} from 'react';
-import {View, Text, Image, TouchableOpacity, StyleSheet} from 'react-native';
+import React from 'react';
+import {View, Text, Image, StyleSheet} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
-import {CategoryIcon} from './CategoryIcon';
+import {dateToStr} from './dateFunc';
 
 interface friendFeedShortProps {
-  bucketId: number;
+  nickname: string;
+  mbti: string;
+  profileImage: string;
   bucketName: string;
-  achieveDate: string;
-  category: number;
+  bucketContent: string;
+  achieveDate: Date;
   achievementMedia: string;
-  goalReview: string;
 }
 
-export const FriendFeedShort = ({ bucketId, bucketName, achieveDate, category, achievementMedia, goalReview,}: friendFeedShortProps) => {
+export const FriendFeedShort = ({
+  nickname,
+  mbti,
+  profileImage,
+  bucketName,
+  bucketContent,
+  achieveDate,
+  achievementMedia,
+}: friendFeedShortProps) => {
   const navigation = useNavigation();
 
   return (
-    <View>
-      <TouchableOpacity
-        style={styles.bucketContainer}
-        onPress={() => handleMyBucketInfo(bucketId)}>
-        <View
-          style={{
-            marginLeft: 14,
-            flexDirection: 'row',
-          }}>
-          <CategoryIcon category={category} />
-          <View style={styles.textContainer}>
-            <Text style={styles.titleText} numberOfLines={1}>
-              {bucketName}
-            </Text>
-            <Text style={styles.dateText}>{achieveDate} &nbsp;달성</Text>
-          </View>
-          {/* 이모티콘 추가 필요 */}
+    <View style={styles.bucketContainer}>
+      <View
+        style={{
+          flexDirection: 'row',
+        }}>
+        <View style={styles.userInfo}>
+          {/* Profile Image */}
+          <Image source={{uri: profileImage}} style={styles.profileImage} />
+          {/* Username */}
+          <Text style={styles.username}>{nickname}</Text>
         </View>
-        {achievementMedia ? (
-          <Image source={{ uri: achievementMedia }} style={styles.imageContainer}></Image>
-        ) : (null)}
-        {goalReview ? (
-          <Text style={styles.reviewText} numberOfLines={3}>{goalReview}</Text>
-        ) : (null)}
-      </TouchableOpacity>
+        <View style={styles.textContainer}>
+          <View style={{flexDirection: 'row'}}>
+            <Text style={styles.titleText}>{bucketName}</Text>
+            <View style={styles.badge}>
+              <Text style={styles.badgeText}>{mbti}</Text>
+            </View>
+          </View>
+          <Text style={styles.dateText}>
+            {dateToStr(achieveDate)} &nbsp;달성
+          </Text>
+        </View>
+        {/* 이모티콘 추가 필요 */}
+      </View>
+      {achievementMedia ? (
+        <Image
+          source={{uri: achievementMedia}}
+          style={styles.imageContainer}></Image>
+      ) : null}
+      {bucketContent ? (
+        <Text style={styles.contentText} numberOfLines={3}>
+          {bucketContent}
+        </Text>
+      ) : null}
     </View>
   );
 };
@@ -62,25 +80,53 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     margin: 'auto',
     marginBottom: 10,
-    paddingBottom: 15, // 텍스트 상하 간격을 위해 추가
+    padding: 8,
+    paddingHorizontal: 15,
+    gap: 5,
   },
   textContainer: {
-    width: 241,
     position: 'relative',
-    marginLeft: 20,
+    marginLeft: 15,
+    marginVertical: 8
   },
   titleText: {
     fontFamily: 'Pretendard-Bold',
     fontSize: 17,
-    position: 'relative',
-    top: '18%',
   },
   dateText: {
     fontFamily: 'Pretendard-Regular',
     fontSize: 13,
     color: '#6C7278',
     position: 'relative',
-    top: '20%',
+    marginTop: 3,
+  },
+  profileImage: {
+    width: 55,
+    height: 55,
+    borderRadius: 50,
+  },
+  userInfo: {
+    justifyContent: 'center',
+  },
+  badge: {
+    width: 40,
+    height: 18,
+    justifyContent: 'center',
+    backgroundColor: '#E3E3E3',
+    borderRadius: 5,
+    marginTop: 3,
+    marginLeft: 5,
+  },
+  badgeText: {
+    color: '#EE4963',
+    fontSize: 12,
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  username: {
+    fontSize: 10,
+    fontWeight: 'bold',
+    textAlign: 'center'
   },
   imageContainer: {
     width: 330,
@@ -88,15 +134,11 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     position: 'relative',
     marginLeft: 14,
-    marginTop: 5
   },
-  reviewText: {
+  contentText: {
     width: 330,
     fontFamily: 'Pretendard-Regular',
     fontSize: 13,
-    position: 'relative',
-    top: 5,
-    marginLeft: 14,
   },
 });
 
