@@ -2,16 +2,22 @@ package com.example.ToBeBucket.Service;
 
 import com.example.ToBeBucket.Entity.UserFriend;
 import com.example.ToBeBucket.Repository.ProcessFriendRepository;
+import com.example.ToBeBucket.Repository.UserProfileRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class ProcessFriendService {
     private final ProcessFriendRepository processFriendRepository;
+    private final UserProfileRepository userProfileRepository;
 
     @Transactional
     public void deleteFriendByUserId(String userId, String friendId) {
@@ -80,5 +86,21 @@ public class ProcessFriendService {
         } catch (Exception e) {
             throw new RuntimeException("Failed to reject friend request.", e);
         }
+    }
+
+    public List<Map<String, Object>> getFriendRequests(String userId) {
+        List<String> requesterIds = processFriendRepository.findPendingRequests(userId);
+
+        return requesterIds.stream()
+                .map(requesterId -> userProfileRepository.findProfileByUserId(requesterId))
+                .collect(Collectors.toList());
+    }
+
+    public List<Map<String, Object>> getFriends(String userId) {
+        List<String> friendIds = processFriendRepository.findConfirmedFriends(userId);
+
+        return friendIds.stream()
+                .map(friendId -> userProfileRepository.findProfileByUserId(friendId))
+                .collect(Collectors.toList());
     }
 }
