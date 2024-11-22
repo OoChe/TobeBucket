@@ -45,4 +45,40 @@ public class ProcessFriendService {
             throw new RuntimeException("Failed to add friend.");
         }
     }
+
+    @Transactional
+    public void acceptFriendRequest(String friendId, String userId) {
+        try {
+            UserFriend friendRequest = processFriendRepository.findByUserIdAndFriendId(userId, friendId);
+            if (friendRequest == null) {
+                throw new RuntimeException("Friend request not found.");
+            }
+            friendRequest.setFriendStatus(1); // 친구 요청 수락
+            processFriendRepository.save(friendRequest);
+
+            UserFriend reverseRelationship = new UserFriend();
+            reverseRelationship.setFriendId(userId);
+            reverseRelationship.setUserId(friendId);
+            reverseRelationship.setFriendStatus(1); // 친구 상태
+
+            processFriendRepository.save(reverseRelationship);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to accept friend request.", e);
+        }
+    }
+
+    @Transactional
+    public void rejectFriendRequest(String friendId, String userId) {
+        try {
+            // 기존 요청의 friendStatus를 2로 업데이트
+            UserFriend friendRequest = processFriendRepository.findByUserIdAndFriendId(friendId, userId);
+            if (friendRequest == null) {
+                throw new RuntimeException("Friend request not found.");
+            }
+            friendRequest.setFriendStatus(2); // 친구 요청 거절
+            processFriendRepository.save(friendRequest);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to reject friend request.", e);
+        }
+    }
 }
