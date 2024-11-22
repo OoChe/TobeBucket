@@ -1,6 +1,9 @@
 import {StyleSheet} from 'react-native';
 
 const styles = StyleSheet.create({
+  main: {
+    backgroundColor: '#FBFBFB',
+  },
   container: {
     flexDirection: 'row',
     padding: 'auto',
@@ -43,7 +46,7 @@ const styles = StyleSheet.create({
     position: 'relative',
     textAlign: 'center',
     marginBottom: 15,
-    lineHeight: 35
+    lineHeight: 35,
   },
 });
 

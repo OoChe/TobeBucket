@@ -1,9 +1,15 @@
 /* [버킷리스트 상세 정보 화면]
-1) 추가할 내용
-- 디데이 자동 계산하기
+
  */
 import React, {useEffect, useState} from 'react';
-import { View, Text, Image, SafeAreaView, ScrollView, StyleSheet, TouchableOpacity,} from 'react-native';
+import {
+  View,
+  Text,
+  Image,
+  ScrollView,
+  StyleSheet,
+  TouchableOpacity,
+} from 'react-native';
 import {useRoute, useNavigation} from '@react-navigation/native';
 import BucketDetailDropdown from '../../components/BucketDetailDropdown';
 import CategoryButton from '../../components/CategoryButton';
@@ -12,6 +18,7 @@ import MilestoneShort from '../../components/MilestoneShort';
 import PageTitle from '../../components/PageTitle';
 import {achievedDetailData} from '../../data/tempBucketData';
 import {getCategoryById} from '../../data/bucketCategories';
+import {dateToStr, calculateDDay} from '../../data/dateFunc';
 
 const MyBucketDetailScreen = () => {
   const navigation = useNavigation();
@@ -22,11 +29,11 @@ const MyBucketDetailScreen = () => {
     friendId: string;
   }
 
-  const [bucketDetail, setBucketDetail] = useState<{
+  const [bucketList, setBucketList] = useState<{
     bucketId: number;
     bucketName: string;
     bucketContent: string;
-    goalDate: string;
+    goalDate: Date;
     category: number;
     createDate: Date;
     friendIds: friendId[];
@@ -42,15 +49,18 @@ const MyBucketDetailScreen = () => {
     //   .then(data => setBucketDetail(data))
     //   .catch(error => console.error('Error fetching bucket detail:', error));
     // 서버 적용 시 아래 내용 삭제
-    setBucketDetail(achievedDetailData);
+    setBucketList(achievedDetailData);
   }, [bucketId]);
 
-  if (!bucketDetail) {
+  if (!bucketList) {
     return <Text>Loading...</Text>;
   }
+  const handleMilestone = () => {
+    navigation.navigate('SemigoalRecord');
+  };
 
   return (
-    <SafeAreaView>
+    <View style={styles.main}>
       <ScrollView
         scrollEnabled={true}
         contentInsetAdjustmentBehavior="automatic">
@@ -79,7 +89,7 @@ const MyBucketDetailScreen = () => {
                   fontSize: 28,
                   color: '#3f6262',
                 }}>
-                {bucketDetail.bucketName}
+                {bucketList.bucketName}
               </Text>
               <Text
                 style={{
@@ -88,7 +98,7 @@ const MyBucketDetailScreen = () => {
                   color: '#878787',
                   marginBottom: 10,
                 }}>
-                생성일 - {bucketDetail.createDate}
+                생성일 - {dateToStr(bucketList.createDate)}
               </Text>
             </View>
             <StickerEmpty />
@@ -97,7 +107,6 @@ const MyBucketDetailScreen = () => {
             <View
               style={{
                 flexDirection: 'row',
-                position: 'relative',
                 marginTop: 12,
               }}>
               <Text
@@ -105,7 +114,7 @@ const MyBucketDetailScreen = () => {
                   fontFamily: 'Pretendard-ExtraBold',
                   fontSize: 28,
                 }}>
-                D-0000
+                D-{calculateDDay(bucketList.goalDate)}
               </Text>
               <Text
                 style={{
@@ -115,21 +124,24 @@ const MyBucketDetailScreen = () => {
                   marginTop: 15,
                   marginLeft: 10,
                 }}>
-                {bucketDetail.goalDate} 목표
+                {dateToStr(bucketList.goalDate)} 목표
               </Text>
-              <BucketDetailDropdown/>
+              <View style={{position: 'absolute', right: 20, marginTop: 10}}>
+                <BucketDetailDropdown
+                  bucketId={bucketList.bucketId}
+                  bucketName={bucketList.bucketName}
+                />
+              </View>
             </View>
             <Text style={styles.middleText}>세부 설명</Text>
             <View style={styles.textContainer}>
-              <Text style={styles.normalText}>
-                {bucketDetail.bucketContent}
-              </Text>
+              <Text style={styles.normalText}>{bucketList.bucketContent}</Text>
             </View>
             <Text style={styles.middleText}>카테고리</Text>
             <CategoryButton
-              icon={getCategoryById(bucketDetail.category).icon}
-              label={getCategoryById(bucketDetail.category).label}
-              borderColor={getCategoryById(bucketDetail.category).borderColor}
+              icon={getCategoryById(bucketList.category).icon}
+              label={getCategoryById(bucketList.category).label}
+              borderColor={getCategoryById(bucketList.category).borderColor}
               onPress={null}
               isSelected={true}
             />
@@ -141,25 +153,27 @@ const MyBucketDetailScreen = () => {
                 alignItems: 'center',
                 flexWrap: 'wrap',
               }}>
-              {bucketDetail.friendIds.map(friendId => (
+              {bucketList.friendIds.map(friendId => (
                 <View key={friendId.friendId} style={styles.friendBox}>
                   <Text style={styles.friendText}>@{friendId}</Text>
                 </View>
               ))}
             </View>
-            {bucketDetail.semiGoalData ? (
+            {bucketList.semiGoalData ? (
               <View>
                 <Text style={styles.middleText}>중간 목표</Text>
                 <View>
-                  {Array.from(bucketDetail.semiGoalData).map(
+                  {Array.from(bucketList.semiGoalData).map(
                     ([semiGoalName, stickerNum]) => (
-                      <View key={semiGoalName}>
-                        <MilestoneShort // key는 고유한 값으로 설정
+                      <TouchableOpacity
+                        key={semiGoalName}
+                        onPress={() => handleMilestone()}>
+                        <MilestoneShort
                           title={semiGoalName}
                           stickerNum={stickerNum}
                           onPress={null}
                         />
-                      </View>
+                      </TouchableOpacity>
                     ),
                   )}
                 </View>
@@ -168,15 +182,13 @@ const MyBucketDetailScreen = () => {
             <View>
               <Text style={styles.middleText}>달성 후기</Text>
               <View style={styles.textContainer}>
-                {bucketDetail.achievementMedia ? (
+                {bucketList.achievementMedia ? (
                   <Image
-                    source={{uri: bucketDetail.achievementMedia}}
+                    source={{uri: bucketList.achievementMedia}}
                     style={styles.imageContainer}></Image>
                 ) : null}
-                {bucketDetail.goalReview ? (
-                  <Text style={styles.normalText}>
-                    {bucketDetail.goalReview}
-                  </Text>
+                {bucketList.goalReview ? (
+                  <Text style={styles.normalText}>{bucketList.goalReview}</Text>
                 ) : null}
                 {}
               </View>
@@ -184,13 +196,16 @@ const MyBucketDetailScreen = () => {
           </View>
         </View>
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 };
 
 export default MyBucketDetailScreen;
 
 const styles = StyleSheet.create({
+  main: {
+    backgroundColor: '#FBFBFB',
+  },
   titleContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',

@@ -7,11 +7,12 @@ import React, {useState} from 'react';
 import {View, ScrollView, StyleSheet} from 'react-native';
 import BucketShort from './BucketShort';
 import HorizontalCategory from './HorizontalCategory';
+import { dateToStr } from '../data/dateFunc';
 
 interface achievedBucket {
     bucketId: number;
     bucketName: string;
-    achieveDate: string;
+    achieveDate: Date;
     category: number;
     achievementMedia: string;
     goalReview: string;
@@ -42,7 +43,7 @@ const ViewMyBucketList = ({bucketList}: achievedBucketList) => {
             <BucketShort
               bucketId={item.bucketId}
               bucketName={item.bucketName}
-              achieveDate={item.achieveDate}
+              achieveDate={dateToStr(item.achieveDate)}
               category={item.category}
               achievementMedia={item.achievementMedia}
               goalReview={item.goalReview}

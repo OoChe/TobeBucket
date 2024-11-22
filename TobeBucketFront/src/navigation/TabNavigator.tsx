@@ -2,7 +2,7 @@ import React from 'react';
 import {Image, View} from 'react-native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import styles from '../styles/TabNavigator.styles';
-import BucketFeedScreen from '../screens/BucketFeedScreen';
+import BucketFeedStackNavigator from './BucketFeedStackNavigator';
 import MyBucketStackNavigator from './MyBucketStackNavigator';
 import FriendListScreen from '../screens/FriendList/FriendListScreen';
 import MyPageScreen from '../screens/MyPageScreen';
@@ -66,7 +66,7 @@ const TabNavigator = () => {
 
       <Tab.Screen
         name="BucketFeed"
-        component={BucketFeedScreen}
+        component={BucketFeedStackNavigator}
         options={{tabBarLabel: '버킷 피드', headerShown: false}}
       />
 

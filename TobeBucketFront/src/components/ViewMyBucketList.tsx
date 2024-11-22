@@ -12,7 +12,7 @@ interface upcomingBucket {
   bucketId: number;
   bucketName: string;
   bucketContent: string;
-  goalDate: string;
+  goalDate: Date;
   category: number;
 }
 
@@ -39,7 +39,7 @@ const ViewMyBucketList = ({bucketList}: upcomingBucketList) => {
         {filteredBucketList.map(item => (
           <View key={item.bucketId}>
             <MyBucketShort
-              bucketID={item.bucketId}
+              bucketId={item.bucketId}
               bucketName={item.bucketName}
               bucketContent={item.bucketContent}
               goalDate={item.goalDate}

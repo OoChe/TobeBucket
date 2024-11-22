@@ -104,7 +104,7 @@ const MyBucketScreen = () => {
   };
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={styles.main}>
       <PageTitle title="나의 버킷" colorCode="#B6E7CC" />
       <ViewMyBucketToggle onSelect={setViewMode} />
       {loading ? (

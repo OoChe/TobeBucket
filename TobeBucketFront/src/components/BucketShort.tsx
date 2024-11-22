@@ -38,7 +38,7 @@ export const BucketShort = ({ bucketId, bucketName, achieveDate, category, achie
     <View>
       <TouchableOpacity
         style={styles.bucketContainer}
-        onPress={handleMyBucketInfo}>
+        onPress={() => handleMyBucketInfo(bucketId)}>
         <View
           style={{
             marginLeft: 14,

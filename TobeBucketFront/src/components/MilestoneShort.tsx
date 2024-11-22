@@ -3,7 +3,7 @@
 - text: 중간목표 제목
 */
 import React from 'react';
-import {TouchableOpacity, View, Text, StyleSheet} from 'react-native';
+import {View, Text, StyleSheet} from 'react-native';
 import StickerEmpty from './StickerEmpty';
 
 interface milestoneProps{
