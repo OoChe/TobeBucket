@@ -3,12 +3,18 @@ package com.example.ToBeBucket.Repository;
 import com.example.ToBeBucket.Entity.Bucket;
 import com.example.ToBeBucket.Entity.BucketAchievement;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
 public interface AchieveBucketRepository extends JpaRepository<BucketAchievement, Integer> {
     Optional<BucketAchievement> findByBucketId(Integer bucketId);
     List<BucketAchievement> findByBucket(Bucket bucket);
+
+    @Query("SELECT ba.achieveDate FROM BucketAchievement ba WHERE ba.bucketId = :bucketId")
+    LocalDate findAchieveDateByBucketId(@Param("bucketId") Integer bucketId);
 }
 
