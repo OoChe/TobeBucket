@@ -22,4 +22,10 @@ public interface BucketRepository extends JpaRepository<Bucket, Integer> {
     @Transactional
     @Query("UPDATE Bucket b SET b.mbti = :newMbti WHERE b.userId = :userId AND b.mbti = :oldMbti")
     void updateMbtiForUser(@Param("userId") String userId, @Param("oldMbti") String oldMbti, @Param("newMbti") String newMbti);
+
+    @Query("SELECT b.userId as userId, b.bucketName as bucketName, b.bucketContent as bucketContent, " +
+            "b.achieveStatus as achieveStatus, a.achieveDate as achieveDate " +
+            "FROM Bucket b LEFT JOIN BucketAchievement a ON b.bucketId = a.bucketId " +
+            "WHERE b.userId IN :userIds AND b.publicStatus = true")
+    List<Map<String, Object>> findBucketsByUserIds(@Param("userIds") List<String> userIds);
 }
