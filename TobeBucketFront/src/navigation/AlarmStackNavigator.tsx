@@ -3,8 +3,7 @@ import {createStackNavigator} from '@react-navigation/stack';
 import AlarmScreen from '../screens/AlarmScreen';
 
 type StackParamList = {
-  FriendBucketFeed: undefined;
-  MbtiBucketFeed: undefined;
+  AlarmList: undefined;
 };
 
 const Stack = createStackNavigator<StackParamList>();
@@ -21,11 +20,8 @@ const BucketFeedStackNavigator = () => {
 
   return (
     <Stack.Navigator>
-      <Stack.Screen name="FriendBucketFeed" options={{headerShown: false}}>
-        {props => <FriendBucketFeedScreen />}
-      </Stack.Screen>
-      <Stack.Screen name="MbtiBucketFeed" options={{headerShown: false}}>
-        {props => <MbtiBucketFeedScreen />}
+      <Stack.Screen name="AlarmList" options={{headerShown: false}}>
+        {props => <AlarmScreen />}
       </Stack.Screen>
     </Stack.Navigator>
   );

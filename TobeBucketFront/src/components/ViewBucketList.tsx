@@ -7,15 +7,15 @@ import React, {useState} from 'react';
 import {View, ScrollView, StyleSheet} from 'react-native';
 import BucketShort from './BucketShort';
 import HorizontalCategory from './HorizontalCategory';
-import { dateToStr } from '../data/dateFunc';
+import {dateToStr} from './dateFunc';
 
 interface achievedBucket {
-    bucketId: number;
-    bucketName: string;
-    achieveDate: Date;
-    category: number;
-    achievementMedia: string;
-    goalReview: string;
+  bucketId: number;
+  bucketName: string;
+  achieveDate: Date;
+  category: number;
+  achievementMedia: string;
+  goalReview: string;
 }
 
 interface achievedBucketList {
@@ -24,19 +24,20 @@ interface achievedBucketList {
 
 const ViewMyBucketList = ({bucketList}: achievedBucketList) => {
   const [selectedCategory, setSelectedCategory] = useState<number>(6);
-  
+
   const handleCategorySelect = (categoryId: number) => {
     setSelectedCategory(categoryId);
     console.log(categoryId);
   };
 
-  const filteredBucketList = selectedCategory === 6
-    ? bucketList // 전체보기 선택 시 모든 버킷리스트 표시
-    : bucketList.filter(item => item.category === selectedCategory);
+  const filteredBucketList =
+    selectedCategory === 6
+      ? bucketList // 전체보기 선택 시 모든 버킷리스트 표시
+      : bucketList.filter(item => item.category === selectedCategory);
 
   return (
     <View style={styles.bucketListContainer}>
-      <HorizontalCategory onSelectCategory={handleCategorySelect}/>
+      <HorizontalCategory onSelectCategory={handleCategorySelect} />
       <ScrollView>
         {filteredBucketList.map(item => (
           <View key={item.bucketId}>

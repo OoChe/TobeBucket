@@ -12,7 +12,7 @@ import React from 'react';
 import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {CategoryIcon} from './CategoryIcon';
-import {dateToStr} from '../data/dateFunc';
+import {dateToStr} from './dateFunc';
 
 interface bucketShortProps {
   bucketId: number;

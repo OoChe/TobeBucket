@@ -20,7 +20,7 @@ import {
 } from 'react-native';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import PageSmallTitle from '../../components/PageSmallTitle';
-import {dateToStr, getToday} from '../../data/dateFunc';
+import {dateToStr, getToday} from '../../components/dateFunc';
 
 interface bucketProps {
   bucketId: number;
@@ -87,7 +87,7 @@ const AchievementRecordScreen = () => {
     } else {
       console.error('bucketId is undefined'); // 디버그용 에러 로그
     }
-  }, [bucketId]);  
+  }, [bucketId]);
 
   return (
     <ScrollView>

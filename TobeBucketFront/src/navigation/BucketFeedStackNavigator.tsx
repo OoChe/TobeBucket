@@ -5,7 +5,7 @@ import FriendBucketFeedScreen from '../screens/BucketFeed/FriendBucketFeedScreen
 import MbtiBucketFeedScreen from '../screens/BucketFeed/MbtiBucketFeedScreen';
 
 type StackParamList = {
-  BucketFeed: undefined;
+  BucketFeedSelect: undefined;
   FriendBucketFeed: undefined;
   MbtiBucketFeed: undefined;
 };
@@ -24,7 +24,7 @@ const BucketFeedStackNavigator = () => {
 
   return (
     <Stack.Navigator>
-      <Stack.Screen name="BucketFeed" options={{headerShown: false}}>
+      <Stack.Screen name="BucketFeedSelect" options={{headerShown: false}}>
         {props => <BucketFeedScreen />}
       </Stack.Screen>
       <Stack.Screen name="FriendBucketFeed" options={{headerShown: false}}>

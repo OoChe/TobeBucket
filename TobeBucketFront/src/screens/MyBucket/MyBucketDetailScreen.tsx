@@ -18,7 +18,7 @@ import MilestoneShort from '../../components/MilestoneShort';
 import PageTitle from '../../components/PageTitle';
 import {achievedDetailData} from '../../data/tempBucketData';
 import {getCategoryById} from '../../data/bucketCategories';
-import {dateToStr, calculateDDay} from '../../data/dateFunc';
+import {dateToStr, calculateDDay} from '../../components/dateFunc';
 
 const MyBucketDetailScreen = () => {
   const navigation = useNavigation();
