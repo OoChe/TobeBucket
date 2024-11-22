@@ -1,7 +1,9 @@
 package com.example.ToBeBucket.Repository;
 
 import com.example.ToBeBucket.Entity.Bucket;
+import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -16,4 +18,8 @@ public interface BucketRepository extends JpaRepository<Bucket, Integer> {
             "FROM Bucket b WHERE b.userId = :userId AND b.publicStatus = true")
     List<Map<String, Object>> findPublicBucketsByUserId(@Param("userId") String userId);
 
+    @Modifying
+    @Transactional
+    @Query("UPDATE Bucket b SET b.mbti = :newMbti WHERE b.userId = :userId AND b.mbti = :oldMbti")
+    void updateMbtiForUser(@Param("userId") String userId, @Param("oldMbti") String oldMbti, @Param("newMbti") String newMbti);
 }
