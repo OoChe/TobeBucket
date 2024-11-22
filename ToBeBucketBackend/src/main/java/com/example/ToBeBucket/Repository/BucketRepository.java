@@ -28,4 +28,12 @@ public interface BucketRepository extends JpaRepository<Bucket, Integer> {
             "FROM Bucket b LEFT JOIN BucketAchievement a ON b.bucketId = a.bucketId " +
             "WHERE b.userId IN :userIds AND b.publicStatus = true")
     List<Map<String, Object>> findBucketsByUserIds(@Param("userIds") List<String> userIds);
+
+    @Query("SELECT new map(b.bucketId as bucketId, b.category as category, b.achieveStatus as achieveStatus) " +
+            "FROM Bucket b WHERE b.userId = :userId")
+    List<Map<String, Object>> findBucketsByUserId(@Param("userId") String userId);
+
+    @Query("SELECT b.bucketId FROM Bucket b WHERE b.userId = :userId AND b.achieveStatus = true")
+    List<Integer> findAchievedBucketIdsByUserId(@Param("userId") String userId);
+
 }
