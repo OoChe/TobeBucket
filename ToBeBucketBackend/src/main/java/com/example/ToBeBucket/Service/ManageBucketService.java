@@ -25,7 +25,7 @@ public class ManageBucketService {
 
     //버킷 새로 만들기
     @Transactional
-    public void saveNewBucket(String userId, WriteBucketDTO writeBucketDTO) {
+    public Integer saveNewBucket(String userId, WriteBucketDTO writeBucketDTO) {
         UserLogin user = userLoginRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("없는 사용자"));
 
@@ -72,7 +72,7 @@ public class ManageBucketService {
                 bucketSemiGoalRepository.save(bucketSemiGoal);
             }
         }
-
+        return bucket.getBucketId();
     }
     private static Bucket getBucket(String  userId, WriteBucketDTO writeBucketDTO, UserProfile userProfile) {
         String userMbti = userProfile.getMbti();

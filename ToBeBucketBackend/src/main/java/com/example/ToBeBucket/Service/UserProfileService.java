@@ -8,6 +8,8 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import java.util.Optional;
+
 
 @Slf4j
 @Service
@@ -15,6 +17,14 @@ import org.springframework.stereotype.Service;
 public class UserProfileService {
     private final UserProfileRepository userProfileRepository;
     private final BucketRepository bucketRepository;
+
+    public Integer getStickerProcessInfo(String userId){
+        Optional<UserProfile> userProfile = userProfileRepository.findByUserId(userId);
+        if(userProfile.isPresent()){
+            return userProfile.get().getStickerProcess();
+        }
+        return 0;
+    }
 
     @Transactional
     public void updateUserProfile(String userId, UserProfileDTO updateRequest) {
@@ -40,4 +50,5 @@ public class UserProfileService {
 
         userProfileRepository.save(userProfile);
     }
+
 }

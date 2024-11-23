@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -27,7 +28,7 @@ public class GetFriendBucketController {
             @RequestBody GetBucketDTO getBucketDTO) {
         Map<String, Object> response = new LinkedHashMap<>();
         try {
-            String userId = getBucketDTO.getUserId();
+            String userId = SecurityContextHolder.getContext().getAuthentication().getName();
 
             // 프로필 조회
             Map<String, Object> profile = friendBucketService.getUserProfile(userId);
