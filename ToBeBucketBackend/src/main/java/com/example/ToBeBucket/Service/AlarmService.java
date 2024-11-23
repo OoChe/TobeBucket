@@ -19,8 +19,8 @@ import java.util.stream.Collectors;
 public class AlarmService {
     private final AlarmRepository alarmRepository;
 
-    public List<AlarmDTO> getAlarms() {
-        return alarmRepository.findAll().stream()
+    public List<AlarmDTO> getAlarms(String userId) {
+        return alarmRepository.findAllByUserId(userId).stream()
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
     }
