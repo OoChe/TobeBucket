@@ -2,8 +2,10 @@ package com.example.ToBeBucket.Service;
 
 import com.example.ToBeBucket.DTO.CreateAccountDTO;
 import com.example.ToBeBucket.Entity.UserLogin;
+import com.example.ToBeBucket.Entity.UserPoint;
 import com.example.ToBeBucket.Entity.UserProfile;
 import com.example.ToBeBucket.Repository.CreateAccountRepository;
+import com.example.ToBeBucket.Repository.UserPointRepository;
 import com.example.ToBeBucket.Repository.UserProfileRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -21,11 +23,12 @@ public class CreateAccountService {
     private final CreateAccountRepository createAccountRepository;
     private final UserProfileRepository userProfileRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
-
+    private final UserPointRepository userPointRepository;
     @Transactional
     public void createAccount(CreateAccountDTO createAccountDTO) {
         Optional<UserLogin> existingUser = createAccountRepository.findById(createAccountDTO.getUserId());
         Optional<UserProfile> existingProfile = userProfileRepository.findByNickname(createAccountDTO.getNickname());
+
         if (existingUser.isPresent()) {
             throw new IllegalArgumentException (createAccountDTO.getUserId()+"는 이미 존재하는 아이디입니다.");
         }else if (existingProfile.isPresent()) {
@@ -46,6 +49,11 @@ public class CreateAccountService {
             userProfile.setUserPoint(createAccountDTO.getUserPoint());
             userProfileRepository.save(userProfile);  // UserProfile 테이블에 저장
 
+            //UserPoint테이블에 유저 포인트 저장
+            UserPoint userPoint = new UserPoint();
+            userPoint.setUserId(userLogin.getUserId());
+            userPoint.setPoint(userProfile.getUserPoint());
+            userPointRepository.save(userPoint);
         }
     }
 }
