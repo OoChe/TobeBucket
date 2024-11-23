@@ -3,14 +3,17 @@ package com.example.ToBeBucket.Controller;
 import com.example.ToBeBucket.DTO.EditBucketDTO;
 import com.example.ToBeBucket.DTO.WriteBucketDTO;
 import com.example.ToBeBucket.Service.ManageBucketService;
+import com.example.ToBeBucket.Service.UserFriendService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -19,7 +22,24 @@ import java.util.Map;
 public class ManageBucketController {
 
     private final ManageBucketService manageBucketService;
-
+    private final UserFriendService userFriendService;
+    //버킷 작성 페이지 접근 시
+    @GetMapping("/tobebucket/bucket/write")
+    public ResponseEntity<Map<String,Object>> getFriendListsForCreateBucket(){
+        Map<String,Object>  response = new LinkedHashMap<>();
+        try{
+            String userId = SecurityContextHolder.getContext().getAuthentication().getName();
+            List<String> friendNicknameList = userFriendService.getFriendLists(userId);
+            response.put("code", "SU");
+            response.put("message", "Success.");
+            response.put("friendNicknameList",friendNicknameList);
+            return ResponseEntity.ok(response);
+        }catch (Exception e){
+            response.put("code", "DE");
+            response.put("message", e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        }
+    }
     //버킷작성하기
     @PostMapping("/tobebucket/bucket/write")
     public ResponseEntity<Map<String,Object>> writeNewBucket(
