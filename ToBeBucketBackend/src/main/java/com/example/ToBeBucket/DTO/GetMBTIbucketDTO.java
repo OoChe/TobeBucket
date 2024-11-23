@@ -5,6 +5,6 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class GetBucketDTO {
-    private Boolean achieveStatus=false;
+public class GetMBTIbucketDTO {
+    private String mbti;
 }

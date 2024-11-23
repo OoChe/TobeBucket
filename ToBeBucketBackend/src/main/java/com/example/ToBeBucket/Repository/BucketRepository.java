@@ -1,6 +1,6 @@
 package com.example.ToBeBucket.Repository;
-
 import com.example.ToBeBucket.Entity.Bucket;
+import com.example.ToBeBucket.Entity.UserLogin;
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -10,8 +10,12 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 import java.util.Map;
 
+import java.util.List;
+
 public interface BucketRepository extends JpaRepository<Bucket, Integer> {
     Bucket findByBucketId(int bucketId);
+    List<Bucket> findAllByUserId(String userId);
+    List<Bucket> findAllByMbtiAndPublicStatus(String mbti, Boolean publicStatus);
 
     @Query("SELECT new map(b.bucketId as bucketId, b.bucketName as bucketName, b.bucketContent as bucketContent, " +
             "b.achieveStatus as achieveStatus) " +
