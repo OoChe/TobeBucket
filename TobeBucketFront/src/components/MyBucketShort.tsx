@@ -8,6 +8,7 @@
     5) category: 버킷리스트 카테고리
   - 
 */
+
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
@@ -53,7 +54,7 @@ export const MyBucketShort = ({ bucketID, bucketName, bucketContent, goalDate, c
           </TouchableOpacity>
           <View style={styles.divider} />
           <TouchableOpacity style={styles.button}>
-            <Text style={styles.buttonText}>수정하기</Text>-
+            <Text style={styles.buttonText}>수정하기</Text>
           </TouchableOpacity>
           <View style={styles.divider} />
           <TouchableOpacity style={styles.button}>

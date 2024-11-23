@@ -5,9 +5,10 @@ import styles from '../styles/TabNavigator.styles';
 import BucketFeedScreen from '../screens/BucketFeedScreen';
 import MyBucketStackNavigator from './MyBucketStackNavigator';
 import FriendListScreen from '../screens/FriendList/FriendListScreen';
-import MyPageScreen from '../screens/MyPageScreen';
+import MyPageScreen from '../screens/MyPage/MyPageScreen';
 import WriteBucketStackNavigator from './WriteBucketStackNavigator';
 import FriendListStackNavigator from './FriendListStackNavigator';
+import MyPageStackNavigator from './MyPageStackNavigator';
 
 
 type TabParamList = {
@@ -84,7 +85,7 @@ const TabNavigator = () => {
 
       <Tab.Screen
         name="MyPage"
-        component={MyPageScreen}
+        component={MyPageStackNavigator}
         options={{tabBarLabel: '마이페이지', headerShown: false}}
       />
     </Tab.Navigator>
