@@ -15,6 +15,7 @@ public class UserAlarm {
     private String userId; // 외래 키: 사용자 ID
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "alarmId", nullable = false)
     private Integer alarmId; // 알람 ID
 

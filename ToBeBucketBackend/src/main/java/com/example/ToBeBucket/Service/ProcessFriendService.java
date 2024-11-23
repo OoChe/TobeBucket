@@ -1,13 +1,18 @@
 package com.example.ToBeBucket.Service;
 
+import com.example.ToBeBucket.Entity.UserAlarm;
 import com.example.ToBeBucket.Entity.UserFriend;
 import com.example.ToBeBucket.Repository.ProcessFriendRepository;
 import com.example.ToBeBucket.Repository.UserProfileRepository;
+import com.example.ToBeBucket.Repository.AlarmRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -18,6 +23,7 @@ import java.util.stream.Collectors;
 public class ProcessFriendService {
     private final ProcessFriendRepository processFriendRepository;
     private final UserProfileRepository userProfileRepository;
+    private final AlarmRepository alarmRepository;
 
     @Transactional
     public void deleteFriendByUserId(String userId, String friendId) {
@@ -28,6 +34,16 @@ public class ProcessFriendService {
             log.error("Failed to delete friend relationship: {}", e.getMessage(), e);
             throw new RuntimeException("Failed to delete friend relationship.", e);
         }
+    }
+
+    private void createFriendRequestAlarm(String senderId, String receiverId) {
+        UserAlarm alarm = new UserAlarm();
+        alarm.setUserId(receiverId);
+        alarm.setAlarmContent(senderId + "님이 친구 요청을 보냈습니다.");
+        alarm.setReadStatus(false);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        alarm.setReceiveDate(LocalDate.now().format(formatter));
+        alarmRepository.save(alarm);
     }
 
     @Transactional
@@ -41,6 +57,7 @@ public class ProcessFriendService {
 
             processFriendRepository.save(newFriend);
 
+            createFriendRequestAlarm(userId, friendId);
         } catch (Exception e) {
             throw new RuntimeException("Failed to add friend.");
         }
