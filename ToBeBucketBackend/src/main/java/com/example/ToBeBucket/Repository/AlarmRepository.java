@@ -16,4 +16,8 @@ public interface AlarmRepository extends JpaRepository<UserAlarm, Integer> {
     @Modifying
     @Query("UPDATE UserAlarm a SET a.readStatus = :readStatus WHERE a.alarmId IN :readAllAlarm")
     void markReadStatusForMultipleAlarms(List<Integer> readAllAlarm, Boolean readStatus);
+
+    @Query("SELECT a FROM UserAlarm a WHERE a.userId = :userId ORDER BY a.receiveDate DESC")
+    List<UserAlarm> findAllByUserId(@Param("userId") String userId);
+
 }

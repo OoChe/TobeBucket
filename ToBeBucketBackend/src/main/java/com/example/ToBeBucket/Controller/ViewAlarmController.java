@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -24,7 +25,9 @@ public class ViewAlarmController {
     public ResponseEntity<Map<String, Object>> viewAlarm() {
         Map<String, Object> response = new LinkedHashMap<>();
         try {
-            List<AlarmDTO> alarmList = alarmService.getAlarms();
+            String userId = SecurityContextHolder.getContext().getAuthentication().getName(); // 로그인된 사용자 ID
+
+            List<AlarmDTO> alarmList = alarmService.getAlarms(userId);
 
             response.put("code", "SU");
             response.put("message", "Success.");
