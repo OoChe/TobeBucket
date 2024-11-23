@@ -35,7 +35,6 @@ public class CreateAccountService {
             userLogin.setUserId(createAccountDTO.getUserId());
             userLogin.setPwd(bCryptPasswordEncoder.encode(createAccountDTO.getPwd()));
             userLogin.setRole(createAccountDTO.getRole());
-
             createAccountRepository.save(userLogin);
 
             UserProfile userProfile = new UserProfile();
@@ -43,7 +42,8 @@ public class CreateAccountService {
             userProfile.setNickname(createAccountDTO.getNickname());
             userProfile.setMbti(createAccountDTO.getMbti());
             userProfile.setIntro(createAccountDTO.getIntro());
-
+            userProfile.setStickerProcess(createAccountDTO.getStickerProcess());
+            userProfile.setUserPoint(createAccountDTO.getUserPoint());
             userProfileRepository.save(userProfile);  // UserProfile 테이블에 저장
 
         }

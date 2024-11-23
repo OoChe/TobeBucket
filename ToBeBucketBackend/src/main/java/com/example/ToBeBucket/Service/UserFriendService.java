@@ -1,7 +1,7 @@
 package com.example.ToBeBucket.Service;
 
 import com.example.ToBeBucket.Entity.UserFriend;
-import com.example.ToBeBucket.Repository.FriendListRepository;
+import com.example.ToBeBucket.Repository.UserFriendRepository;
 import com.example.ToBeBucket.Repository.UserProfileRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,11 +14,11 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class UserFriendService {
-    private final FriendListRepository friendListRepository;
+    private final UserFriendRepository userFriendRepository;
     private final UserProfileRepository userProfileRepository;
     //사용자의 친구 목록 반환하는 비즈니스 로직
     public List<String> getFriendLists (String userId){
-        List<UserFriend> UserFriendLists = friendListRepository.findByUserIdAndFriendStatus(userId,1);
+        List<UserFriend> UserFriendLists = userFriendRepository.findByUserIdAndFriendStatus(userId,1);
         List<String> friendList = new ArrayList<>();
 
         for (UserFriend userFriend : UserFriendLists){
