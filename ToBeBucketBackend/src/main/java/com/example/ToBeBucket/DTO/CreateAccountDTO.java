@@ -12,4 +12,6 @@ public class CreateAccountDTO {
     private String mbti;
     private String intro;
     private String role;
+    private Integer stickerProcess = 3;
+    private Integer userPoint=0;
 }
