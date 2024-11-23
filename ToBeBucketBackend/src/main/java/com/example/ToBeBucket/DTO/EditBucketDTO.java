@@ -12,4 +12,5 @@ public class EditBucketDTO {
     private List<SemiGoalTitleDTO> semiGoalData;
     private String goalDate; //목표 달성 날짜
     private List<String> friendNickNameList;
+    private Boolean publicStatus;
 }

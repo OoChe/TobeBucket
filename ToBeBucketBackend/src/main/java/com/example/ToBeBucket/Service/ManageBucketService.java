@@ -125,6 +125,9 @@ public class ManageBucketService {
         if (editBucketDTO.getGoalDate() != null) {
             bucket.setGoalDate(editBucketDTO.getGoalDate());
         }
+        if (editBucketDTO.getPublicStatus() != null) {
+            bucket.setPublicStatus(editBucketDTO.getPublicStatus());
+        }
         bucketRepository.save(bucket);
     }
     //버킷 중간목표 수정
