@@ -22,7 +22,8 @@ public interface AchieveBucketRepository extends JpaRepository<BucketAchievement
             "FROM BucketAchievement ba WHERE (:bucketIds IS NULL OR ba.bucketId IN :bucketIds)")
     List<Map<String, Object>> findAchieveDatesByBucketIds(@Param("bucketIds") List<Integer> bucketIds);
 
-
+    @Query("SELECT ba.achievementMedia FROM BucketAchievement ba WHERE ba.bucketId = :bucketId")
+    String findAchievementMediaByBucketId(@Param("bucketId") Integer bucketId);
 
 }
 

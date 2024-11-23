@@ -23,11 +23,12 @@ public interface BucketRepository extends JpaRepository<Bucket, Integer> {
     @Query("UPDATE Bucket b SET b.mbti = :newMbti WHERE b.userId = :userId AND b.mbti = :oldMbti")
     void updateMbtiForUser(@Param("userId") String userId, @Param("oldMbti") String oldMbti, @Param("newMbti") String newMbti);
 
-    @Query("SELECT b.userId as userId, b.bucketName as bucketName, b.bucketContent as bucketContent, " +
+    @Query("SELECT b.bucketId as bucketId, b.userId as userId, b.bucketName as bucketName, b.bucketContent as bucketContent, " +
             "b.achieveStatus as achieveStatus, a.achieveDate as achieveDate " +
             "FROM Bucket b LEFT JOIN BucketAchievement a ON b.bucketId = a.bucketId " +
             "WHERE b.userId IN :userIds AND b.publicStatus = true")
     List<Map<String, Object>> findBucketsByUserIds(@Param("userIds") List<String> userIds);
+
 
     @Query("SELECT new map(b.bucketId as bucketId, b.category as category, b.achieveStatus as achieveStatus) " +
             "FROM Bucket b WHERE b.userId = :userId")
@@ -35,5 +36,8 @@ public interface BucketRepository extends JpaRepository<Bucket, Integer> {
 
     @Query("SELECT b.bucketId FROM Bucket b WHERE b.userId = :userId AND b.achieveStatus = true")
     List<Integer> findAchievedBucketIdsByUserId(@Param("userId") String userId);
+
+    @Query("SELECT b.bucketId FROM Bucket b WHERE b.userId = :userId")
+    Integer findBucketIdByUserId(String userId);
 
 }

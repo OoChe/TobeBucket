@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import com.example.ToBeBucket.Entity.UserProfile;
+import com.example.ToBeBucket.Repository.AchieveBucketRepository;
 import com.example.ToBeBucket.Repository.BucketRepository;
 import com.example.ToBeBucket.Repository.FriendListRepository;
 import com.example.ToBeBucket.Repository.UserProfileRepository;
@@ -20,6 +21,7 @@ public class FriendFeedService {
     private final FriendListRepository friendListRepository;
     private final UserProfileRepository userProfileRepository;
     private final BucketRepository bucketRepository;
+    private final AchieveBucketRepository achieveBucketRepository;
 
     public List<Map<String, Object>> getFriendBuckets(String userId) {
         // 1. 친구 리스트 가져오기 (friendId)
@@ -53,9 +55,15 @@ public class FriendFeedService {
                     bucketMap.put("bucketName", bucket.get("bucketName"));
                     bucketMap.put("bucketContent", bucket.get("bucketContent"));
 
-                    // achieveStatus가 true인 경우만 achieveDate 추가
                     if (Boolean.TRUE.equals(bucket.get("achieveStatus"))) {
                         bucketMap.put("achieveDate", bucket.get("achieveDate").toString());
+
+                        Integer bucketId = (Integer) bucket.get("bucketId");
+                        String achievementMedia = achieveBucketRepository.findAchievementMediaByBucketId(bucketId);
+                        if (achievementMedia == null) {
+                            achievementMedia = "default_media_path"; // 기본값 설정
+                        }
+                        bucketMap.put("achievementMedia", achievementMedia);
                     }
 
                     return bucketMap;
