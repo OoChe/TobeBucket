@@ -1,9 +1,8 @@
 
 package com.example.ToBeBucket.Controller;
 
-import com.example.ToBeBucket.DTO.AchieveBucketDTO;
 import com.example.ToBeBucket.DTO.GetBucketDTO;
-import com.example.ToBeBucket.Entity.GetMBTIbucketDTO;
+import com.example.ToBeBucket.DTO.GetMBTIbucketDTO;
 import com.example.ToBeBucket.Service.GetBucketDetailsService;
 import com.example.ToBeBucket.Service.GetBucketlistsService;
 import com.example.ToBeBucket.Service.GetMbtiBucketListsService;
@@ -18,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.time.LocalDate;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -97,7 +95,6 @@ public class GetBucketlistsController {
             response.put("code", "SU");
             response.put("message", "suceess");
             response.put("bcketList", mbtiBuckets);
-
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             response.put("code", "DE");

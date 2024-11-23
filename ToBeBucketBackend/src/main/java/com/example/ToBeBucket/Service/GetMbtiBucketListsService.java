@@ -8,7 +8,8 @@ import com.example.ToBeBucket.Repository.BucketRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @Slf4j
@@ -19,6 +20,9 @@ public class GetMbtiBucketListsService {
     private final AchieveBucketRepository achieveBucketRepository;
     public List<Map<String, Object>> getMbtiBucketLists(String sMBTI) {
         List<Bucket> mbtiBucketLists = bucketRepository.findAllByMbtiAndPublicStatus(sMBTI, true);
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        mbtiBucketLists.sort(Comparator.comparing(bucket -> LocalDate.parse(bucket.getCreateDate(), formatter)));
 
         List<BucketAchievement> bucketAchievements = achieveBucketRepository.findAllByBucketIn(mbtiBucketLists);
         Map<Bucket, BucketAchievement> achievementMap = new HashMap<>();
@@ -33,6 +37,7 @@ public class GetMbtiBucketListsService {
             oMbti.put("bucketContent", bucket.getBucketContent());
             if (achievementMap.containsKey(bucket)) {
                 oMbti.put("achieveDate", achievementMap.get(bucket).getAchieveDate());
+                oMbti.put("achievementMedia", achievementMap.get(bucket).getAchievementMedia());
             }
             mbtiMap.add(oMbti);
         }
