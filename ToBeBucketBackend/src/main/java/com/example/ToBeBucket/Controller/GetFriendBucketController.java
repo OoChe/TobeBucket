@@ -28,13 +28,17 @@ public class GetFriendBucketController {
             @RequestBody GetBucketDTO getBucketDTO) {
         Map<String, Object> response = new LinkedHashMap<>();
         try {
-            String userId = SecurityContextHolder.getContext().getAuthentication().getName();
+            String targetUserId = getBucketDTO.getUserId();
+
+            if (targetUserId == null || targetUserId.isEmpty()) {
+                throw new IllegalArgumentException("Target userId must be provided.");
+            }
 
             // 프로필 조회
-            Map<String, Object> profile = friendBucketService.getUserProfile(userId);
+            Map<String, Object> profile = friendBucketService.getUserProfile(targetUserId);
 
             // 버킷 리스트 조회
-            List<Map<String, Object>> bucketList = friendBucketService.getBucketList(userId);
+            List<Map<String, Object>> bucketList = friendBucketService.getBucketList(targetUserId);
 
             // 응답 데이터 구성
             response.put("code", "SU");
