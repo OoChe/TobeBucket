@@ -22,17 +22,11 @@ public class ProcessFriendService {
     @Transactional
     public void deleteFriendByUserId(String userId, String friendId) {
         try {
-            // 친구 삭제 (양방향 관계 삭제)
-            UserFriend userFriend1 = processFriendRepository.findByUserIdAndFriendId(userId, friendId);
-            if (userFriend1 != null) {
-                processFriendRepository.delete(userFriend1);
-            }
-            UserFriend userFriend2 = processFriendRepository.findByUserIdAndFriendId(friendId, userId);
-            if (userFriend1 != null) {
-                processFriendRepository.delete(userFriend2);
-            }
+            processFriendRepository.deleteByUserIdAndFriendId(userId, friendId);
+            processFriendRepository.deleteByUserIdAndFriendId(friendId, userId);
         } catch (Exception e) {
-            throw new RuntimeException("Failed to delete friend relationship.");
+            log.error("Failed to delete friend relationship: {}", e.getMessage(), e);
+            throw new RuntimeException("Failed to delete friend relationship.", e);
         }
     }
 
@@ -55,20 +49,25 @@ public class ProcessFriendService {
     @Transactional
     public void acceptFriendRequest(String friendId, String userId) {
         try {
-            UserFriend friendRequest = processFriendRepository.findByUserIdAndFriendId(userId, friendId);
+            // 1. 기존 요청 상태 업데이트 (b -> a)
+            UserFriend friendRequest = processFriendRepository.findByUserIdAndFriendId(friendId, userId);
             if (friendRequest == null) {
                 throw new RuntimeException("Friend request not found.");
             }
-            friendRequest.setFriendStatus(1); // 친구 요청 수락
+            friendRequest.setFriendStatus(1); // 요청 수락
             processFriendRepository.save(friendRequest);
 
-            UserFriend reverseRelationship = new UserFriend();
-            reverseRelationship.setFriendId(userId);
-            reverseRelationship.setUserId(friendId);
-            reverseRelationship.setFriendStatus(1); // 친구 상태
-
-            processFriendRepository.save(reverseRelationship);
+            // 2. 양방향 관계 추가 (a -> b)
+            UserFriend reverseRelation = processFriendRepository.findByUserIdAndFriendId(userId, friendId);
+            if (reverseRelation == null) {
+                UserFriend newFriendRelation = new UserFriend();
+                newFriendRelation.setUserId(userId);
+                newFriendRelation.setFriendId(friendId);
+                newFriendRelation.setFriendStatus(1);
+                processFriendRepository.save(newFriendRelation);
+            }
         } catch (Exception e) {
+            log.error("Error accepting friend request: {}", e.getMessage(), e);
             throw new RuntimeException("Failed to accept friend request.", e);
         }
     }
