@@ -1,4 +1,4 @@
-package com.example.ToBeBucket.Entity;
+package com.example.ToBeBucket.DTO;
 
 import lombok.Getter;
 import lombok.Setter;
