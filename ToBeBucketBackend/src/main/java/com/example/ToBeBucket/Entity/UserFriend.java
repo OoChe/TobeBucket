@@ -22,10 +22,10 @@ public class UserFriend {
     private int friendStatus;
 
     @ManyToOne
-    @JoinColumn(name = "userId", insertable = false, updatable = false)
+    @JoinColumn(name = "userId", insertable = false, updatable = false, foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private UserLogin userLogin;
 
     @ManyToOne
-    @JoinColumn(name = "friendId", insertable = false, updatable = false)
+    @JoinColumn(name = "friendId", insertable = false, updatable = false, foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private UserLogin friendUserLogin;
 }
