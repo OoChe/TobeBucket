@@ -1,10 +1,6 @@
 /* [ 버킷 달성 기록 화면 ]
 추가할 사항들
-1) 스티커 Horizational로 정렬해서 보여주기
-    -> 그러려면 스티커 객체들을 일단 받아와야할 필요가 있음!
-3) 사진 첨부 클릭 시 사진 선택하도록 하기
-4) 스티커나 날짜를 선택하지 않은 경우 '선택해야합니다' 안내문 표시
-5) 알맞게 작성했다면, 데이터 보내주기
+3) 사진 첨부 클릭 시 사진 선택하도록 
  */
 import React, {useState, useEffect} from 'react';
 import {useNavigation, useRoute} from '@react-navigation/native';
@@ -21,6 +17,7 @@ import {
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import PageSmallTitle from '../../components/PageSmallTitle';
 import {dateToStr, getToday} from '../../components/dateFunc';
+import StickerSelector from '../../components/StickerSelector';
 
 interface bucketProps {
   bucketId: number;
@@ -33,10 +30,16 @@ const AchievementRecordScreen = () => {
   const {bucketId, bucketName} = route.params as bucketProps;
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
+  const [stickerProcess, setStickerProcess] = useState(3);
   const [bucketAchieveInfo, setBucketAchieveInfo] = useState({
     bucketId: bucketId,
-    stickerId: null,
-    achieveDate: null,
+    stickerId: -1,
+    achieveDate:
+      getToday().getFullYear() +
+      '-' +
+      (getToday().getMonth() + 1) +
+      '-' +
+      getToday().getDate(),
     goalReview: '',
     achievementMedia: '',
   });
@@ -51,7 +54,12 @@ const AchievementRecordScreen = () => {
 
   const validateInputs = () => {
     const missingFields = [];
-    if (!bucketAchieveInfo.stickerId) missingFields.push('스티커');
+    if (
+      bucketAchieveInfo.stickerId === null ||
+      bucketAchieveInfo.stickerId === undefined
+    ) {
+      missingFields.push('스티커');
+    }
     if (!bucketAchieveInfo.achieveDate) missingFields.push('달성 날짜');
 
     if (missingFields.length > 0) {
@@ -78,6 +86,16 @@ const AchievementRecordScreen = () => {
   };
 
   useEffect(() => {
+    const fetchUnlockedIndex = async () => {
+      console.log(stickerProcess);
+      // try {
+      //   const response = await axios.get('https://your-api-url.com/unlocked-sticker-index');
+      //   setUnlockedIndex(response.data.unlockedIndex);
+      // } catch (error) {
+      //   console.error('Error fetching unlocked index:', error);
+      // }
+    };
+    fetchUnlockedIndex();
     if (bucketId) {
       console.log('bucketId:', bucketId); // bucketId 값 확인
       setBucketAchieveInfo(prevData => ({
@@ -120,6 +138,15 @@ const AchievementRecordScreen = () => {
               <Text style={styles.sticketText}>스티커 잠금해제</Text>
             </TouchableOpacity>
           </View>
+          <StickerSelector
+            unlockedIndex={stickerProcess}
+            onSelectSticker={stickerId => {
+              setBucketAchieveInfo(prevData => ({
+                ...prevData,
+                stickerId: stickerId, // 선택된 스티커 ID 업데이트
+              }));
+            }}
+          />
 
           {/* 스티커 가로로 정렬 표시 */}
           <View style={styles.itemContainer}>

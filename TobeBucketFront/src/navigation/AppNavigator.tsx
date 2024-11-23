@@ -1,20 +1,18 @@
 import React from 'react';
-import { createStackNavigator } from '@react-navigation/stack';
+import {createStackNavigator} from '@react-navigation/stack';
 import LoginScreen from '../screens/LoginScreen';
+
 import TabNavigator from './TabNavigator';
 import Header from '../components/Header';
-
-
 
 const Stack = createStackNavigator();
 
 const AppNavigator = () => {
   return (
     <Stack.Navigator
-        screenOptions={{
-            header: () => <Header />,
-        }}
-    >
+      screenOptions={{
+        header: () => <Header />,
+      }}>
       {/*
       로그인 화면에서는 헤더와 탭을 숨김
       <Stack.Screen
@@ -27,7 +25,7 @@ const AppNavigator = () => {
       <Stack.Screen
         name="Main"
         component={TabNavigator}
-        options={{ headerShown: true }}
+        options={{headerShown: true}}
       />
     </Stack.Navigator>
   );
