@@ -61,7 +61,7 @@ public class ManageBucketController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
         }
     }
-
+    //수정하기
     @PatchMapping("/tobebucket/bucket-edit/{bucketId}")
     public ResponseEntity<Map<String,Object>> editBucket(
             @PathVariable Integer bucketId,

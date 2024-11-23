@@ -21,6 +21,8 @@ public class AchieveBucketService {
     private final BucketSemiGoalRepository bucketSemiGoalRepository;
     private final StickerRepository stickerRepository;
     private final UserProfileRepository userProfileRepository;
+    private final UserPointRepository userPointRepository;
+
     //달성기록 데이터베이스에 저장
     public void saveAchieveBucket(String userId, AchieveBucketDTO achieveBucketDTO) {
         Bucket bucket = bucketRepository.findById(achieveBucketDTO.getBucketId())
@@ -52,10 +54,18 @@ public class AchieveBucketService {
             newAchieveBucket.setGoalReview(achieveBucketDTO.getGoalReview());
             newAchieveBucket.setAchievementMedia(achieveBucketDTO.getAchievementMedia());
             achieveBucketRepository.save(newAchieveBucket);
-            //포인트 점수 추가해주기
+            //포인트 점수 추가
             userProfile.ifPresent(profile -> {
-                profile.setUserPoint(profile.getUserPoint() + 10);
+                int newPoints = profile.getUserPoint() + 10;
+                profile.setUserPoint(newPoints);
                 userProfileRepository.save(profile);
+
+                // userPoint 테이블도 업데이트
+                Optional<UserPoint> userPoint = userPointRepository.findById(userId);
+                userPoint.ifPresent(point -> {
+                    point.setPoint(newPoints);
+                    userPointRepository.save(point);
+                });
             });
 
             bucket.setAchieveStatus(true);
@@ -79,10 +89,21 @@ public class AchieveBucketService {
         if (bucketSemiGoal.getAchieveDate() == null) {
             Optional<UserProfile> userProfile = userProfileRepository.findById(userId);
             userProfile.ifPresent(profile -> {
-                profile.setUserPoint(profile.getUserPoint() + 5);
+                int newPoints = profile.getUserPoint() + 5;
+
+                // UserProfile의 포인트 업데이트
+                profile.setUserPoint(newPoints);
                 userProfileRepository.save(profile);
+
+                // UserPoint 테이블도 업데이트
+                Optional<UserPoint> userPoint = userPointRepository.findById(userId);
+                userPoint.ifPresent(point -> {
+                    point.setPoint(newPoints);
+                    userPointRepository.save(point); 
+                });
             });
         }
+
 
         Sticker sticker = stickerRepository.findById(semiGoalDTO.getStickerId())
                 .orElseThrow(() -> new IllegalArgumentException("Invalid stickerId: " + semiGoalDTO.getStickerId()));
