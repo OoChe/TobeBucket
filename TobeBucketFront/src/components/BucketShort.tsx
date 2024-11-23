@@ -12,6 +12,7 @@ import React, {useEffect} from 'react';
 import {View, Text, Image, TouchableOpacity, StyleSheet} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {CategoryIcon} from './CategoryIcon';
+import {getStickerById} from '../data/StickerData';
 
 interface bucketShortProps {
   bucketId: number;
@@ -20,19 +21,27 @@ interface bucketShortProps {
   category: number;
   achievementMedia: string;
   goalReview: string;
+  stickerId: number;
 }
 
-export const BucketShort = ({ bucketId, bucketName, achieveDate, category, achievementMedia, goalReview,}: bucketShortProps) => {
+export const BucketShort = ({
+  bucketId,
+  bucketName,
+  achieveDate,
+  category,
+  achievementMedia,
+  goalReview,
+  stickerId,
+}: bucketShortProps) => {
   const navigation = useNavigation();
 
   const handleMyBucketInfo = (bucketId: number) => {
     // sendDataToDB();
-    navigation.navigate('MyBucketDetail', { bucketId });
+    navigation.navigate('MyBucketDetail', {bucketId});
   };
   useEffect(() => {
     console.log(achievementMedia);
   }, [achievementMedia]);
-
 
   return (
     <View>
@@ -51,14 +60,23 @@ export const BucketShort = ({ bucketId, bucketName, achieveDate, category, achie
             </Text>
             <Text style={styles.dateText}>{achieveDate} &nbsp;달성</Text>
           </View>
-          {/* 이모티콘 추가 필요 */}
+          <View>
+            <Image
+              source={getStickerById(stickerId)?.stickerPath}
+              style={styles.sticker}
+            />
+          </View>
         </View>
         {achievementMedia ? (
-          <Image source={{ uri: achievementMedia }} style={styles.imageContainer}></Image>
-        ) : (null)}
+          <Image
+            source={{uri: achievementMedia}}
+            style={styles.imageContainer}></Image>
+        ) : null}
         {goalReview ? (
-          <Text style={styles.reviewText} numberOfLines={3}>{goalReview}</Text>
-        ) : (null)}
+          <Text style={styles.reviewText} numberOfLines={3}>
+            {goalReview}
+          </Text>
+        ) : null}
       </TouchableOpacity>
     </View>
   );
@@ -97,7 +115,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     position: 'relative',
     marginLeft: 14,
-    marginTop: 5
+    marginTop: 5,
   },
   reviewText: {
     width: 330,
@@ -106,6 +124,11 @@ const styles = StyleSheet.create({
     position: 'relative',
     top: 5,
     marginLeft: 14,
+  },
+  sticker: {
+    width: 30,
+    height: 30,
+    marginTop: 15,
   },
 });
 

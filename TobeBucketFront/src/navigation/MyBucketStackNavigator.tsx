@@ -9,7 +9,7 @@ type StackParamList = {
   MyBucketList: undefined;
   MyBucketDetail: undefined;
   AchievementRecord: undefined;
-  SemigoalRecord: undefined;
+  SemiGoalRecord: undefined;
 };
 
 const Stack = createStackNavigator<StackParamList>();
@@ -44,8 +44,16 @@ const MyBucketStackNavigator = () => {
         )}
       </Stack.Screen>
 
-      <Stack.Screen name="SemigoalRecord" options={{headerShown: false}}>
-        {props => <SemigoalRecordScreen />}
+      <Stack.Screen name="SemiGoalRecord" options={{headerShown: false}}>
+        {props => (
+          <SemigoalRecordScreen
+            {...props}
+            bucketId={props.route.params?.bucketId}
+            bucketName={props.route.params?.bucketName}
+            semiGoalId={props.route.params?.semiGoalId}
+            semiGoalName={props.route.params?.semiGoalName}
+          />
+        )}
       </Stack.Screen>
     </Stack.Navigator>
   );

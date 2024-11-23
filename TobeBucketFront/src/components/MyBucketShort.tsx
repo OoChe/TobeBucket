@@ -27,6 +27,13 @@ interface bucketProps {
   bucketName: string;
 }
 
+interface semiGoalProps {
+  bucketId: number;
+  bucketName: string;
+  semiGoalId: number;
+  semiGoalName: string;
+}
+
 const MyBucketShort = ({
   bucketId,
   bucketName,
@@ -46,6 +53,7 @@ const MyBucketShort = ({
       bucketName: bucketName,
     });
   };
+
   const handleEditBucket = () => {
     console.log('수정 선택');
     // navigate.navigate('WriteBucket');

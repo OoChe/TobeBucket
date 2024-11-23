@@ -57,7 +57,6 @@ export const FriendFeedShort = ({
             {dateToStr(achieveDate)} &nbsp;달성
           </Text>
         </View>
-        {/* 이모티콘 추가 필요 */}
       </View>
       {achievementMedia ? (
         <Image

@@ -27,7 +27,7 @@ export const unachievedData = [
   },
 ];
 
-// 달성한 버킷리스트 데이터데이터
+// 달성한 버킷리스트 데이터
 export const achievedData = [
   {
     bucketId: 10,
@@ -37,6 +37,7 @@ export const achievedData = [
     achievementMedia:
       'https://img.daily.co.kr/@files/www.daily.co.kr/content/food/2017/20170411/7b532799ae9d210415512b2d22457a4e.jpg',
     goalReview: '진짜 맛있었다',
+    stickerId: 3,
   },
   {
     bucketId: 20,
@@ -46,6 +47,8 @@ export const achievedData = [
     achievementMedia: '',
     goalReview:
       '제주도에서 한달 동안 힐링하기 성공했다. 긴 내용이 있다면 얘가 어떻게 될 지 파악해야 하기 때문에 일부러 길게 적어보고 있다. 사실 저는 제주도를 한 번도 가보지 못했어요. 제주도보다 일본이 더 값싼 시절에 가서 제주도를 한 번도 못가봤어요 하지만 가보고 싶다는 로망도? 있기는 합니다 제주도 바다 제주도 귤 귤이 요즘 제철이더라고요 귤 맛있어요',
+
+    stickerId: 1,
   },
   {
     bucketId: 30,
@@ -54,6 +57,7 @@ export const achievedData = [
     category: 5,
     achievementMedia: '',
     goalReview: '',
+    stickerId: 4,
   },
 ];
 
@@ -67,22 +71,25 @@ export const achievedDetailData = {
   createDate: new Date(2023, 1, 31),
   friendIds: ['햄햄이', '햄햄사', '햄햄오'],
   semiGoalData: new Map<string, number>([
-    ['돈 모으기', 5],
-    ['머물 곳 마련하기', 20],
-    ['필요한 자료 찾기', 10],
-    ['옷 모으기', 7],
+    ['돈 모으기', 2],
+    ['머물 곳 마련하기', 0],
+    ['필요한 자료 찾기', null],
+    ['옷 모으기', 4],
   ]),
   achievementMedia:
     'https://img.daily.co.kr/@files/www.daily.co.kr/content/food/2017/20170411/7b532799ae9d210415512b2d22457a4e.jpg',
   goalReview:
     '제주도에서 한달 동안 힐링하기 성공했다. 긴 내용이 있다면 얘가 어떻게 될 지 파악해야 하기 때문에 일부러 길게 적어보고 있다. 사실 저는 제주도를 한 번도 가보지 못했어요. 제주도보다 일본이 더 값싼 시절에 가서 제주도를 한 번도 못가봤어요 하지만 가보고 싶다는 로망도? 있기는 합니다 제주도 바다 제주도 귤 귤이 요즘 제철이더라고요 귤 맛있어요',
+
+  stickerId: 3,
 };
 // 친구 버킷리스트 목록
 export const FriendBucket = [
   {
     nickname: 'user1',
     mbti: 'INTP',
-    profileImage: 'https://i.pinimg.com/236x/2f/55/97/2f559707c3b04a1964b37856f00ad608.jpg',
+    profileImage:
+      'https://i.pinimg.com/236x/2f/55/97/2f559707c3b04a1964b37856f00ad608.jpg',
     bucketName: '제주도 한달 살이',
     bucketContent: '재밌당.',
     achieveDate: new Date(2023, 11, 18),
@@ -91,7 +98,8 @@ export const FriendBucket = [
   {
     nickname: 'user2',
     mbti: 'INTJ',
-    profileImage: 'https://i.pinimg.com/236x/2f/55/97/2f559707c3b04a1964b37856f00ad608.jpg',
+    profileImage:
+      'https://i.pinimg.com/236x/2f/55/97/2f559707c3b04a1964b37856f00ad608.jpg',
     bucketName: '제주도',
     bucketContent: '재밌.',
     achieveDate: new Date(2024, 12, 8),
@@ -100,7 +108,8 @@ export const FriendBucket = [
   {
     nickname: 'user2',
     mbti: 'INTJ',
-    profileImage: 'https://i.pinimg.com/236x/2f/55/97/2f559707c3b04a1964b37856f00ad608.jpg',
+    profileImage:
+      'https://i.pinimg.com/236x/2f/55/97/2f559707c3b04a1964b37856f00ad608.jpg',
     bucketName: '제주도',
     bucketContent: '재밌.',
     achieveDate: new Date(2024, 12, 8),
@@ -109,7 +118,8 @@ export const FriendBucket = [
   {
     nickname: 'user2',
     mbti: 'INTJ',
-    profileImage: 'https://i.pinimg.com/236x/2f/55/97/2f559707c3b04a1964b37856f00ad608.jpg',
+    profileImage:
+      'https://i.pinimg.com/236x/2f/55/97/2f559707c3b04a1964b37856f00ad608.jpg',
     bucketName: '제주도',
     bucketContent: '재밌.',
     achieveDate: new Date(2024, 12, 8),
@@ -118,7 +128,8 @@ export const FriendBucket = [
   {
     nickname: 'user2',
     mbti: 'INTJ',
-    profileImage: 'https://i.pinimg.com/236x/2f/55/97/2f559707c3b04a1964b37856f00ad608.jpg',
+    profileImage:
+      'https://i.pinimg.com/236x/2f/55/97/2f559707c3b04a1964b37856f00ad608.jpg',
     bucketName: '제주도',
     bucketContent: '재밌.',
     achieveDate: new Date(2024, 12, 8),
@@ -127,7 +138,8 @@ export const FriendBucket = [
   {
     nickname: 'user2',
     mbti: 'INTJ',
-    profileImage: 'https://i.pinimg.com/236x/2f/55/97/2f559707c3b04a1964b37856f00ad608.jpg',
+    profileImage:
+      'https://i.pinimg.com/236x/2f/55/97/2f559707c3b04a1964b37856f00ad608.jpg',
     bucketName: '제주도',
     bucketContent: '재밌.',
     achieveDate: new Date(2024, 12, 8),

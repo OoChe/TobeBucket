@@ -55,8 +55,18 @@ const MyBucketDetailScreen = () => {
   if (!bucketList) {
     return <Text>Loading...</Text>;
   }
-  const handleMilestone = () => {
-    navigation.navigate('SemigoalRecord');
+  const handleSemiGoalRecord = ({
+    bucketId,
+    bucketName,
+    semiGoalId,
+    semiGoalName,
+  }: semiGoalProps) => {
+    navigation.navigate('SemiGoalRecord', {
+      bucketId: bucketId,
+      bucketName: bucketName,
+      semiGoalId: semiGoalId,
+      semiGoalName: semiGoalName,
+    });
   };
 
   return (
@@ -164,14 +174,20 @@ const MyBucketDetailScreen = () => {
                 <Text style={styles.middleText}>중간 목표</Text>
                 <View>
                   {Array.from(bucketList.semiGoalData).map(
-                    ([semiGoalName, stickerNum]) => (
+                    ([semiGoalName, stickerNum], index) => (
                       <TouchableOpacity
                         key={semiGoalName}
-                        onPress={() => handleMilestone()}>
+                        onPress={() =>
+                          handleSemiGoalRecord({
+                            bucketId: bucketList.bucketId,
+                            bucketName: bucketList.bucketName,
+                            semiGoalId: index,
+                            semiGoalName: semiGoalName,
+                          })
+                        }>
                         <MilestoneShort
                           title={semiGoalName}
                           stickerNum={stickerNum}
-                          onPress={null}
                         />
                       </TouchableOpacity>
                     ),

@@ -16,6 +16,7 @@ interface achievedBucket {
   category: number;
   achievementMedia: string;
   goalReview: string;
+  stickerId: number;
 }
 
 interface achievedBucketList {
@@ -48,6 +49,7 @@ const ViewMyBucketList = ({bucketList}: achievedBucketList) => {
               category={item.category}
               achievementMedia={item.achievementMedia}
               goalReview={item.goalReview}
+              stickerId={item.stickerId}
             />
           </View>
         ))}

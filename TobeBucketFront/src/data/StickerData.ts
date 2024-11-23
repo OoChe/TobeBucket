@@ -8,4 +8,7 @@ export const stickers = [
     { id: 4, stickerPath: require('../assets/images/sticker5.png') },
     { id: 5, stickerPath: require('../assets/images/sticker6.png') },
   ];
+  export const getStickerById = (id : number) => {
+    return stickers.find(sticker => sticker.id === id);
+  };
   
