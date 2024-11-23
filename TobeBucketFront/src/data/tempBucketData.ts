@@ -176,3 +176,19 @@ export const MBTIBucket = [
       'https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2F20151104_15%2Fnew_huacheng_1446641842729s09Bd_JPEG%2F3-4_%25B5%25B9%25C7%25CF%25B8%25A3%25B9%25E6.jpg&type=a340',
   },
 ];
+
+// 알람 예시
+export const AlarmList = [
+  {
+    alarmId: 1,
+    receiveDate: '2024-10-14',
+    alarmContent: '출석체크: 10point 적립',
+    readStatus: 1, //읽음
+  },
+  {
+    alarmId: 2,
+    receiveDate: '2024-10-15',
+    alarmContent: "'제주도 가기'까지 한 달 남았습니다.",
+    readStatus: 0, //읽지 않음
+  },
+];
