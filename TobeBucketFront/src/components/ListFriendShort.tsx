@@ -1,9 +1,19 @@
+/*
+ [친구 목록에 나타나는 프로필 요약 컴포넌트]
+  - 파라미터
+    1) profileImage : 친구 프로필 이미지
+    2) mbti : MBTI
+    3) nickname : 닉네임
+    4) onMove : 친구 버킷으로 이동하는 버튼
+    5) onDrop : 친구 삭제하기 드롭다운 버튼
+ */
+
 import React from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
 
-const ListFriendShort = ({ profileImage, mbti, nickname, onEdit, onMenu, onPress }) => {
+const ListFriendShort = ({ profileImage, mbti, nickname, onMove, onDrop }) => {
   return (
-    <TouchableOpacity onPress={onPress} style={styles.container}>
+    <View style={styles.container}>
       {/* Profile Image */}
       <Image source={profileImage} style={styles.profileImage} />
 
@@ -20,16 +30,16 @@ const ListFriendShort = ({ profileImage, mbti, nickname, onEdit, onMenu, onPress
       {/* Icons Group */}
       <View style={styles.iconGroup}>
         {/* Edit Icon */}
-        <TouchableOpacity onPress={onEdit} style={styles.iconContainer}>
+        <TouchableOpacity onPress={onMove} style={styles.iconContainer}>
           <Image source={require('../assets/icons/bucket.png')} style={styles.addIcon} />
         </TouchableOpacity>
 
         {/* Menu Icon */}
-        <TouchableOpacity onPress={onMenu} style={styles.iconContainer}>
+        <TouchableOpacity onPress={onDrop} style={styles.iconContainer}>
           <Image source={require('../assets/icons/dots.png')} style={styles.addIcon} />
         </TouchableOpacity>
       </View>
-    </TouchableOpacity>
+    </View>
   );
 };
 
