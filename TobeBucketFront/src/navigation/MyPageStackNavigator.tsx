@@ -6,7 +6,7 @@ import ChangeMyInfoScreen from '../screens/MyPage/ChangeMyInfoScreen';
 
 
 type StackParamList = {
-  MyPage: undefined;
+  MyPageMain: undefined;
   ChangeMyInfo: undefined;
 };
 
@@ -32,7 +32,7 @@ const MyPageStackNavigator = () => {
     >
 
       <Stack.Screen
-        name="MyPage"
+        name="MyPageMain"
         component={MyPageScreen}
         options={{ headerShown: false }}
       >

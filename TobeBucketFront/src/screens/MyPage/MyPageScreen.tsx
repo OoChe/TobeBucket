@@ -32,6 +32,7 @@ const DUMMY_MY_INFO = {
 
 const MyPageScreen = () => {
    const navigation = useNavigation();
+   const profile = DUMMY_MY_INFO.profile;
 
   return (
     <View style={styles.main}>
@@ -41,7 +42,7 @@ const MyPageScreen = () => {
         mbti={DUMMY_MY_INFO.profile.mbti}
         nickname={DUMMY_MY_INFO.profile.nickname}
         intro={DUMMY_MY_INFO.profile.intro}
-        onPress= {() => navigation.navigate('MyPage')}
+        onPress= {() => navigation.navigate('ChangeMyInfo', {profile})}
       />
 
       {/* 나의 포인트, 달성률 */}
