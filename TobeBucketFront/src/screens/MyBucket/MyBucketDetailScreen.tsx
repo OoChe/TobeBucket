@@ -40,6 +40,16 @@ const MyBucketDetailScreen = () => {
     semiGoalData: Map<string, number>;
     goalReview: string;
     achievementMedia: string;
+    stickerId: number;
+  }>();
+
+  const [editBucketInfo, setEditBucketInfo] = useState<{
+    bucketId: number;
+    bucketContent: string;
+    category: number;
+    friendIds: friendId[];
+    semiGoalData: Map<string, number>;
+    publicStatus: boolean;
   }>();
 
   useEffect(() => {
@@ -50,6 +60,18 @@ const MyBucketDetailScreen = () => {
     //   .catch(error => console.error('Error fetching bucket detail:', error));
     // 서버 적용 시 아래 내용 삭제
     setBucketList(achievedDetailData);
+    if (bucketList) {
+      setEditBucketInfo({
+        bucketId: bucketList.bucketId,
+        bucketContent: bucketList.bucketContent,
+        category: bucketList.category,
+        friendIds: bucketList.friendIds,
+        semiGoalData: bucketList.semiGoalData,
+        publicStatus: false, // publicStatus는 기본값 또는 필요에 따라 설정
+      });
+    }
+    console.log('useEffect 적용된 후의 버킷 : ');
+    console.log(bucketList, '\n', editBucketInfo);
   }, [bucketId]);
 
   if (!bucketList) {
@@ -67,6 +89,19 @@ const MyBucketDetailScreen = () => {
       semiGoalId: semiGoalId,
       semiGoalName: semiGoalName,
     });
+  };
+  const handleEditBucket = () => {
+    setEditBucketInfo({
+      bucketId: bucketList.bucketId,
+      bucketContent: bucketList.bucketContent,
+      category: bucketList.category,
+      friendIds: bucketList.friendIds,
+      semiGoalData: bucketList.semiGoalData,
+      publicStatus: false, // publicStatus는 기본값 또는 필요에 따라 설정
+    });
+    console.log('수정 선택');
+    navigation.navigate('EditBucket', {editBucketInfo});
+    console.log('navgiate 요청 보낸 후의 결과', editBucketInfo);
   };
 
   return (
@@ -111,6 +146,7 @@ const MyBucketDetailScreen = () => {
                 생성일 - {dateToStr(bucketList.createDate)}
               </Text>
             </View>
+            {/* 스티커 정보가 안보임 */}
             <StickerEmpty />
           </View>
           <View style={styles.contentContainer}>
@@ -140,6 +176,7 @@ const MyBucketDetailScreen = () => {
                 <BucketDetailDropdown
                   bucketId={bucketList.bucketId}
                   bucketName={bucketList.bucketName}
+                  handleEditBucket={handleEditBucket}
                 />
               </View>
             </View>

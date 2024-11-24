@@ -1,11 +1,25 @@
 /* [ 버킷리스트 상세 정보 옵션 드롭다운 컴포넌트]
  */
 import React, {useState} from 'react';
-import {View, TouchableOpacity, Image, Text, StyleSheet} from 'react-native';
+import {
+  View,
+  TouchableOpacity,
+  Image,
+  Text,
+  Alert,
+  StyleSheet,
+} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
+// import axios from 'axios';
 import dots from '../assets/icons/coldots.png';
 
-const BucketDetailDropdown = ({bucketId, bucketName}) => {
+interface DetailProps {
+  bucketId: number;
+  bucketName: string;
+  handleEditBucket: () => void;
+}
+
+const BucketDetailDropdown = ({bucketId, bucketName, handleEditBucket}: DetailProps) => {
   const navigation = useNavigation();
   const [isDropdownVisible, setDropdownVisible] = useState(false);
 
@@ -13,14 +27,42 @@ const BucketDetailDropdown = ({bucketId, bucketName}) => {
     setDropdownVisible(!isDropdownVisible);
   };
   const handleAchievementRecord = () => {
-    navigation.navigate('AchievementRecord', {bucketId: bucketId, bucketName: bucketName});
-  };
-  const handleEditBucket = () => {
-    console.log('수정 선택');
-    // navigate.navigate('WriteBucket');
+    navigation.navigate('AchievementRecord', {
+      bucketId: bucketId,
+      bucketName: bucketName,
+    });
   };
   const handleDeleteBucket = () => {
-    console.log('삭제 선택');
+    Alert.alert(
+      '삭제 확인',
+      '정말로 이 버킷을 삭제하시겠습니까?',
+      [
+        {text: '취소', style: 'cancel'},
+        {
+          text: '삭제',
+          onPress: async () => {
+            try {
+              // const response = await axios.delete(
+              //   `https://your-api-endpoint.com/tobebucket/bucket-delete/${bucketId}`,
+              // );
+              // if (response.status === 200) {
+              //   Alert.alert('삭제 완료', '버킷이 성공적으로 삭제되었습니다.');
+              //   // UI 업데이트 로직 추가
+              // } else {
+              //   Alert.alert(
+              //     '삭제 실패',
+              //     '삭제에 실패했습니다. 다시 시도해주세요.',
+              //   );
+              // }
+            } catch (error) {
+              console.error('Error deleting bucket:', error);
+              Alert.alert('오류 발생', '삭제 중 문제가 발생했습니다.');
+            }
+          },
+        },
+      ],
+      {cancelable: true},
+    );
   };
 
   return (

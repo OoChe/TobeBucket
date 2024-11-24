@@ -1,13 +1,15 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 import MyBucketScreen from '../screens/MyBucket/MyBucketScreen';
 import MyBucketDetailScreen from '../screens/MyBucket/MyBucketDetailScreen';
+import EditMyBucketScreen from '../screens/MyBucket/EditMyBucketScreen';
 import AchievementRecordScreen from '../screens/MyBucket/AchievementRecordScreen';
 import SemigoalRecordScreen from '../screens/MyBucket/SemigoalRecordScreen';
 
 type StackParamList = {
   MyBucketList: undefined;
   MyBucketDetail: undefined;
+  EditBucket: undefined;
   AchievementRecord: undefined;
   SemiGoalRecord: undefined;
 };
@@ -16,7 +18,7 @@ const Stack = createStackNavigator<StackParamList>();
 
 const MyBucketStackNavigator = () => {
   const sendDataToDB = async () => {
-    // 백엔드 연결 후, WriteBucketScreen에서는 제거 필요
+    // 백엔드 연결 후, 제거 필요
     try {
       console.log('데이터 전송 중:');
     } catch (error) {
@@ -33,7 +35,9 @@ const MyBucketStackNavigator = () => {
       <Stack.Screen name="MyBucketDetail" options={{headerShown: false}}>
         {props => <MyBucketDetailScreen />}
       </Stack.Screen>
-
+      <Stack.Screen name="EditBucket" options={{headerShown: false}}>
+        {props => <EditMyBucketScreen {...props} bucketInfo={props.route.params?.bucketInfo} sendDataToDB={sendDataToDB} />}
+      </Stack.Screen>
       <Stack.Screen name="AchievementRecord" options={{headerShown: false}}>
         {props => (
           <AchievementRecordScreen

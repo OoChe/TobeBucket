@@ -7,7 +7,7 @@ import {
   FlatList,
   StyleSheet,
 } from 'react-native';
-import CheckBox from '@react-native-community/checkbox';
+import BouncyCheckbox from 'react-native-bouncy-checkbox';
 import axios from 'axios';
 import {AlarmList} from '../data/tempBucketData';
 import PageTitle from '../components/PageTitle';
@@ -33,7 +33,7 @@ const AlarmScreen = () => {
     // }
     setAlarmList(AlarmList);
   };
-
+  // 모든 알람 읽음 처리 함수
   const handleReadAll = () => {
     setAlarmList(prev => prev.map(alarm => ({...alarm, readStatus: 1})));
     Alert.alert('모든 알림이 읽음 처리되었습니다.');
@@ -75,10 +75,14 @@ const AlarmScreen = () => {
     );
   };
 
-  const handleSelect = (id, value) => {
-    setSelectedIds(prev =>
-      value ? [...prev, id] : prev.filter(selectedId => selectedId !== id),
-    );
+  const toggleSelection = (alarmId: string, isChecked: boolean) => {
+    setSelectedIds(prev => {
+      if (isChecked) {
+        return [...prev, alarmId]; // 체크박스 선택 시 추가
+      } else {
+        return prev.filter(id => id !== alarmId); // 체크 해제 시 제거
+      }
+    });
   };
 
   // 알림 렌더링
@@ -88,15 +92,23 @@ const AlarmScreen = () => {
         styles.alarmItem,
         {backgroundColor: item.readStatus === 0 ? '#FBDDDD' : '#E6E6E6'},
       ]}>
-      {deleteMode && (
-        <CheckBox
-          value={selectedIds.includes(item.alarmId)}
-          onValueChange={value => handleSelect(item.alarmId, value)}
-        />
-      )}
       <View style={styles.alarmContent}>
-        <Text style={styles.date}>{item.receiveDate}</Text>
-        <Text style={styles.content}>{item.alarmContent}</Text>
+        <View style={{flexDirection: 'row'}}>
+          {deleteMode && (
+            <BouncyCheckbox
+              size={25}
+              fillColor="#FF6B6B"
+              iconStyle={{borderColor: '#FF6B6B', borderRadius: 15}}
+              onPress={isChecked =>
+                toggleSelection(item.alarmId, isChecked || false)
+              }
+            />
+          )}
+          <View>
+            <Text style={styles.date}>{item.receiveDate}</Text>
+            <Text style={styles.content}>{item.alarmContent}</Text>
+          </View>
+        </View>
       </View>
     </View>
   );
@@ -112,8 +124,8 @@ const AlarmScreen = () => {
         ) : (
           <TouchableOpacity
             onPress={() => setDeleteMode(true)}
-            style={styles.buttonColor}>
-            <Text style={styles.buttonColorText}>전체 삭제</Text>
+            style={styles.buttonBorder}>
+            <Text style={styles.buttonBorderText}>전체 삭제</Text>
           </TouchableOpacity>
         )}
         <TouchableOpacity
@@ -122,11 +134,19 @@ const AlarmScreen = () => {
           <Text style={styles.buttonColorText}>삭제</Text>
         </TouchableOpacity>
       </View>
-      <FlatList
-        data={alarmList}
-        keyExtractor={item => item.alarmId.toString()}
-        renderItem={renderAlarm}
-      />
+      {!deleteMode ? (
+        <FlatList
+          data={alarmList}
+          keyExtractor={item => item.alarmId.toString()}
+          renderItem={renderAlarm}
+        />
+      ) : (
+        <FlatList
+          data={alarmList}
+          keyExtractor={item => item.alarmId}
+          renderItem={renderAlarm}
+        />
+      )}
     </View>
   );
 };
@@ -178,9 +198,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 10,
     borderRadius: 10,
   },
-  alarmContent: {
-    marginLeft: 10,
-  },
+  alarmContent: {},
   date: {
     fontSize: 12,
     color: '#888',

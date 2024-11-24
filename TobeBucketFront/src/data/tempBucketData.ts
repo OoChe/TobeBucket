@@ -79,8 +79,7 @@ export const achievedDetailData = {
   achievementMedia:
     'https://img.daily.co.kr/@files/www.daily.co.kr/content/food/2017/20170411/7b532799ae9d210415512b2d22457a4e.jpg',
   goalReview:
-    '제주도에서 한달 동안 힐링하기 성공했다. 긴 내용이 있다면 얘가 어떻게 될 지 파악해야 하기 때문에 일부러 길게 적어보고 있다. 사실 저는 제주도를 한 번도 가보지 못했어요. 제주도보다 일본이 더 값싼 시절에 가서 제주도를 한 번도 못가봤어요 하지만 가보고 싶다는 로망도? 있기는 합니다 제주도 바다 제주도 귤 귤이 요즘 제철이더라고요 귤 맛있어요',
-
+    '제주도에서 한달 동안 힐링하기 성공했다.',
   stickerId: 3,
 };
 // 친구 버킷리스트 목록

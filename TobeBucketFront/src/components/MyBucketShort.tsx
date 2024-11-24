@@ -9,8 +9,9 @@
   - 
 */
 import React from 'react';
-import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
+import {View, Text, Alert, TouchableOpacity, StyleSheet} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
+// import axios from 'axios';
 import {CategoryIcon} from './CategoryIcon';
 import {dateToStr} from './dateFunc';
 
@@ -25,13 +26,6 @@ interface bucketShortProps {
 interface bucketProps {
   bucketId: number;
   bucketName: string;
-}
-
-interface semiGoalProps {
-  bucketId: number;
-  bucketName: string;
-  semiGoalId: number;
-  semiGoalName: string;
 }
 
 const MyBucketShort = ({
@@ -57,9 +51,39 @@ const MyBucketShort = ({
   const handleEditBucket = () => {
     console.log('수정 선택');
     // navigate.navigate('WriteBucket');
+    navigation.navigate('WriteBucketRequired', { template })
   };
   const handleDeleteBucket = () => {
-    console.log('삭제 선택');
+    Alert.alert(
+      '삭제 확인',
+      '정말로 이 버킷을 삭제하시겠습니까?',
+      [
+        {text: '취소', style: 'cancel'},
+        {
+          text: '삭제',
+          onPress: async () => {
+            try {
+              // const response = await axios.delete(
+              //   `https://your-api-endpoint.com/tobebucket/bucket-delete/${bucketId}`,
+              // );
+              // if (response.status === 200) {
+              //   Alert.alert('삭제 완료', '버킷이 성공적으로 삭제되었습니다.');
+              //   // UI 업데이트 로직 추가
+              // } else {
+              //   Alert.alert(
+              //     '삭제 실패',
+              //     '삭제에 실패했습니다. 다시 시도해주세요.',
+              //   );
+              // }
+            } catch (error) {
+              console.error('Error deleting bucket:', error);
+              Alert.alert('오류 발생', '삭제 중 문제가 발생했습니다.');
+            }
+          },
+        },
+      ],
+      {cancelable: true},
+    );
   };
   return (
     <View>
