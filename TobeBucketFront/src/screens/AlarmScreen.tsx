@@ -33,7 +33,7 @@ const AlarmScreen = () => {
     // }
     setAlarmList(AlarmList);
   };
-  // 모든 알람 읽음 처리 함수
+  // 모든 알람 읽음 처리 함수 - PATCH
   const handleReadAll = () => {
     setAlarmList(prev => prev.map(alarm => ({...alarm, readStatus: 1})));
     Alert.alert('모든 알림이 읽음 처리되었습니다.');
@@ -45,7 +45,7 @@ const AlarmScreen = () => {
     renderAlarm(AlarmList);
     setSelectedIds([]); // 선택 초기화
   };
-
+  // 선택한 알림 삭제 함수 - DELETE
   const handleDeleteSelected = () => {
     if (selectedIds.length === 0) {
       Alert.alert('선택된 알림이 없습니다.');

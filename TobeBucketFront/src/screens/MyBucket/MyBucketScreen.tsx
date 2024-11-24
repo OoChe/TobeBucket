@@ -48,7 +48,7 @@ const MyBucketScreen = () => {
     setLoading(true);
     try {
       // api logic 추가
-      // const response = await fetch(`/tobebucket/bucketlists/${mode}`);
+      // const response = await get(`/tobebucket/bucketlists/${mode}`);
       // const data = await response.json();
       if (mode === 'upcoming') {
         setUpcomingBucketList(unachievedData);
