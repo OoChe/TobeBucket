@@ -52,7 +52,7 @@ public class SecurityConfig {
                             @Override
                             public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
                                 CorsConfiguration config = new CorsConfiguration();
-                                config.setAllowedOrigins(Collections.singletonList("http://localhost:3000")); //허용할 프론트엔드 서버 포트
+                                config.setAllowedOrigins(Collections.singletonList("http://localhost:8081")); //허용할 프론트엔드 서버 포트
                                 config.setAllowedMethods(Collections.singletonList("*")); //모든 메서드 허용
                                 config.setAllowCredentials(true);
                                 config.setAllowedHeaders(Collections.singletonList("*"));
