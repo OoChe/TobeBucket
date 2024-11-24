@@ -24,4 +24,8 @@ public interface UserProfileRepository extends JpaRepository<UserProfile,String>
     @Query("SELECT new map(u.userId as userId, u.nickname as nickname, u.mbti as mbti, u.profileImage as profileImage) " +
             "FROM UserProfile u WHERE u.userId IN :userIds")
     List<Map<String, Object>> findProfilesByIds(@Param("userIds") List<String> userIds);
+
+    @Query("SELECT new map(up.userId as userId, up.nickname as nickname, up.mbti as mbti, up.profileImage as profileImage) " +
+            "FROM UserProfile up WHERE up.userId <> 'admin'")
+    List<Map<String, Object>> findAllUsersExceptAdmin();
 }

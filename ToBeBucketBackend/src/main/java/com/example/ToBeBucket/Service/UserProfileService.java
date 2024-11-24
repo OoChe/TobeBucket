@@ -8,6 +8,9 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 
@@ -49,6 +52,10 @@ public class UserProfileService {
         }
 
         userProfileRepository.save(userProfile);
+    }
+
+    public List<Map<String, Object>> getAllUsersExceptAdmin() {
+        return userProfileRepository.findAllUsersExceptAdmin();
     }
 
 }
