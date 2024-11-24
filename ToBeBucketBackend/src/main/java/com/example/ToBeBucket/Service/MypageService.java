@@ -121,6 +121,7 @@ public class MypageService {
                     return categoryRate;
                 })
                 .sorted((a, b) -> (Integer) b.get("rate") - (Integer) a.get("rate"))
+                .limit(3)
                 .collect(Collectors.toList());
 
     }
