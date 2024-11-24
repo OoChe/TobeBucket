@@ -5,12 +5,14 @@
  - 구성 : 헤더, 친구 프로필 정보, 버킷 피드(추가 예정)
  */
 
-import React from 'react';
-import { View, Text, TextInput, TouchableOpacity, Image, FlatList } from 'react-native';
+import React, { useState, useEffect } from 'react'; // react에서 useState, useEffect 임포트
+import { View, Text, TouchableOpacity, Image } from 'react-native';
 import styles from '../../styles/ViewFriendBucketScreen.styles';
-import SearchFriendShort from '../../components/SearchFriendShort';
 import PageTitle from '../../components/PageTitle';
 import FriendProfileShort from '../../components/FriendProfileShort';
+import { useNavigation, useRoute } from '@react-navigation/native';
+import { FriendBucketResponse, getFriendBucket } from '../../apis/friend/friendService';
+
 
 
 const DUMMY_FRIEND_BUCKET_INFO = {
@@ -18,7 +20,7 @@ const DUMMY_FRIEND_BUCKET_INFO = {
        nickname: "iloveham",
        mbti: "ENFP",
        intro: "럭키비키자나",
-       profileImage: require('../../assets/images/hamsterProfile.png')
+       profileImage: '../../assets/images/hamsterProfile.png'
     },
     bucketList: [
   	 {
@@ -35,7 +37,28 @@ const DUMMY_FRIEND_BUCKET_INFO = {
 };
 
 
-const ViewFriendBucketScreen = ({ navigation }: any) => {
+const ViewFriendBucketScreen = () => {
+  const [friendInfo, setFriendInfo] = useState<FriendBucketResponse>();
+  const route = useRoute();
+  const { userId } = route.params as { userId: string };
+
+  const loadFriendBucket = async (friendId) => {
+    console.log(`Fetching data for userId: ${friendId}`);
+
+    try {
+      const data = await getFriendBucket(friendId);
+      console.log(data)
+      setFriendInfo(data);
+    } catch (err: any) {
+      console.error('친구 버킷 피드 로드 오류:', err);
+      setError(err.message || '친구 피드를 불러오는 중 오류가 발생했습니다.');
+    }
+  };
+
+  useEffect(() => {
+    console.log('Received userId in FriendBucket:', userId);
+    loadFriendBucket(userId);
+  }, [userId]);
 
   return (
     <View style={styles.main}>

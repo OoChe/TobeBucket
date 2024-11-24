@@ -1,5 +1,5 @@
 /*
- NOTICE : handleDeleteFriend 함수 내에서 삭제 후 리렌더링 설정 필요, Test 필수
+ NOTICE : handleDeleteFriend, handleFriendRequest 함수 내에서 삭제 후 리렌더링 설정 필요, Test 필수
 
  [친구 목록 스크린]
  - 구성 : 헤더, 친구 추가, 친구 목록 (친구 요약, 삭제 드롭 다운)
@@ -10,38 +10,42 @@
   - toggleDropdown: 선택된 친구의 삭제 드롭 다운 표시
  */
 
-import React, { useState } from 'react';
-import { View, ScrollView, TouchableOpacity, Text, Alert } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, ScrollView, TouchableOpacity, Text, Alert, Image } from 'react-native';
 import styles from '../../styles/FriendListScreen.styles';
 import PageTitle from '../../components/PageTitle';
 import ListFriendShort from '../../components/ListFriendShort';
-import { useNavigation } from '@react-navigation/native';
+import FriendRequest from '../../components/FriendRequest';
+import { useNavigation, useRoute } from '@react-navigation/native';
+import { getFriendList, deleteFriend, respondFriendRequest, Friend, patchFriendList } from '../../apis/friend/friendService';
 
-interface Friend {
-  userId: string;
-  nickname: string;
-  mbti: string;
-  profileImage: any;
-}
 
-const DUMMY_FRIEND_LIST: Friend[] = [
-  {
-    userId: "ham1",
-    nickname: "햄햄일",
-    mbti: "ENTP",
-    profileImage: require('../../assets/images/hamsterProfile.png'),
-  },
-  {
-    userId: "ham2",
-    nickname: "햄햄이",
-    mbti: "ENTJ",
-    profileImage: require('../../assets/images/hamsterProfile.png'),
-  },
-];
+const DUMMY_USER_ID = "ham"
+
 
 const FriendListScreen: React.FC = () => {
   const navigation = useNavigation();
   const [dropdownVisible, setDropdownVisible] = useState<string | null>(null);
+  const [friendList, setFriendList] = useState<Friend[]>([]);
+  const [friendRequestList, setFriendRequestList] = useState<Friend[]>([]);
+
+  // 친구 목록 가져오기
+  useEffect(() => {
+    loadFriendList();
+  }, []);
+
+
+  const loadFriendList = async () => {
+    try {
+      const data = await getFriendList();
+      setFriendList(data.friendList);
+      setFriendRequestList(data.friendRequest);
+    } catch (err: any) {
+      console.error('친구 목록 로드 오류:', err);
+      setError(err.message || '친구 목록을 불러오는 중 오류가 발생했습니다.');
+    }
+  };
+
 
   {/* 친구 삭제 전 확인 창 */}
   const confirmDeleteFriend = (id: string) => {
@@ -68,10 +72,28 @@ const FriendListScreen: React.FC = () => {
     const requestBody = {
       userId: id,
     };
-
     console.log(requestBody);
     console.log(`${id}을(를) 삭제합니다.`);
+
     setDropdownVisible(null);
+    loadFriendList();
+  };
+
+  {/* 친구 요청 */}
+  const handleFriendRequest = async (friendId: string, response: number) => {
+    const requestBody = {
+      friendStatus: response,
+      friendId: friendId,
+    };
+    console.log(requestBody);
+    try {
+      await patchFriendList(requestBody);
+      await loadFriendList();
+
+    } catch (err: any) {
+      console.error('친구 요청 전송 오류:', err);
+      setError(err.message || '친구 요청을 전송하는 중 오류가 발생했습니다.');
+    }
   };
 
   {/* 친구 삭제 드롭 다운 표시 */}
@@ -93,16 +115,35 @@ const FriendListScreen: React.FC = () => {
         </TouchableOpacity>
       </View>
 
+
+      {/* 친구 요청 목록 */}
+      {friendRequestList.length > 0 && (
+        <View style={styles.friendRequestSection}>
+          <Image  source={require('../../assets/icons/requestFriend.png')} style={styles.requestTitle}></Image>
+          {friendRequestList.map((friend, index) => (
+            <FriendRequest
+              key={index}
+              friend={friend}
+              onAccept={() => handleFriendRequest(friend.userId, 1)}
+              onReject={() => handleFriendRequest(friend.userId, 0)}
+            />
+          ))}
+        </View>
+      )}
+
+
       {/* 친구 목록 리스트 */}
       <ScrollView contentContainerStyle={styles.container}>
         {/* 친구 목록 요약 */}
-        {DUMMY_FRIEND_LIST.map((friend, index) => (
+        {friendList.map((friend, index) => (
           <View key={index} style={styles.friendItem}>
             <ListFriendShort
               profileImage={friend.profileImage}
               mbti={friend.mbti}
               nickname={friend.nickname}
-              onMove={() => navigation.navigate('FriendBucket')}
+              onMove={() => {
+                navigation.navigate('FriendBucket', { userId: friend.userId });
+              }}
               onDrop={() => toggleDropdown(friend.userId)}
             />
             {/* 친구 삭제 드롭 다운 */}

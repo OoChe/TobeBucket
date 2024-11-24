@@ -6,7 +6,7 @@ import ViewFriendBucketScreen from '../screens/FriendList/ViewFriendBucketScreen
 
 
 type StackParamList = {
-  FriendList: undefined;
+  FriendListMain: undefined;
   SearchFriend: undefined;
   FriendBucket: undefined;
 };
@@ -33,7 +33,7 @@ const FriendListStackNavigator = () => {
     >
 
       <Stack.Screen
-        name="FriendList"
+        name="FriendListMain"
         component={FriendListScreen}
         options={{ headerShown: false }}
       >

@@ -1,28 +1,28 @@
-/*
- [친구 버킷에서 프로필 요약 컴포넌트]
-  - 파라미터
-    1) profileImage : 친구 프로필 이미지
-    2) mbti : MBTI
-    3) nickname : 닉네임
-    4) intro : 한줄 소개
- */
-
-
 import React from 'react';
 import { View, Text, Image, StyleSheet } from 'react-native';
 
 interface FriendProfileShortProps {
-  profileImage: any;
+  profileImage: string | null; // URI 또는 null
   mbti: string;
   nickname: string;
   intro: string;
 }
 
 const FriendProfileShort: React.FC<FriendProfileShortProps> = ({ profileImage, mbti, nickname, intro }) => {
+
+  const isValidUri = typeof profileImage === 'string' && profileImage.startsWith('http');
+
   return (
     <View style={styles.container}>
       {/* 프로필 이미지 */}
-      <Image source={profileImage} style={styles.profileImage} />
+      <Image
+        source={
+          isValidUri
+            ? { uri: profileImage } // URI가 유효하면 해당 이미지 사용
+            : require('../assets/images/defaultProfile.png') // 기본 이미지
+        }
+        style={styles.profileImage}
+      />
 
       {/* 친구 프로필 정보 */}
       <View style={styles.userInfo}>
