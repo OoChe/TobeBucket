@@ -26,6 +26,8 @@ public class GetUserListController {
             List<Map<String, Object>> userList = userProfileService.getAllUsersExceptAdmin();
 
             // 응답 데이터 구성
+            response.put("code", "SU");
+            response.put("message", "Success.");
             response.put("userList", userList);
 
             return ResponseEntity.ok(response);

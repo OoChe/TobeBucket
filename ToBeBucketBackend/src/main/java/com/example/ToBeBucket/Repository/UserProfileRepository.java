@@ -13,7 +13,7 @@ public interface UserProfileRepository extends JpaRepository<UserProfile,String>
     Optional<UserProfile> findByNickname(String nickname);
     Optional<UserProfile> findByUserId(String userId);
 
-    @Query("SELECT new map(up.userId as userId, up.nickname as nickname, up.mbti as mbti, up.profileImage as profileImage) " +
+    @Query("SELECT new map(up.intro as intro, up.nickname as nickname, up.mbti as mbti, up.profileImage as profileImage) " +
             "FROM UserProfile up WHERE up.userId = :userId")
     Map<String, Object> findProfileByUserId(@Param("userId") String userId);
 

@@ -7,10 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -25,20 +22,19 @@ public class GetFriendBucketController {
 
     @GetMapping("/tobebucket/friendlist/bucket")
     public ResponseEntity<Map<String, Object>> getFriendBucket(
-            @RequestBody GetBucketDTO getBucketDTO) {
+            @RequestParam String userId) {
         Map<String, Object> response = new LinkedHashMap<>();
         try {
-            String targetUserId = getBucketDTO.getUserId();
 
-            if (targetUserId == null || targetUserId.isEmpty()) {
+            if (userId == null || userId.isEmpty()) {
                 throw new IllegalArgumentException("Target userId must be provided.");
             }
 
             // 프로필 조회
-            Map<String, Object> profile = friendBucketService.getUserProfile(targetUserId);
+            Map<String, Object> profile = friendBucketService.getUserProfile(userId);
 
             // 버킷 리스트 조회
-            List<Map<String, Object>> bucketList = friendBucketService.getBucketList(targetUserId);
+            List<Map<String, Object>> bucketList = friendBucketService.getBucketList(userId);
 
             // 응답 데이터 구성
             response.put("code", "SU");

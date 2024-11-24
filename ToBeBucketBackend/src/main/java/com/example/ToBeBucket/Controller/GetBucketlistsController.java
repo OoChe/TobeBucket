@@ -31,13 +31,13 @@ public class GetBucketlistsController {
     private final GetMbtiBucketListsService getMbtiBucketListsService;
     //버킷리스트 목록 조회
     @GetMapping("/tobebucket/bucketlists")
-    public ResponseEntity<Map<String, Object>> getBucketlists(@RequestBody GetBucketDTO getBucketDTO) {
+    public ResponseEntity<Map<String, Object>> getBucketlists(@RequestParam (required = false) Boolean achieveStatus) {
         String userId = SecurityContextHolder.getContext().getAuthentication().getName();
         Map<String, Object> response = new LinkedHashMap<>();
         try {
-            List<?> bucketList = getBucketlistsService.getBucketlists(userId, getBucketDTO);
+            List<?> bucketList = getBucketlistsService.getBucketlists(userId, achieveStatus);
             response.put("code", "SU");
-            response.put("message", getBucketDTO.getAchieveStatus()
+            response.put("message", achieveStatus
                     ? "달성 버킷 목록 조회 Success."
                     : "달성 예정 버킷 목록 조회 Success.");
             response.put("bucketList", bucketList);
@@ -88,10 +88,10 @@ public class GetBucketlistsController {
 
     //MBTI 버킷 목록 조회
     @GetMapping("/tobebucket/feed/mbti")
-    public ResponseEntity<Map<String, Object>> getMBTIbuckets(@RequestBody GetMBTIbucketDTO getMBTIbucketDTO) {
+    public ResponseEntity<Map<String, Object>> getMBTIbuckets(@RequestParam String mbti) {
         Map<String, Object> response = new LinkedHashMap<>();
         try {
-            List<?> mbtiBuckets = getMbtiBucketListsService.getMbtiBucketLists(getMBTIbucketDTO.getMbti());
+            List<?> mbtiBuckets = getMbtiBucketListsService.getMbtiBucketLists(mbti);
             response.put("code", "SU");
             response.put("message", "suceess");
             response.put("bucketList", mbtiBuckets);
