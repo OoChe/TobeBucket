@@ -1,11 +1,31 @@
+/*
+ [친구 목록에 나타나는 프로필 요약 컴포넌트]
+  - 파라미터
+    1) profileImage : 친구 프로필 이미지
+    2) mbti : MBTI
+    3) nickname : 닉네임
+    4) onMove : 친구 버킷으로 이동하는 버튼
+    5) onDrop : 친구 삭제하기 드롭다운 버튼
+ */
+
 import React from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
 
-const ListFriendShort = ({ profileImage, mbti, nickname, onEdit, onMenu, onPress }) => {
+const ListFriendShort = ({ profileImage, mbti, nickname, onMove, onDrop }) => {
+
+  const isValidUri = typeof profileImage === 'string' && profileImage.startsWith('http');
+
   return (
-    <TouchableOpacity onPress={onPress} style={styles.container}>
-      {/* Profile Image */}
-      <Image source={profileImage} style={styles.profileImage} />
+    <View style={styles.container}>
+      {/* 프로필 이미지 */}
+      <Image
+        source={
+          isValidUri
+            ? { uri: profileImage } // URI가 유효하면 해당 이미지 사용
+            : require('../assets/images/defaultProfile.png') // 기본 이미지
+        }
+        style={styles.profileImage}
+      />
 
       <View style={styles.userInfo}>
          {/* Username */}
@@ -20,16 +40,16 @@ const ListFriendShort = ({ profileImage, mbti, nickname, onEdit, onMenu, onPress
       {/* Icons Group */}
       <View style={styles.iconGroup}>
         {/* Edit Icon */}
-        <TouchableOpacity onPress={onEdit} style={styles.iconContainer}>
+        <TouchableOpacity onPress={onMove} style={styles.iconContainer}>
           <Image source={require('../assets/icons/bucket.png')} style={styles.addIcon} />
         </TouchableOpacity>
 
         {/* Menu Icon */}
-        <TouchableOpacity onPress={onMenu} style={styles.iconContainer}>
+        <TouchableOpacity onPress={onDrop} style={styles.iconContainer}>
           <Image source={require('../assets/icons/dots.png')} style={styles.addIcon} />
         </TouchableOpacity>
       </View>
-    </TouchableOpacity>
+    </View>
   );
 };
 
@@ -55,8 +75,6 @@ const styles = StyleSheet.create({
     flex: 1, // 아이콘 그룹과의 간격 확보
     flexDirection: 'column', // badge와 nickname을 가로로 배치
     alignItems: 'flex-start',
-
-
   },
 
   badge: {

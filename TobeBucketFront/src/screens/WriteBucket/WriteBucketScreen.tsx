@@ -23,15 +23,17 @@ import CategoryButton from '../../components/CategoryButton';
 import PageTitle from '../../components/PageTitle';
 import { categories } from '../../data/bucketCategories';
 
-const WriteBucketScreen = ({ bucketInfo, setBucketInfo, sendDataToDB }) => {
+
+const WriteBucketScreen = ({ bucketInfo, setBucketInfo }) => {
   const navigation = useNavigation();
   const route = useRoute();
   const template = route.params?.template;
 
   useEffect(() => {
-      {/* 템플릿이 전달된 경우, 입력 값 전달 */}
+   {/* 템플릿이 전달된 경우, 입력 값 전달 */}
+
     if (template) {
-      console.log('템플릿 로드:', template);
+      console.log('템플릿 가져오기 성공:', template);
       setBucketInfo((prevData) => ({
         ...prevData,
         bucketName: template.bucketName,
@@ -70,8 +72,8 @@ const WriteBucketScreen = ({ bucketInfo, setBucketInfo, sendDataToDB }) => {
   {/* 다음 단계로 이동 */}
   const handleNextStep = () => {
     if (validateInputs()) {
-      sendDataToDB();
       navigation.navigate('WriteBucketOptional', { bucketInfo });
+
     }
   };
 
@@ -111,6 +113,7 @@ const WriteBucketScreen = ({ bucketInfo, setBucketInfo, sendDataToDB }) => {
         <Text style={styles.sectionTitle}>3. 카테고리 선택</Text>
         <View style={styles.categoryContainer}>
           {categories.map((category, index) => (
+            category.id !== 6 &&
             <CategoryButton
               key={category.id}
               icon={category.icon}

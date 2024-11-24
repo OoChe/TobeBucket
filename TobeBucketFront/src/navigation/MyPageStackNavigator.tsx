@@ -1,19 +1,18 @@
 import React, { useState } from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
-import FriendListScreen from '../screens/FriendList/FriendListScreen';
-import SearchFriendScreen from '../screens/FriendList/SearchFriendScreen';
-import ViewFriendBucketScreen from '../screens/FriendList/ViewFriendBucketScreen';
+import MyPageScreen from '../screens/MyPage/MyPageScreen';
+import ChangeMyInfoScreen from '../screens/MyPage/ChangeMyInfoScreen';
+
 
 
 type StackParamList = {
-  FriendListMain: undefined;
-  SearchFriend: undefined;
-  FriendBucket: undefined;
+  MyPageMain: undefined;
+  ChangeMyInfo: undefined;
 };
 
 const Stack = createStackNavigator<StackParamList>();
 
-const FriendListStackNavigator = () => {
+const MyPageStackNavigator = () => {
 
   const sendDataToDB = async () => {
       // 백엔드 연결 후, WriteBucketScreen에서는 제거 필요
@@ -33,24 +32,15 @@ const FriendListStackNavigator = () => {
     >
 
       <Stack.Screen
-        name="FriendListMain"
-        component={FriendListScreen}
+        name="MyPageMain"
+        component={MyPageScreen}
         options={{ headerShown: false }}
       >
       </Stack.Screen>
 
-
       <Stack.Screen
-        name="SearchFriend"
-        component={SearchFriendScreen}
-        options={{ headerShown: false }}
-      >
-      </Stack.Screen>
-
-
-      <Stack.Screen
-        name="FriendBucket"
-        component={ViewFriendBucketScreen}
+        name="ChangeMyInfo"
+        component={ChangeMyInfoScreen}
         options={{ headerShown: false }}
       >
       </Stack.Screen>
@@ -59,4 +49,4 @@ const FriendListStackNavigator = () => {
   );
 };
 
-export default FriendListStackNavigator;
+export default MyPageStackNavigator;

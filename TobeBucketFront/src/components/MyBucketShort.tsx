@@ -8,6 +8,7 @@
     5) category: 버킷리스트 카테고리
   - 
 */
+
 import React from 'react';
 import {View, Text, Alert, TouchableOpacity, StyleSheet} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
