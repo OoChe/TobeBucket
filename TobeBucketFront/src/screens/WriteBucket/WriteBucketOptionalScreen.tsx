@@ -1,7 +1,8 @@
 /*
- NOTICE : handleSubmit 함수 내에서 작성 완료 후 이동할 페이지 설정 논의 필요, Test 필수
+ NOTICE : Test 필수
  [UPDATE]
  24.11.13 - 달성 날짜 형식 변경(YY-MM-DD 문자열), 이전 날짜 선택 불가
+ 24.11.23 - 작성 완료 후 나의 버킷 페이지로 이동 설정
 
  [버킷리스트 작성하기(선택) 스크린]
  - 구성 : 헤더, 중간 목표, 달성 날짜, 친구 태그 입력, 버튼(뒤로, 작성 완료)
@@ -30,16 +31,34 @@ import { useNavigation } from '@react-navigation/native';
 import styles from '../../styles/WriteBucketOptionalScreen.styles';
 import DatePicker from '../../components/DatePicker';
 import PageTitle from '../../components/PageTitle';
+import { writeBucket, getFriendNickNames } from '../../apis/bucket/bucketService';
 
 const DUMMY_FRIEND_LIST = ["햄햄일", "햄햄이", "햄햄삼", "햄햄사"];
 
-const WriteBucketOptionalScreen = ({ route, bucketInfo, setBucketInfo, sendDataToDB }) => {
+const WriteBucketOptionalScreen = ({ route, bucketInfo, setBucketInfo }) => {
   const initialBucketInfo = route.params?.bucketInfo || bucketInfo;
   const [goals, setGoals] = useState(initialBucketInfo.semiGoalData || []);
+  const [friendList, setFriendList] = useState<string[]>([]);
   const [selectedFriends, setSelectedFriends] = useState<string[]>([]);
   const [showFriendPicker, setShowFriendPicker] = useState(false);
   const [friendTags, setFriendTags] = useState<string[]>([]);
   const navigation = useNavigation();
+
+  useEffect(() => {
+    const loadFriendList = async () => {
+      try {
+        const friends = await getFriendNickNames();
+        setFriendList(friends);
+      } catch (error: any) {
+        console.error('친구 목록 로드 오류:', error);
+        Alert.alert('오류', error.message || '친구 목록을 불러오는 중 오류가 발생했습니다.');
+      }
+    };
+
+    loadFriendList();
+  }, []);
+
+
 
   // 중간 목표 함수
   const addGoal = () => {
@@ -97,15 +116,33 @@ const WriteBucketOptionalScreen = ({ route, bucketInfo, setBucketInfo, sendDataT
   };
 
   // 제출 함수
-  const handleSubmit = () => {
-    const filteredGoals = goals.filter((goal) => goal.semiGoalTitle.trim() !== "");
-    setBucketInfo((prevData) => ({
-      ...prevData,
+  const handleSubmit = async () => {
+    // 중간 목표 필터링
+    const filteredGoals = goals.filter((goal) => goal.semiGoalTitle.trim() !== '');
+    const finalBucketInfo: WriteBucketRequest = {
+      bucketName: bucketInfo.bucketName || bucketInfo.title,
+      bucketContent: bucketInfo.bucketContent || bucketInfo.description,
+      category: bucketInfo.category,
+      publicStatus: bucketInfo.publicStatus,
+      createDate: new Date().toISOString().split('T')[0],
+      goalDate: bucketInfo.goalDate,
+      friendNickNameList: friendTags,
       semiGoalData: filteredGoals,
-    }));
+    };
 
-    sendDataToDB();
-    navigation.navigate('WriteBucketRequired'); // 수정 필요
+    // 데이터 확인을 위한 로그 출력
+    console.log('최종 버킷 데이터:', JSON.stringify(finalBucketInfo, null, 2));
+
+    try {
+      // 버킷 생성 API 호출
+      //const response = await writeBucket(finalBucketInfo);
+      Alert.alert('성공', '버킷리스트가 성공적으로 생성되었습니다.');
+      navigation.navigate('MyBucket', {screen : 'MyBucketList'});
+    } catch (error: any) {
+      console.error('버킷 생성 오류:', error);
+      const errorMessage = error.response?.data?.message || '버킷리스트 생성 중 오류가 발생했습니다.';
+      Alert.alert('오류', errorMessage);
+    }
   };
 
   return (

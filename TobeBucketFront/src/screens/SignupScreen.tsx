@@ -1,19 +1,20 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Image, ScrollView, ImageBackground, Linking, Alert } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
-
 import styles from '../styles/SignupScreen.styles';
 import MBTI_LIST from '../data/mbti'; // MBTI 리스트 불러오기
+import { signup } from '../apis/auth/authService'; // 회원 가입 함수 임포트
+
 
 const SignupScreen = ({ navigation }: any) => {
   const [formData, setFormData] = useState({
-    userid: '',
-    password: '',
+    userId: '',
+    pwd: '',
     confirmPassword: '',
     nickname: '',
     mbti: '',
     intro: '',
-    role: 'USER', // 기본값 설정
+    role: 'USER',
   });
 
   const [isPasswordHidden, setIsPasswordHidden] = useState(true);
@@ -28,53 +29,34 @@ const SignupScreen = ({ navigation }: any) => {
     setFormData({ ...formData, [key]: value });
   };
 
-  const handleSignup = async () => {
-    const { userid, password, confirmPassword, nickname, mbti, intro, role } = formData;
+const handleSignup = async () => {
+    const { userId, pwd, confirmPassword, nickname, mbti, intro, role } = formData;
 
     // 유효성 검사
-    if (!userid || !password || !confirmPassword || !nickname || !mbti || !intro) {
+    if (!userId || !pwd || !confirmPassword || !nickname || !mbti || !intro) {
       Alert.alert('오류', '모든 필드를 입력해주세요.');
       return;
     }
 
-    if (password !== confirmPassword) {
+    if (pwd !== confirmPassword) {
       Alert.alert('오류', '비밀번호가 일치하지 않습니다.');
       return;
     }
 
-    const requestBody = {
-      userId: userid,
-      pwd: password,
-      nickname,
-      mbti,
-      intro,
-      role,
-    };
+    const requestBody = { userId, pwd, nickname, mbti, intro, role,};
 
-    console.log(requestBody)
-
-    {/*
     try {
-        const response = await fetch('tobebucket/signup', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(requestBody),
-        });
+      const response = await signup(requestBody);
 
-        if (response.ok) {
-          Alert.alert('성공', '회원가입이 완료되었습니다.');
-          navigation.navigate('Login');
-        } else {
-          const errorData = await response.json();
-          Alert.alert('오류', errorData.message || '회원가입에 실패했습니다.');
-        }
-      } catch (error) {
-        console.error('회원가입 요청 실패:', error);
-        Alert.alert('오류', '회원가입 요청 중 문제가 발생했습니다.');
+      if (response.code === 'SU') {
+        Alert.alert('성공', response.message);
+        navigation.navigate('Login');
+      } else {
+        Alert.alert('오류', response.message);
       }
-      */}
+    } catch (error: any) {
+      Alert.alert('오류', '디버깅 필요');
+    }
   };
 
   const togglePasswordVisibility = () => {
@@ -102,8 +84,8 @@ const SignupScreen = ({ navigation }: any) => {
           <TextInput
             style={styles.input}
             placeholder="아이디를 입력하세요"
-            value={formData.userid}
-            onChangeText={(text) => handleInputChange('userid', text)}
+            value={formData.userId}
+            onChangeText={(text) => handleInputChange('userId', text)}
           />
 
           {/* 닉네임 */}
@@ -121,9 +103,9 @@ const SignupScreen = ({ navigation }: any) => {
             <TextInput
               style={{ flex: 1 }}
               placeholder="비밀번호를 입력하세요"
-              value={formData.password}
+              value={formData.pwd}
               secureTextEntry={isPasswordHidden}
-              onChangeText={(text) => handleInputChange('password', text)}
+              onChangeText={(text) => handleInputChange('pwd', text)}
             />
             <TouchableOpacity onPress={togglePasswordVisibility}>
               <Image

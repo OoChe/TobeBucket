@@ -4,6 +4,7 @@ import WriteBucketScreen from '../screens/WriteBucket/WriteBucketScreen';
 import WriteBucketOptionalScreen from '../screens/WriteBucket/WriteBucketOptionalScreen';
 import ViewTemplateScreen from '../screens/WriteBucket/ViewTemplateScreen';
 import ViewTemplateDetailScreen from '../screens/WriteBucket/ViewTemplateDetailScreen';
+import MyBucketScreen from '../screens/MyBucket/MyBucketScreen';
 
 
 type StackParamList = {
@@ -11,6 +12,7 @@ type StackParamList = {
   WriteBucketOptional: undefined;
   ViewTemplate: undefined;
   ViewTemplateDetail: undefined;
+  MyBucketList: undefined;
 };
 
 const Stack = createStackNavigator<StackParamList>();
@@ -26,14 +28,6 @@ const WriteBucketStackNavigator = () => {
       friendNickNameList : [] as string[]
   });
 
-  const sendDataToDB = async () => {
-      // 백엔드 연결 후, WriteBucketScreen에서는 제거 필요
-      try {
-        console.log('데이터 전송 중:', bucketInfo);
-      } catch (error) {
-        console.error('데이터 전송 오류:', error);
-      }
-  };
 
 
   return (
@@ -50,8 +44,7 @@ const WriteBucketStackNavigator = () => {
           <WriteBucketScreen
             {...props}
             bucketInfo={bucketInfo}
-            setBucketInfo={setBucketInfo} // 직접 전달
-            sendDataToDB={sendDataToDB}
+            setBucketInfo={setBucketInfo}
           />
         )}
       </Stack.Screen>
@@ -66,7 +59,6 @@ const WriteBucketStackNavigator = () => {
             {...props}
             bucketInfo={bucketInfo}
             setBucketInfo={setBucketInfo} // 직접 전달
-            sendDataToDB={sendDataToDB}
           />
         )}
       </Stack.Screen>
@@ -83,6 +75,15 @@ const WriteBucketStackNavigator = () => {
         component={ViewTemplateDetailScreen}
         options={{ headerShown: false }}
       />
+
+      <Stack.Screen
+        name="MyBucketList"
+        options={{ headerShown: false }}
+      >
+        {(props) => (
+          <MyBucketScreen/>
+        )}
+      </Stack.Screen>
 
     </Stack.Navigator>
   );

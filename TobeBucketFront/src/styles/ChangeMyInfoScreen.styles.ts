@@ -91,6 +91,15 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#249E9E',
   },
+  pickerContainer: {
+    borderWidth: 1,
+    borderColor: '#E3E3E3',
+    borderRadius: 10,
+    backgroundColor: '#FFFFFF',
+  },
+  picker: {
+    color: '#707070',
+  },
 });
 
 export default styles;

@@ -79,7 +79,7 @@ const TabNavigator = () => {
 
       <Tab.Screen
         name="FriendList"
-        component={FriendListScreen}
+        component={FriendListStackNavigator}
         options={{tabBarLabel: '친구 목록', headerShown: false}}
       />
 

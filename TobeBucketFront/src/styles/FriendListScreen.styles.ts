@@ -60,6 +60,15 @@ const styles = StyleSheet.create({
     color: '#FF4D4D',
     fontWeight: 'bold',
   },
+
+  friendRequestSection: {
+      paddingHorizontal: 16,
+  },
+  requestTitle: {
+    width: 100,
+    height: 50,
+    resizeMode: 'contain'
+  }
 });
 
 export default styles;
