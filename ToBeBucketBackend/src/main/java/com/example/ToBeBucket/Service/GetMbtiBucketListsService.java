@@ -22,7 +22,7 @@ public class GetMbtiBucketListsService {
         List<Bucket> mbtiBucketLists = bucketRepository.findAllByMbtiAndPublicStatus(sMBTI, true);
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        mbtiBucketLists.sort(Comparator.comparing(bucket -> LocalDate.parse(bucket.getCreateDate(), formatter)));
+        mbtiBucketLists.sort(Comparator.comparing(bucket -> LocalDate.parse(bucket.getCreateDate(), formatter), Comparator.reverseOrder()));
 
         List<BucketAchievement> bucketAchievements = achieveBucketRepository.findAllByBucketIn(mbtiBucketLists);
         Map<Bucket, BucketAchievement> achievementMap = new HashMap<>();

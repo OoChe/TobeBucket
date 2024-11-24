@@ -94,7 +94,7 @@ public class GetBucketlistsController {
             List<?> mbtiBuckets = getMbtiBucketListsService.getMbtiBucketLists(getMBTIbucketDTO.getMbti());
             response.put("code", "SU");
             response.put("message", "suceess");
-            response.put("bcketList", mbtiBuckets);
+            response.put("bucketList", mbtiBuckets);
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             response.put("code", "DE");

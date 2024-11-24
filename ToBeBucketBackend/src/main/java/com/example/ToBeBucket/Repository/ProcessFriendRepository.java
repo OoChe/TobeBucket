@@ -13,6 +13,12 @@ import java.util.List;
 public interface ProcessFriendRepository extends JpaRepository<UserFriend, Long> {
      UserFriend findByUserIdAndFriendId(String userId, String friendId);
 
+     @Modifying
+     @Transactional
+     @Query("DELETE FROM UserFriend uf WHERE uf.userId = :userId AND uf.friendId = :friendId")
+     void deleteByUserIdAndFriendId(@Param("userId") String userId, @Param("friendId") String friendId);
+
+
      @Query("SELECT uf.userId FROM UserFriend uf WHERE uf.friendId = :userId AND uf.friendStatus = 0")
      List<String> findPendingRequests(@Param("userId") String userId);
 

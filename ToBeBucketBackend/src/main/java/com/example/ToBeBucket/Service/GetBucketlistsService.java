@@ -1,21 +1,13 @@
 package com.example.ToBeBucket.Service;
 
 import com.example.ToBeBucket.DTO.GetBucketDTO;
-import com.example.ToBeBucket.Entity.BucketAchievement;
-import com.example.ToBeBucket.Entity.UserBucket;
-import com.example.ToBeBucket.Entity.UserLogin;
-import com.example.ToBeBucket.Entity.Bucket;
-import com.example.ToBeBucket.Repository.UserBucketRepository;
-import com.example.ToBeBucket.Repository.AchieveBucketRepository;
-import com.example.ToBeBucket.Repository.GetNotAchvBucketlistsRepository;
-import com.example.ToBeBucket.Repository.UserLoginRepository;
+import com.example.ToBeBucket.Entity.*;
+import com.example.ToBeBucket.Repository.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -26,7 +18,9 @@ public class GetBucketlistsService {
     private final AchieveBucketRepository acheiveBucketRepository;
     private final UserBucketRepository userBucketRepository;
     private final UserLoginRepository userLoginRepository;
-
+    private final BucketSemiGoalRepository bucketSemiGoalRepository;
+    private final BucketFriendRepository bucketFriendRepository;
+    private final UserProfileRepository userProfileRepository;
     public List<Map<String, Object>> getBucketlists(String userId, GetBucketDTO getBucketDTO) {
 
         // UserBucket을 이용하여 UserId와 BucketId에 해당하는 버킷 정보를 가져오기
@@ -44,6 +38,35 @@ public class GetBucketlistsService {
                             map.put("bucketContent", bucket.getBucketContent());
                             map.put("goalDate", bucket.getGoalDate());
                             map.put("category", bucket.getCategory());
+                            map.put("publicStatus", bucket.getPublicStatus());
+
+                            // 중간목표가 있는 경우 추가
+                            List<BucketSemiGoal> bucketSemiGoals = bucketSemiGoalRepository.findByBucket(bucket);
+                            if (!bucketSemiGoals.isEmpty()) {
+                                List<Map<String, Object>> semiGoalDataList = new ArrayList<>();
+                                for (BucketSemiGoal semiGoal : bucketSemiGoals) {
+                                    Map<String, Object> semiGoalMap = new LinkedHashMap<>();
+                                    semiGoalMap.put("semiGoalTitle", semiGoal.getSemiGoalTitle());
+                                    if (semiGoal.getSticker() != null) {
+                                        semiGoalMap.put("stickerId", semiGoal.getSticker().getStickerId());
+                                    }
+                                    semiGoalDataList.add(semiGoalMap);
+                                }
+                                map.put("semiGoalData", semiGoalDataList);
+                            }
+
+                            // 함께하는 친구가 있는 경우 친구 정보도 추가
+                            List<BucketFriend> bucketFriendLists = bucketFriendRepository.findByBucket(bucket);
+                            if (!bucketFriendLists.isEmpty()) {
+                                List<String> friendNicknameLists = new ArrayList<>();
+                                for (BucketFriend bucketFriend : bucketFriendLists) {
+                                    Optional<UserProfile> userProfileOpt = userProfileRepository.findByUserId(bucketFriend.getFriend().getUserId());
+                                    userProfileOpt.ifPresent(userProfile -> {
+                                        friendNicknameLists.add(userProfile.getNickname());
+                                    });
+                                }
+                                map.put("friendNickname", friendNicknameLists);
+                            }
                             return map;
                         }
                         return null;

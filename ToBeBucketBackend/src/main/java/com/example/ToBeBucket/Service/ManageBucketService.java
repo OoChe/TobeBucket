@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.awt.*;
 import java.util.List;
 
 @Slf4j
@@ -100,7 +101,6 @@ public class ManageBucketService {
         Bucket bucket = bucketRepository.findById(bucketId)
                 .orElseThrow(() -> new RuntimeException("없는 버킷"));
 
-
         updateBucketDetails(bucket, editBucketDTO);
         updateBucketFriends(bucket, user, editBucketDTO.getFriendNickNameList());
         updateBucketSemiGoal(bucket, editBucketDTO.getSemiGoalData());
@@ -134,13 +134,12 @@ public class ManageBucketService {
     private void updateBucketSemiGoal(Bucket bucket, List<SemiGoalTitleDTO> semiGoalData) {
         // 현재 가지고 있는 중간 목표 목록 가져오기
         List<BucketSemiGoal> currentSemiGoals = bucketSemiGoalRepository.findByBucket(bucket);
-
-        if (semiGoalData != null && !semiGoalData.isEmpty()) {
-            //new 중간 목표 추가
+        if (semiGoalData != null) {
             for (SemiGoalTitleDTO semiGoalTitleDTO : semiGoalData) {
                 String semiGoalTitle = semiGoalTitleDTO.getSemiGoalTitle();
                 boolean exists = currentSemiGoals.stream()
                         .anyMatch(semiGoal -> semiGoal.getSemiGoalTitle().equals(semiGoalTitle));
+
                 if (!exists) {
                     BucketSemiGoal bucketSemiGoal = new BucketSemiGoal();
                     bucketSemiGoal.setSemiGoalTitle(semiGoalTitle);
@@ -148,7 +147,6 @@ public class ManageBucketService {
                     bucketSemiGoalRepository.save(bucketSemiGoal);
                 }
             }
-            // 삭제
             List<String> newSemiGoalTitles = semiGoalData.stream()
                     .map(SemiGoalTitleDTO::getSemiGoalTitle)
                     .toList();
@@ -157,8 +155,8 @@ public class ManageBucketService {
                     bucketSemiGoalRepository.delete(currentSemiGoal);
                 }
             }
-        } else { //전체 삭제인 경우
-            bucketSemiGoalRepository.deleteAll(currentSemiGoals);
+        }else{
+            //수정 요청 없으므로 기존 데이터 유지하도록
         }
     }
 
@@ -167,22 +165,18 @@ public class ManageBucketService {
         List<BucketFriend> currentFriends = bucketFriendRepository.findByBucket(bucket);
 
         // 친구 목록이 비어있거나 null이면 기존 친구 삭제
-        if (newFriendNickNameList == null || newFriendNickNameList.isEmpty()) {
-            deleteAllFriends(currentFriends, bucket, user);
-        } else {
+        if (newFriendNickNameList != null) {
+            // 이전 친구 삭제
             deleteOldFriends(currentFriends, newFriendNickNameList, bucket, user);
+
+            // 새로운 친구 추가
             addNewFriends(bucket, user, currentFriends, newFriendNickNameList);
+        } else {
+            // 친구 목록 수정 요청이 없는 경우 유지
+            System.out.println("친구목록 변경사항 X");
         }
     }
 
-    private void deleteAllFriends(List<BucketFriend> currentFriends, Bucket bucket, UserLogin user) {
-        for (BucketFriend currentFriend : currentFriends) {
-            bucketFriendRepository.delete(currentFriend);
-
-            // UserBucket에서도 삭제
-            deleteUserBucketRelation(currentFriend.getFriend(), bucket);
-        }
-    }
     private void deleteOldFriends(List<BucketFriend> currentFriends, List<String> newFriendNickNameList, Bucket bucket, UserLogin user){
         for (BucketFriend currentFriend : currentFriends) {
             String currentNickname = getNicknameByUserId(currentFriend.getFriend().getUserId());
