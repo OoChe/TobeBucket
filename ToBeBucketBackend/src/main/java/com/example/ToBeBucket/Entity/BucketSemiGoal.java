@@ -28,6 +28,6 @@ public class BucketSemiGoal {
     private String semiGoalTitle; // 중간목표 제목
 
     @Column(nullable = true)
-    private LocalDate achieveDate; // 중간목표 달성일 (optional)
+    private String achieveDate; // 중간목표 달성일 (optional)
 
 }

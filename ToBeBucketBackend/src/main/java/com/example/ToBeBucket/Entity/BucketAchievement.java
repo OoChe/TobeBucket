@@ -22,7 +22,7 @@ public class BucketAchievement {
 
 
     @Column(name = "achieveDate", nullable = false)
-    private LocalDate achieveDate;
+    private String achieveDate;
 
     @Column(name = "goalReview", length = 255)
     private String goalReview;

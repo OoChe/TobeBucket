@@ -11,6 +11,6 @@ public class SemiGoalDTO {
     private Integer bucketId;
     private Integer stickerId;
     private Integer semiGoalId;
-    private LocalDate achieveDate; //달성한 날짜
+    private String achieveDate; //달성한 날짜
 }
 
