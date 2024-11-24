@@ -40,6 +40,7 @@ public class GetBucketDetailsService {
         bucketDetailMap.put("createDate", bucket.getCreateDate());
         bucketDetailMap.put("goalDate", bucket.getGoalDate());
         bucketDetailMap.put("category", bucket.getCategory());
+        bucketDetailMap.put("publicStatus", bucket.getPublicStatus());
 
         //중간목표가 있는 버킷이라면 중간목표도 반환해야함
         if (!bucketSemiGoals.isEmpty()) {
