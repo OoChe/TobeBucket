@@ -81,7 +81,26 @@ public class ManageBucketController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
         }
     }
-
+    //수정 전 GETMAPPING으로 친구 목록 반환
+    @GetMapping("/tobebucket/bucket-edit/{bucketId}")
+    public ResponseEntity<Map<String,Object>> getFriendBeforeEditBucket(
+            @PathVariable Integer bucketId){
+        Map<String,Object> response = new LinkedHashMap<>();
+        try {
+            String userId = SecurityContextHolder.getContext().getAuthentication().getName();
+            // 서비스 호출해서 DB에 저장
+            List<String> friendNicknameList = userFriendService.getFriendLists(userId);
+            //response해주기
+            response.put("code", "SU");
+            response.put("message", "Success.");
+            response.put("friendNicknameList",friendNicknameList);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            response.put("code", "DE");
+            response.put("message", e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        }
+    }
     @DeleteMapping("/tobebucket/bucket-delete/{bucketId}")
     public ResponseEntity<Map<String,Object>> deleteBucket(@PathVariable Integer bucketId){
         Map<String,Object> response = new LinkedHashMap<>();
