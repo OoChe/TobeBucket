@@ -10,8 +10,7 @@ interface PageTitleProps {
 interface CircleProps {
   colorCode: string;
 }
-// 제목과 오른쪽 위 포인트컬러 지정
-const PageTitle = ({title, colorCode}: PageTitleProps) => {
+const PageSmallTitle = ({title, colorCode}: PageTitleProps) => {
   return (
     <View style={styles.container}>
       <Text style={styles.titleText}>
@@ -30,7 +29,7 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     padding: 'auto',
-    marginTop: 10,
+    marginTop: 13,
     marginRight: 5,
     marginLeft: 15,
   },
@@ -46,9 +45,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'flex-start',
     fontFamily: 'Pretendard-Bold',
-    fontSize: 22,
+    fontSize: 18,
     textAlign: 'center',
   },
 });
 
-export default PageTitle;
+export default PageSmallTitle;

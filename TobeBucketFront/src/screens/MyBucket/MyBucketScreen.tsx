@@ -5,7 +5,8 @@ import ViewMyBucketToggle from '../../components/ViewMyBucketToggle';
 import PageTitle from '../../components/PageTitle';
 import CustomButton from '../../components/CustomButton';
 import ViewMyBucketList from '../../components/ViewMyBucketList';
-import CryingBucket from '../../assets/images/CryingBucketImg.png';
+import ViewBucketList from '../../components/ViewBucketList';
+import CryingBucket from '../../assets/images/cryingBucketImg.png';
 import noAchievedBucket from '../../assets/images/noAchievedBucket.png';
 import styles from '../../styles/MyBucketScreen.styles';
 import { unachievedData, achievedData } from '../../data/tempBucketData.ts';
@@ -34,11 +35,20 @@ const MyBucketScreen = () => {
   const [viewMode, setViewMode] = useState<'upcoming' | 'achieved'>('upcoming');
   const navigation = useNavigation();
 
+  const handleWriteBucket = () => {
+    navigation.navigate('WriteBucket');
+  };
+
+  const handleViewTemplate = () => {
+    // sendDataToDB();
+    // navigation.navigate('ViewTemplate');
+  };
+
   const fetchBucketList = async (mode: 'upcoming' | 'achieved') => {
     setLoading(true);
     try {
       // api logic 추가
-      // const response = await fetch(`/tobebucket/bucketlists/${mode}`);
+      // const response = await get(`/tobebucket/bucketlists/${mode}`);
       // const data = await response.json();
       if (mode === 'upcoming') {
         setUpcomingBucketList(unachievedData);
@@ -81,7 +91,7 @@ const MyBucketScreen = () => {
       );
     } else if (viewMode === 'achieved') {
       return achievedBucketList && achievedBucketList.length > 0 ? (
-        <ViewMyBucketList bucketList={achievedBucketList} />
+        <ViewBucketList bucketList={achievedBucketList} />
       ) : (
         <ScrollView contentInsetAdjustmentBehavior="automatic">
           <Text style={styles.smallText}>아직 달성한 버킷이 없어요</Text>
@@ -93,17 +103,8 @@ const MyBucketScreen = () => {
     }
   };
 
-  const handleWriteBucket = () => {
-    navigation.navigate('WriteBucket');
-  };
-
-  const handleViewTemplate = () => {
-    // sendDataToDB();
-    // navigation.navigate('ViewTemplate');
-  };
-
   return (
-    <View style={{ flex: 1 }}>
+    <View style={styles.main}>
       <PageTitle title="나의 버킷" colorCode="#B6E7CC" />
       <ViewMyBucketToggle onSelect={setViewMode} />
       {loading ? (

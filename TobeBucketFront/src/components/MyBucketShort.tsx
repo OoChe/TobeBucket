@@ -10,61 +10,130 @@
 */
 
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import { CategoryIcon } from './CategoryIcon';
+import {View, Text, Alert, TouchableOpacity, StyleSheet} from 'react-native';
+import {useNavigation} from '@react-navigation/native';
+// import axios from 'axios';
+import {CategoryIcon} from './CategoryIcon';
+import {dateToStr} from './dateFunc';
 
 interface bucketShortProps {
-  bucketID: number;
+  bucketId: number;
   bucketName: string;
   bucketContent: string;
-  goalDate: string;
+  goalDate: Date;
   category: number;
 }
 
-export const MyBucketShort = ({ bucketID, bucketName, bucketContent, goalDate, category }: bucketShortProps) => {
+interface bucketProps {
+  bucketId: number;
+  bucketName: string;
+}
+
+const MyBucketShort = ({
+  bucketId,
+  bucketName,
+  bucketContent,
+  goalDate,
+  category,
+}: bucketShortProps) => {
   const navigation = useNavigation();
 
-  const handleMyBucketInfo = () => {
-    // sendDataToDB();
-    navigation.navigate('MyBucketInfo');
+  const handleMyBucketInfo = (bucketId: number) => {
+    navigation.navigate('MyBucketDetail', {bucketId});
   };
 
+  const handleAchievementRecord = ({bucketId, bucketName}: bucketProps) => {
+    navigation.navigate('AchievementRecord', {
+      bucketId: bucketId,
+      bucketName: bucketName,
+    });
+  };
+
+  const handleEditBucket = () => {
+    console.log('수정 선택');
+    // navigate.navigate('WriteBucket');
+    navigation.navigate('WriteBucketRequired', { template })
+  };
+  const handleDeleteBucket = () => {
+    Alert.alert(
+      '삭제 확인',
+      '정말로 이 버킷을 삭제하시겠습니까?',
+      [
+        {text: '취소', style: 'cancel'},
+        {
+          text: '삭제',
+          onPress: async () => {
+            try {
+              // const response = await axios.delete(
+              //   `https://your-api-endpoint.com/tobebucket/bucket-delete/${bucketId}`,
+              // );
+              // if (response.status === 200) {
+              //   Alert.alert('삭제 완료', '버킷이 성공적으로 삭제되었습니다.');
+              //   // UI 업데이트 로직 추가
+              // } else {
+              //   Alert.alert(
+              //     '삭제 실패',
+              //     '삭제에 실패했습니다. 다시 시도해주세요.',
+              //   );
+              // }
+            } catch (error) {
+              console.error('Error deleting bucket:', error);
+              Alert.alert('오류 발생', '삭제 중 문제가 발생했습니다.');
+            }
+          },
+        },
+      ],
+      {cancelable: true},
+    );
+  };
   return (
     <View>
-      <TouchableOpacity style={styles.bucketContainer} onPress={handleMyBucketInfo}>
+      <TouchableOpacity
+        style={styles.bucketContainer}
+        onPress={() => handleMyBucketInfo(bucketId)}>
         <View
           style={{
             flexDirection: 'row',
             marginTop: 5,
             marginLeft: 13,
           }}>
-          <CategoryIcon category={category}/>
-          <View
-            style={styles.textContainer}>
-            <Text style={styles.titleText} numberOfLines={1}>{bucketName}</Text>
-            <Text style={styles.descriptionText} numberOfLines={1}>{bucketContent}</Text>
-            <Text style={styles.dateText}>목표 날짜 : {goalDate}</Text>
+          <CategoryIcon category={category} />
+          <View style={styles.textContainer}>
+            <Text style={styles.titleText} numberOfLines={1}>
+              {bucketName}
+            </Text>
+            <Text style={styles.descriptionText} numberOfLines={1}>
+              {bucketContent}
+            </Text>
+            <Text style={styles.dateText}>
+              목표 날짜 : {dateToStr(goalDate)}
+            </Text>
           </View>
         </View>
         {/* 아래 버튼 영역 */}
         <View style={styles.buttonContainer}>
-          <TouchableOpacity style={styles.button}>
-            <Text style={styles.buttonText}>달성 기록</Text>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => handleAchievementRecord({bucketId, bucketName})}>
+            <Text style={styles.buttonText}>달성 기록하기</Text>
           </TouchableOpacity>
           <View style={styles.divider} />
-          <TouchableOpacity style={styles.button}>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => handleEditBucket()}>
             <Text style={styles.buttonText}>수정하기</Text>
           </TouchableOpacity>
           <View style={styles.divider} />
-          <TouchableOpacity style={styles.button}>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => handleDeleteBucket()}>
             <Text style={styles.buttonText}>삭제하기</Text>
           </TouchableOpacity>
         </View>
       </TouchableOpacity>
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   bucketContainer: {

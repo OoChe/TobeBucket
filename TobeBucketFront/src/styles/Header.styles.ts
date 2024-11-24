@@ -6,7 +6,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: 16,
-    height: 80,
+    height: 60,
     backgroundColor: '#FBFBFB',
   },
   logoContainer: {

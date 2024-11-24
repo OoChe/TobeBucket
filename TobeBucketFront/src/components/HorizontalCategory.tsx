@@ -35,6 +35,7 @@ const HorizontalCategory = ({onSelectCategory} : HorizontalCategoryProps) => {
         showsHorizontalScrollIndicator={false}
       >
         {[categories[6], ...categories.slice(0, 6)].map((category, index) => (
+          <View key={category.id}>
           <CategoryButton
             icon={category.icon}
             label={category.label}
@@ -42,6 +43,7 @@ const HorizontalCategory = ({onSelectCategory} : HorizontalCategoryProps) => {
             onPress={() => handleCategorySelect((index+6)%7)}
             isSelected={selectedCategory === ((index+6)%7)}
           />
+          </View>
         ))}
       </ScrollView>
     </View>

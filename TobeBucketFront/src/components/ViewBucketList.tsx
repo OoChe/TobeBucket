@@ -1,49 +1,55 @@
 /*
-[달성 예정 버킷리스트 목록 컴포넌트]
+[달성한 버킷리스트 목록 컴포넌트]
 1) 카테고리 스크롤바 표시
 2) 달성 예정 버킷리스트 목록
 */
 import React, {useState} from 'react';
 import {View, ScrollView, StyleSheet} from 'react-native';
-import MyBucketShort from './MyBucketShort';
+import BucketShort from './BucketShort';
 import HorizontalCategory from './HorizontalCategory';
+import {dateToStr} from './dateFunc';
 
-interface upcomingBucket {
+interface achievedBucket {
   bucketId: number;
   bucketName: string;
-  bucketContent: string;
-  goalDate: Date;
+  achieveDate: Date;
   category: number;
+  achievementMedia: string;
+  goalReview: string;
+  stickerId: number;
 }
 
-interface upcomingBucketList {
-  bucketList: upcomingBucket[]; // 올바른 타입 지정
+interface achievedBucketList {
+  bucketList: achievedBucket[]; // 올바른 타입 지정
 }
 
-const ViewMyBucketList = ({bucketList}: upcomingBucketList) => {
+const ViewMyBucketList = ({bucketList}: achievedBucketList) => {
   const [selectedCategory, setSelectedCategory] = useState<number>(6);
-  
+
   const handleCategorySelect = (categoryId: number) => {
     setSelectedCategory(categoryId);
     console.log(categoryId);
   };
 
-  const filteredBucketList = selectedCategory === 6
-    ? bucketList // 전체보기 선택 시 모든 버킷리스트 표시
-    : bucketList.filter(item => item.category === selectedCategory);
+  const filteredBucketList =
+    selectedCategory === 6
+      ? bucketList // 전체보기 선택 시 모든 버킷리스트 표시
+      : bucketList.filter(item => item.category === selectedCategory);
 
   return (
     <View style={styles.bucketListContainer}>
-      <HorizontalCategory onSelectCategory={handleCategorySelect}/>
+      <HorizontalCategory onSelectCategory={handleCategorySelect} />
       <ScrollView>
         {filteredBucketList.map(item => (
           <View key={item.bucketId}>
-            <MyBucketShort
+            <BucketShort
               bucketId={item.bucketId}
               bucketName={item.bucketName}
-              bucketContent={item.bucketContent}
-              goalDate={item.goalDate}
+              achieveDate={dateToStr(item.achieveDate)}
               category={item.category}
+              achievementMedia={item.achievementMedia}
+              goalReview={item.goalReview}
+              stickerId={item.stickerId}
             />
           </View>
         ))}
