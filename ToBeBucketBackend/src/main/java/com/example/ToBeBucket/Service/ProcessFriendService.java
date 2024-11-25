@@ -119,4 +119,22 @@ public class ProcessFriendService {
                 .map(friendId -> userProfileRepository.findProfileByUserId(friendId))
                 .collect(Collectors.toList());
     }
+
+    public List<Map<String, Object>> addFriendStatusToUserList(String userId, List<Map<String, Object>> userList) {
+        return userList.stream()
+                .map(user -> {
+                    String friendId = (String) user.get("userId");
+
+                    // 현재 유저와 friendId의 관계 조회
+                    Integer friendStatus = processFriendRepository.findFriendStatus(userId, friendId);
+                    if (friendStatus == null) {
+                        friendStatus = -1; // 관계가 없는 경우
+                    }
+
+                    // friendStatus 추가
+                    user.put("friendStatus", friendStatus);
+                    return user;
+                })
+                .collect(Collectors.toList());
+    }
 }

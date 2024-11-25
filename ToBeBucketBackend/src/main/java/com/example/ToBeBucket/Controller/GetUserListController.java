@@ -1,10 +1,12 @@
 package com.example.ToBeBucket.Controller;
 
+import com.example.ToBeBucket.Service.ProcessFriendService;
 import com.example.ToBeBucket.Service.UserProfileService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -17,13 +19,16 @@ import java.util.Map;
 @Slf4j
 public class GetUserListController {
     private final UserProfileService userProfileService;
+    private final ProcessFriendService processFriendService;
 
     @GetMapping("/tobebucket/friendlist/add")
     public ResponseEntity<Map<String, Object>> getUserList() {
         Map<String, Object> response = new LinkedHashMap<>();
         try {
-            // 전체 유저 리스트 가져오기
-            List<Map<String, Object>> userList = userProfileService.getAllUsersExceptAdmin();
+            String userId = SecurityContextHolder.getContext().getAuthentication().getName();
+
+            List<Map<String, Object>> userList = userProfileService.getAllUsersExceptAdminAndSelf(userId);
+            List<Map<String, Object>> userListWithStatus = processFriendService.addFriendStatusToUserList(userId, userList);
 
             // 응답 데이터 구성
             response.put("code", "SU");
