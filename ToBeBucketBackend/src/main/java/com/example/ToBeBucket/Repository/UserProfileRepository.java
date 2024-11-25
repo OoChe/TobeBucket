@@ -17,7 +17,7 @@ public interface UserProfileRepository extends JpaRepository<UserProfile,String>
             "FROM UserProfile up WHERE up.userId = :userId")
     Map<String, Object> findProfileByUserId(@Param("userId") String userId);
 
-    @Query("SELECT new map(up.userId as userId, up.mbti as mbti, up.intro as intro, up.profileImage as profileImage) " +
+    @Query("SELECT new map(up.userId as userId, up.nickname as nickname, up.mbti as mbti, up.intro as intro, up.profileImage as profileImage) " +
             "FROM UserProfile up WHERE up.userId = :userId")
     Map<String, Object> findProfileWithIntroByUserId(@Param("userId") String userId);
 
