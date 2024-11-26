@@ -54,8 +54,8 @@ public class UserProfileService {
         userProfileRepository.save(userProfile);
     }
 
-    public List<Map<String, Object>> getAllUsersExceptAdmin() {
-        return userProfileRepository.findAllUsersExceptAdmin();
+    public List<Map<String, Object>> getAllUsersExceptAdminAndSelf(String currentUserId) {
+        return userProfileRepository.findAllUsersExceptAdminAndSelf(currentUserId);
     }
 
 }

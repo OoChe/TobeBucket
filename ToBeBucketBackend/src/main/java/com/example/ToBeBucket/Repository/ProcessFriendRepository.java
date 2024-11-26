@@ -24,5 +24,8 @@ public interface ProcessFriendRepository extends JpaRepository<UserFriend, Long>
 
      @Query("SELECT uf.friendId FROM UserFriend uf WHERE uf.userId = :userId AND uf.friendStatus = 1")
      List<String> findConfirmedFriends(@Param("userId") String userId);
+
+     @Query("SELECT uf.friendStatus FROM UserFriend uf WHERE uf.userId = :userId AND uf.friendId = :friendId")
+     Integer findFriendStatus(@Param("userId") String userId, @Param("friendId") String friendId);
 }
 
