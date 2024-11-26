@@ -6,7 +6,7 @@ import PageTitle from '../../components/PageTitle';
 import MbtiButton from '../../components/MbtiButton';
 import {MBTI} from '../../data/MbtiCategories';
 import MbtiFeedShort from '../../components/MbtiFeedShort';
-import {getMbtiFeedList} from '../../apis/bucket/bucketService';
+import {getMbtiFeedList} from '../../apis/bucket/feedService';
 import {MbtiBucket} from '../../apis/types';
 
 const MbtiBucketFeedScreen = () => {

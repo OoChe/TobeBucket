@@ -1,7 +1,6 @@
 // src/apis/types.ts
 
-
-  /* COMMON */
+/* COMMON */
 export interface Request {
   userId: string;
 }
@@ -32,8 +31,7 @@ export interface SignupRequest {
   role: string;
 }
 
-
-  /* BUCKET */
+/* BUCKET */
 export interface upcomingBucketResponse {
   bucketId: number;
   bucketName: string;
@@ -72,6 +70,19 @@ export interface BucketDetail {
   goalReview: string;
   achievementMedia: string;
   stickerId: number;
+}
+
+export interface achieveRecordData {
+  bucketId: number;
+  stickerId: number;
+  achieveDate: string;
+  goalReview: string;
+  achievementMedia: string;
+}
+
+export interface achieveRecordResponse {
+  code: string;
+  message: string;
 }
 
 export interface WriteBucketRequest {
@@ -131,8 +142,7 @@ export interface MbtiFeedResponse {
   bucketList: MbtiBucket[];
 }
 
-
-  /* FRIEND */
+/* FRIEND */
 
 export interface Friend {
   userId: string;

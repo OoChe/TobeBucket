@@ -30,7 +30,8 @@ const MyBucketShort = ({
   const navigation = useNavigation();
 
   const handleMyBucketInfo = (bucketId: number) => {
-    navigation.navigate('MyBucketDetail', {bucketId});
+    console.log('버킷 눌렀어요!');
+    navigation.navigate('MyBucketDetail', {bucketId: bucketId});
   };
 
   const handleAchievementRecord = ({bucketId, bucketName}: bucketProps) => {

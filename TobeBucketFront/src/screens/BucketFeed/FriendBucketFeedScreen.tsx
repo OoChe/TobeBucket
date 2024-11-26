@@ -5,7 +5,7 @@ import PageTitle from '../../components/PageTitle';
 import FriendFeedShort from '../../components/FriendFeedShort';
 import styles from '../../styles/FriendBucketFeedScreen.styles';
 import { FriendFeedBucket } from '../../apis/types';
-import { getFriendFeedList } from '../../apis/bucket/bucketService';
+import { getFriendFeedList } from '../../apis/bucket/feedService';
 
 const FriendBucketFeedScreen = () => {
   const [FriendBucketList, setFriendBucketList] = useState<FriendFeedBucket[]>([]);
