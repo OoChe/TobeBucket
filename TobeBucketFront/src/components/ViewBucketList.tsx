@@ -8,16 +8,7 @@ import {View, ScrollView, StyleSheet} from 'react-native';
 import BucketShort from './BucketShort';
 import HorizontalCategory from './HorizontalCategory';
 import {dateToStr} from './dateFunc';
-
-interface achievedBucket {
-  bucketId: number;
-  bucketName: string;
-  achieveDate: Date;
-  category: number;
-  achievementMedia: string;
-  goalReview: string;
-  stickerId: number;
-}
+import { achievedBucket } from '../apis/types';
 
 interface achievedBucketList {
   bucketList: achievedBucket[]; // 올바른 타입 지정
@@ -45,7 +36,7 @@ const ViewMyBucketList = ({bucketList}: achievedBucketList) => {
             <BucketShort
               bucketId={item.bucketId}
               bucketName={item.bucketName}
-              achieveDate={dateToStr(item.achieveDate)}
+              achieveDate={item.achieveDate}
               category={item.category}
               achievementMedia={item.achievementMedia}
               goalReview={item.goalReview}

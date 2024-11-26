@@ -10,18 +10,7 @@
 */
 import React from 'react';
 import {View, Text, Image, StyleSheet} from 'react-native';
-import {useNavigation} from '@react-navigation/native';
-import {dateToStr} from './dateFunc';
-
-interface friendFeedShortProps {
-  nickname: string;
-  mbti: string;
-  profileImage: string;
-  bucketName: string;
-  bucketContent: string;
-  achieveDate: Date;
-  achievementMedia: string;
-}
+import {FriendFeedBucket} from '../apis/types';
 
 export const FriendFeedShort = ({
   nickname,
@@ -31,9 +20,7 @@ export const FriendFeedShort = ({
   bucketContent,
   achieveDate,
   achievementMedia,
-}: friendFeedShortProps) => {
-  const navigation = useNavigation();
-
+}: FriendFeedBucket) => {
   return (
     <View style={styles.bucketContainer}>
       <View
@@ -53,9 +40,9 @@ export const FriendFeedShort = ({
               <Text style={styles.badgeText}>{mbti}</Text>
             </View>
           </View>
-          <Text style={styles.dateText}>
-            {dateToStr(achieveDate)} &nbsp;달성
-          </Text>
+          {achieveDate ? (
+            <Text style={styles.dateText}>{achieveDate} &nbsp;달성</Text>
+          ) : null}
         </View>
       </View>
       {achievementMedia ? (
@@ -86,7 +73,7 @@ const styles = StyleSheet.create({
   textContainer: {
     position: 'relative',
     marginLeft: 15,
-    marginVertical: 8
+    marginVertical: 8,
   },
   titleText: {
     fontFamily: 'Pretendard-Bold',
@@ -125,7 +112,7 @@ const styles = StyleSheet.create({
   username: {
     fontSize: 10,
     fontWeight: 'bold',
-    textAlign: 'center'
+    textAlign: 'center',
   },
   imageContainer: {
     width: 330,

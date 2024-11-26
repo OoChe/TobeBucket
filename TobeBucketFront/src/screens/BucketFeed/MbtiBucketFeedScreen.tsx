@@ -1,16 +1,17 @@
 // [MBTI 버킷 피드 화면]
 import React, {useState, useEffect} from 'react';
 import {View, Text, ScrollView, Alert} from 'react-native';
-import axios from 'axios';
 import styles from '../../styles/MbtiBucketFeedScreen.styles';
 import PageTitle from '../../components/PageTitle';
 import MbtiButton from '../../components/MbtiButton';
 import {MBTI} from '../../data/MbtiCategories';
 import MbtiFeedShort from '../../components/MbtiFeedShort';
-import {MBTIBucket} from '../../data/tempBucketData';
+import {getMbtiFeedList} from '../../apis/bucket/bucketService';
+import {MbtiBucket} from '../../apis/types';
 
 const MbtiBucketFeedScreen = () => {
   const [mbtiString, setMbtiString] = useState('ENFP');
+  const [MBTIBucketList, setMBTIBucketList] = useState<MbtiBucket[]>([]);
 
   const [selectedTypes, setSelectedTypes] = useState({
     0: 'E', // E vs I
@@ -18,31 +19,6 @@ const MbtiBucketFeedScreen = () => {
     2: 'F', // F vs T
     3: 'P', // P vs J
   });
-
-  // 선택된 MBTI를 서버로 전달
-  const fetchBucketList = async () => {
-    try {
-      // 선택한 MBTI 문자열 생성
-      setMbtiString(Object.values(selectedTypes).join(''));
-      console.log(mbtiString);
-
-      //   // 서버로 요청 보내기
-      //   const response = await axios.post('https://your-server-url.com/api/bucketlist', {
-      //     mbti: mbtiString,
-      //   });
-
-      //   // 서버로부터 받은 데이터 처리
-      //   console.log('서버 응답:', response.data);
-      //   Alert.alert('버킷리스트 로드 성공', `MBTI: ${mbtiString}`);
-      //   // 이 데이터를 나중에 컴포넌트에 전달해 표시 가능
-    } catch (error) {
-      console.error('버킷리스트 로드 중 오류 발생:', error);
-      Alert.alert(
-        '버킷리스트 로드 실패',
-        '서버와의 통신 중 문제가 발생했습니다.',
-      );
-    }
-  };
 
   // MBTI 선택 처리
   const handleMBTISelect = (id: number, type: string) => {
@@ -68,9 +44,25 @@ const MbtiBucketFeedScreen = () => {
       mbti.type === 'J',
   );
 
+  const getMbtiBucket = async () => {
+    try {
+      // 최신 selectedTypes 값을 기반으로 mbtiString 계산
+      const updatedMbtiString = Object.values(selectedTypes).join('');
+      const data = await getMbtiFeedList(updatedMbtiString);
+      setMBTIBucketList(data);
+      setMbtiString(updatedMbtiString);
+    } catch (err: any) {
+      console.error('MBTI 피드 로드 오류:', err);
+      setError(
+        err.message ||
+          '스크린에서 MBTI별 버킷 목록을 불러오는 중 오류가 발생했습니다.',
+      );
+    }
+  };
+
   // 버튼 변경 시 서버 호출
   useEffect(() => {
-    fetchBucketList();
+    getMbtiBucket();
   }, [selectedTypes]);
 
   return (
@@ -104,10 +96,9 @@ const MbtiBucketFeedScreen = () => {
           </View>
         </View>
         <View style={styles.borderLine} />
-        {/* MBTI 버킷리스트 목록 */}
         <ScrollView>
           <Text style={styles.MbtiText}>{mbtiString}</Text>
-          {MBTIBucket.map((bucket, index) => (
+          {MBTIBucketList.map((bucket, index) => (
             <MbtiFeedShort
               key={index}
               bucketName={bucket.bucketName}

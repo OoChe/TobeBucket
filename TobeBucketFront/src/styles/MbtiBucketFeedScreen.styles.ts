@@ -3,7 +3,7 @@ import {StyleSheet} from 'react-native';
 const styles = StyleSheet.create({
   main: {
     backgroundColor: '#FBFBFB',
-    marginBottom: 260,
+    flex: 0.78,
   },
   buttonGroup: {
     marginTop: 16,

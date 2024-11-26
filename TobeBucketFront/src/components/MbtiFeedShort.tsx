@@ -14,7 +14,7 @@ import {dateToStr} from './dateFunc';
 interface mbtiFeedShortProps {
   bucketName: string;
   bucketContent: string;
-  achieveDate: Date;
+  achieveDate: string;
   achievementMedia: string;
 }
 
@@ -43,9 +43,9 @@ export const MbtiFeedShort = ({
             <Text style={styles.titleText} numberOfLines={1}>
               {bucketName}
             </Text>
-            <Text style={styles.dateText}>
-              {dateToStr(achieveDate)} &nbsp;달성
-            </Text>
+            {achieveDate ? (
+              <Text style={styles.dateText}>{achieveDate} &nbsp;달성</Text>
+            ) : null}
           </View>
         </View>
         {achievementMedia ? (

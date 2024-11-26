@@ -12,17 +12,8 @@
 import React from 'react';
 import {View, Text, Alert, TouchableOpacity, StyleSheet} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
-// import axios from 'axios';
 import {CategoryIcon} from './CategoryIcon';
-import {dateToStr} from './dateFunc';
-
-interface bucketShortProps {
-  bucketId: number;
-  bucketName: string;
-  bucketContent: string;
-  goalDate: Date;
-  category: number;
-}
+import {upcomingBucket} from '../apis/types';
 
 interface bucketProps {
   bucketId: number;
@@ -35,7 +26,7 @@ const MyBucketShort = ({
   bucketContent,
   goalDate,
   category,
-}: bucketShortProps) => {
+}: upcomingBucket) => {
   const navigation = useNavigation();
 
   const handleMyBucketInfo = (bucketId: number) => {
@@ -52,7 +43,7 @@ const MyBucketShort = ({
   const handleEditBucket = () => {
     console.log('수정 선택');
     // navigate.navigate('WriteBucket');
-    navigation.navigate('WriteBucketRequired', { template })
+    navigation.navigate('WriteBucketRequired', {template});
   };
   const handleDeleteBucket = () => {
     Alert.alert(
@@ -105,9 +96,7 @@ const MyBucketShort = ({
             <Text style={styles.descriptionText} numberOfLines={1}>
               {bucketContent}
             </Text>
-            <Text style={styles.dateText}>
-              목표 날짜 : {dateToStr(goalDate)}
-            </Text>
+            <Text style={styles.dateText}>목표 날짜 : {goalDate}</Text>
           </View>
         </View>
         {/* 아래 버튼 영역 */}

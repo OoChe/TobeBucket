@@ -3,6 +3,7 @@ import {StyleSheet} from 'react-native';
 const styles = StyleSheet.create({
   main: {
     backgroundColor: '#FBFBFB',
+    flex: 1,
   },
   smallText: {
     height: 15,

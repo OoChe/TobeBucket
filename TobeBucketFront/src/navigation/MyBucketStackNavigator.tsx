@@ -33,10 +33,18 @@ const MyBucketStackNavigator = () => {
       </Stack.Screen>
 
       <Stack.Screen name="MyBucketDetail" options={{headerShown: false}}>
-        {props => <MyBucketDetailScreen />}
+        {props => (
+          <MyBucketDetailScreen bucketId={props.route.params?.bucketId} />
+        )}
       </Stack.Screen>
       <Stack.Screen name="EditBucket" options={{headerShown: false}}>
-        {props => <EditMyBucketScreen {...props} bucketInfo={props.route.params?.bucketInfo} sendDataToDB={sendDataToDB} />}
+        {props => (
+          <EditMyBucketScreen
+            {...props}
+            bucketInfo={props.route.params?.bucketInfo}
+            sendDataToDB={sendDataToDB}
+          />
+        )}
       </Stack.Screen>
       <Stack.Screen name="AchievementRecord" options={{headerShown: false}}>
         {props => (

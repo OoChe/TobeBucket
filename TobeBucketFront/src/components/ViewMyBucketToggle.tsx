@@ -2,9 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 
 const ViewMyBucketToggle = ({ onSelect }) => {
-  const [selectedTab, setSelectedTab] = useState('upcoming');
+  const [selectedTab, setSelectedTab] = useState(false);
 
-  const handleToggle = (tab: string) => {
+  const handleToggle = (tab: boolean) => {
     setSelectedTab(tab);
     if (onSelect) {
       onSelect(tab); // 부모 컴포넌트(MyBucketScreen)로 선택된 탭 전달
@@ -18,12 +18,12 @@ const ViewMyBucketToggle = ({ onSelect }) => {
       <TouchableOpacity
         style={[
           styles.button,
-          selectedTab === 'upcoming' ? styles.selectedButton : styles.unselectedButton,
+          selectedTab === false ? styles.selectedButton : styles.unselectedButton,
         ]}
-        onPress={() => handleToggle('upcoming')}>
+        onPress={() => handleToggle(false)}>
         <Text
           style={
-            selectedTab === 'upcoming'
+            selectedTab === false
               ? styles.selectedText
               : styles.unselectedText
           }>
@@ -33,12 +33,12 @@ const ViewMyBucketToggle = ({ onSelect }) => {
       <TouchableOpacity
         style={[
           styles.button,
-          selectedTab === 'achieved' ? styles.selectedButton : styles.unselectedButton,
+          selectedTab === true ? styles.selectedButton : styles.unselectedButton,
         ]}
-        onPress={() => handleToggle('achieved')}>
+        onPress={() => handleToggle(true)}>
         <Text
           style={
-            selectedTab === 'achieved'
+            selectedTab === true
               ? styles.selectedText
               : styles.unselectedText
           }>

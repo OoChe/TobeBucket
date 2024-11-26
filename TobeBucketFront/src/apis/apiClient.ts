@@ -4,7 +4,7 @@ import { API_BASE_URL } from '@env';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const apiClient = axios.create({
-  baseURL: API_BASE_URL,
+  baseURL: API_BASE_URL, // API_BASE_URL
   timeout: 10000,
   headers: {
     'Content-Type': 'application/json',
@@ -12,8 +12,6 @@ const apiClient = axios.create({
 });
 
 const authNotRequired = ['/signup', '/login'];
-
-
 
 // 요청 인터셉터 설정
 apiClient.interceptors.request.use(
