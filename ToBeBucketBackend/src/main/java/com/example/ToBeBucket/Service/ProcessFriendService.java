@@ -108,7 +108,12 @@ public class ProcessFriendService {
         List<String> requesterIds = processFriendRepository.findPendingRequests(userId);
 
         return requesterIds.stream()
-                .map(requesterId -> userProfileRepository.findProfileByUserId(requesterId))
+                .map(requesterId -> {
+                    Map<String, Object> profile = userProfileRepository.findProfileByUserId(requesterId);
+                    profile.remove("intro");
+                    profile.put("userId", requesterId); // userId 추가
+                    return profile;
+                })
                 .collect(Collectors.toList());
     }
 
@@ -116,7 +121,12 @@ public class ProcessFriendService {
         List<String> friendIds = processFriendRepository.findConfirmedFriends(userId);
 
         return friendIds.stream()
-                .map(friendId -> userProfileRepository.findProfileByUserId(friendId))
+                .map(friendId -> {
+                    Map<String, Object> profile = userProfileRepository.findProfileByUserId(friendId);
+                    profile.remove("intro");
+                    profile.put("userId", friendId); // userId 추가
+                    return profile;
+                })
                 .collect(Collectors.toList());
     }
 
