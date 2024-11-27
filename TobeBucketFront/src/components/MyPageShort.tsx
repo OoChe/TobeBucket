@@ -26,11 +26,19 @@ interface MyPageShortProps {
 const MyPageShort: React.FC<MyPageShortProps> = ({ profileImage, mbti, nickname, intro, onPress }) => {
 
   const navigation = useNavigation();
+  const isValidUri = typeof profileImage === 'string' && profileImage.startsWith('http');
 
   return (
     <View style={styles.container}>
       {/* 프로필 이미지 */}
-      <Image source={profileImage} style={styles.profileImage} />
+      <Image
+        source={
+          isValidUri
+            ? { uri: profileImage } // URI가 유효하면 해당 이미지 사용
+            : require('../assets/images/defaultProfile.png') // 기본 이미지
+        }
+        style={styles.profileImage}
+      />
 
       {/* 친구 프로필 정보 */}
       <View style={styles.userInfo}>

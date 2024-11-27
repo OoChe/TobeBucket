@@ -41,6 +41,10 @@ const styles = StyleSheet.create({
     color: '#555',
   },
 
+  noGraphText: {
+    marginBottom : 30
+  },
+
   progressBarContainer: {
     height: 8,
     width: '100%',

@@ -30,6 +30,21 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
 
+  reloadButton: {
+    paddingVertical: 6,
+    paddingHorizontal: 12,
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: '#249E9E',
+    marginLeft: 20
+  },
+
+  reloadButtonText: {
+    color: '#249E9E',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+
   friendItem: {
     marginVertical: 10,
   },

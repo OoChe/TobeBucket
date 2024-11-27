@@ -1,13 +1,18 @@
+/*
+ [달성 그래프 컴포넌트]
+  - 파라미터
+    1) data : 최근 2년 반기 별 버킷 달성 개수
+ */
+
 import React from 'react';
 import { View, Text, StyleSheet, Dimensions } from 'react-native';
 import { LineChart } from 'react-native-chart-kit';
 
 const AchieveGraph = ({ data }) => {
-  // Extract data for the chart
+  const sortedData = data.sort((a, b) => a.year - b.year);
   const labels = [];
   const values = [];
-  const years = data.map((item) => item.year);
-
+  const years = sortedData.map((item) => item.year);
   const maxValue = Math.max(...values);
   const minValue = Math.min(...values);
 
@@ -18,51 +23,51 @@ const AchieveGraph = ({ data }) => {
 
   return (
     <View style={styles.container}>
-      {/* Chart Background */}
+      {/* 차트 배경 */}
       <View style={styles.chartBackground}>
-        {/* Line Chart */}
+        {/* 차트 */}
         <LineChart
           data={{
             labels: labels,
             datasets: [
               {
                 data: values,
-                color: () => '#EE4963', // Line color
+                color: () => '#EE4963',
               },
             ],
           }}
-          width={Dimensions.get('window').width - 20} // Chart width
+          width={Dimensions.get('window').width - 20}
           height={180} // Chart height
           chartConfig={{
-            backgroundColor: '#EDF0FF', // Make the chart's main background transparent
-            backgroundGradientFrom: '#EDF0FF', // Start of gradient is transparent
-            backgroundGradientTo: '#EDF0FF', // End of gradient is transparent
-            fillShadowGradient: '#EE4963', // Gradient fill under the line
-            fillShadowGradientOpacity: 0.2, // Light fill opacity
-            decimalPlaces: 0, // No decimals in values
-            color: () => '#333', // Line and axis color
-            labelColor: () => '#333', // Label text color
+            backgroundColor: '#EDF0FF',
+            backgroundGradientFrom: '#EDF0FF',
+            backgroundGradientTo: '#EDF0FF',
+            fillShadowGradient: '#EE4963',
+            fillShadowGradientOpacity: 0.2,
+            decimalPlaces: 0,
+            color: () => '#333',
+            labelColor: () => '#333',
             propsForBackgroundLines: {
-              strokeWidth: 2, // Remove grid lines
+              strokeWidth: 2,
             },
             propsForDots: {
-              r: '5', // Dot size
+              r: '5',
               strokeWidth: '2',
-              stroke: '#EE4963', // Dot stroke color
+              stroke: '#EE4963',
             },
           }}
           withDots
-          withHorizontalLabels={false} // Remove horizontal axis labels
-          withVerticalLines={false} // Remove vertical grid lines
-          withHorizontalLines={false} // Remove horizontal grid lines
-          bezier={false} // Use straight lines
+          withHorizontalLabels={false}
+          withVerticalLines={false}
+          withHorizontalLines={false}
+          bezier={false}
           style={{
             borderRadius: 8,
           }}
           fromZero
         />
 
-        {/* Year Labels */}
+        {/* 연도 라벨 */}
         <View style={styles.yearLabelContainer}>
           {years.map((year, index) => (
             <Text key={index} style={styles.yearLabel}>
@@ -86,8 +91,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#EDF0FF',
     borderRadius: 12,
     paddingVertical: 10,
-    elevation: 4, // For Android shadow
-    width: Dimensions.get('window').width - 50, // Match chart width
+    elevation: 4,
+    width: Dimensions.get('window').width - 50,
   },
   yearLabelContainer: {
     flexDirection: 'row',

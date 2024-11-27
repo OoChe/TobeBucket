@@ -1,8 +1,17 @@
+/*
+ [친구 버킷 피드에서의 프로필 컴포넌트]
+  - 파라미터
+    1) profileImage : 사용자 프로필 이미지
+    2) mbti : MBTI
+    3) nickname : 닉네임
+    4) intro : 한 줄 소개
+ */
+
 import React from 'react';
 import { View, Text, Image, StyleSheet } from 'react-native';
 
 interface FriendProfileShortProps {
-  profileImage: string | null; // URI 또는 null
+  profileImage: string | null;
   mbti: string;
   nickname: string;
   intro: string;
@@ -18,8 +27,8 @@ const FriendProfileShort: React.FC<FriendProfileShortProps> = ({ profileImage, m
       <Image
         source={
           isValidUri
-            ? { uri: profileImage } // URI가 유효하면 해당 이미지 사용
-            : require('../assets/images/defaultProfile.png') // 기본 이미지
+            ? { uri: profileImage }
+            : require('../assets/images/defaultProfile.png')
         }
         style={styles.profileImage}
       />
