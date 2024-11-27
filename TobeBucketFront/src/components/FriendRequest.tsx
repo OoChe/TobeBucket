@@ -1,3 +1,11 @@
+/*
+ [친구 목록에서의 친구 요청 표시 컴포넌트]
+  - 파라미터
+    1) friend : Friend 객체(userId, nickname, mbti, profileImage)
+    2) onAccept : 친구 요청 수락
+    3) onReject : 친구 요청 거절
+ */
+
 import React from 'react';
 import { View, Text, TouchableOpacity, Image, StyleSheet } from 'react-native';
 

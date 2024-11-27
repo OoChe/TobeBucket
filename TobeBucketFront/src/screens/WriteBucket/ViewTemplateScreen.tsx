@@ -1,8 +1,10 @@
 /*
-  NOTICE : 카테고리 별 조회 기능 추가 예정
-
  [템플릿 목록 조회 스크린]
-  - 구성 : 헤더, 템플릿 목록
+  - 구성 : 헤더, 카테고리 선택 버튼, 템플릿 목록
+  1) 템플릿 버킷 가져오기
+  - loadTemplates : 서버에서 템플릿 버킷리스트 정보 수신
+  2) 카테고리 분류
+  - handleCategorySelect : 선택된 카테고리 구분 후 표시
  */
 
 import React, { useState, useEffect } from 'react';
@@ -14,39 +16,6 @@ import TemplateBucketShort from '../../components/TemplateBucketShort';
 import { getTemplateBuckets } from '../../apis/bucket/bucketService';
 import HorizontalCategory from '../../components/HorizontalCategory';
 
-
-const DUMMY_TEMPLATE_LIST = [
-  {
-    bucketName: "제주도 한달 살이",
-    bucketContent: "재밌당.",
-    semiGoalData: [
-        { semiGoalTitle: "필요한 돈 모으기" },
-        { semiGoalTitle: "구체적인 지역 찾아보기" },
-    ],
-    category: 1,
-  },
-  {
-    bucketName: "제주도 한달 살이",
-    bucketContent: "재밌당.",
-    semiGoalData: [
-      { semiGoalTitle: "필요한 돈 모으기" },
-      { semiGoalTitle: "구체적인 지역 찾아보기" },
-      { semiGoalTitle: "숙소 예약하기" },
-    ],
-    category: 2,
-  },
-  {
-    bucketName: "제주도 한달 살이",
-    bucketContent: "재밌당.",
-    semiGoalData: [
-      { semiGoalTitle: "필요한 돈 모으기" },
-    ],
-    category: 2,
-  },
-
-];
-
-
 const ViewTemplateScreen = () => {
   const navigation = useNavigation();
   const [templates, setTemplates] = useState<TemplateBucket[]>([]);
@@ -54,6 +23,7 @@ const ViewTemplateScreen = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
+  {/* 템플릿 버킷 가져오기 */}
   const loadTemplates = async () => {
     try {
       const data = await getTemplateBuckets();
@@ -71,16 +41,15 @@ const ViewTemplateScreen = () => {
     loadTemplates();
   }, []);
 
+  {/* 카테고리 분류 */}
   const handleCategorySelect = (categoryId: number) => {
     setSelectedCategory(categoryId);
     console.log(categoryId);
   };
   
   const filteredTemplates = selectedCategory === 6
-    ? templates // 전체보기 선택 시 모든 버킷리스트 표시
+    ? templates
     : templates.filter(item => item.category === selectedCategory);
-
-
 
   return (
     <View style={styles.main}>
@@ -92,9 +61,11 @@ const ViewTemplateScreen = () => {
         <PageTitle title="템플릿 구경하기" colorCode="#FFCAA4" />
       </View>
 
-      {/* 템플릿 리스트 */}
       <ScrollView contentContainerStyle={styles.container}>
+        {/* 카테고리 선택 */}
         <HorizontalCategory onSelectCategory={handleCategorySelect}/>
+
+        {/* 템플릿 리스트 */}
         {filteredTemplates.map((template, index) => (
           <TemplateBucketShort
             key={index}

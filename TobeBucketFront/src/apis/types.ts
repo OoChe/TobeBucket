@@ -106,6 +106,52 @@ export interface FriendBucketResponse {
   bucketList: Bucket[];
 }
 
+export interface UserListResponse {
+  code: string;
+  message: string;
+  userList: Friend[];
+}
+
+export interface FriendAdd {
+  friendId: string;
+}
+
+export interface FriendDelete {
+  friendId: string;
+}
+
+
+export interface MyInfoResponse {
+  code: string;
+  message: string;
+  profile?: {
+    nickname: string;
+    mbti: string;
+    intro: string;
+    profileImage: string;
+  };
+  point?: number;
+  achieveRate?: number;
+  achieveGraph?: {
+    year: number;
+    first: number;
+    second: number;
+  }[];
+  categoryRate?: {
+    category: number;
+    rate: number;
+  }[];
+}
+
+export interface InfoChange {
+  nickname?: string;
+  mbti?: string;
+  intro?: string;
+  profileImage?: string;
+}
+
+
+
 
 
 

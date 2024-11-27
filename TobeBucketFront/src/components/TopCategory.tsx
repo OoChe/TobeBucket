@@ -1,14 +1,19 @@
+/*
+ [인기 카테고리 컴포넌트]
+  - 파라미터
+    1) categoryId : 카테고리 고유 번호
+    2) rate : 달성률
+ */
+
 import React from 'react';
 import { View, Text, StyleSheet, Image } from 'react-native';
 import { getCategoryById, getCategoryLabelById, getCategoryIconPathById } from '../data/bucketCategories';
 
 const TopCategory = ({ categoryId, rate }) => {
-  // 카테고리 정보 가져오기
   const category = getCategoryById(categoryId);
   const iconPath = getCategoryIconPathById(categoryId);
   const label = getCategoryLabelById(categoryId);
 
-  // 컴포넌트 렌더링
   return (
     <View style={[styles.container, { borderColor: category.borderColor }]}>
       {/* 카테고리 아이콘 */}

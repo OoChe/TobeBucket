@@ -16,8 +16,6 @@ const ViewTemplateDetailScreen = () => {
   const route = useRoute();
   const template = route.params?.template;
 
-//   const template = DUMMY_TEMPLATE_DETAIL;
-
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <PageTitle title="템플릿 상세 보기" colorCode="#88B9FF" />
