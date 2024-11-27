@@ -6,10 +6,11 @@
  */
 
 import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, Image } from 'react-native';
+import { View, Text, TouchableOpacity, Image, ScrollView } from 'react-native';
 import styles from '../../styles/ViewFriendBucketScreen.styles';
 import PageTitle from '../../components/PageTitle';
 import FriendProfileShort from '../../components/FriendProfileShort';
+import MbtiFeedShort from '../../components/MbtiFeedShort';
 import { useNavigation, useRoute } from '@react-navigation/native';
 
 
@@ -40,6 +41,18 @@ const ViewFriendBucketScreen = () => {
         nickname={friendData.profile.nickname}
         intro={friendData.profile.intro}
       />
+
+      <ScrollView>
+        {friendData.bucketList.map((bucket, index) => (
+          <MbtiFeedShort
+            key={index}
+            bucketName={bucket.bucketName}
+            bucketContent={bucket.bucketContent}
+            achieveDate={bucket.achieveDate ? new Date(bucket.achieveDate) : null}
+            achievementMedia={bucket.achievementMedia}
+          />
+        ))}
+      </ScrollView>
 
     </View>
 

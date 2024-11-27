@@ -56,8 +56,8 @@ const FriendListScreen: React.FC = () => {
   {/* 친구 버킷 스크린 이동 함수 */}
   const handleNavigateToFriendBucket = async (userId: string) => {
     try {
-      console.log(`Fetching data for userId: ${userId}`);
       const data = await getFriendBucket(userId);
+      console.log("data : ", data);
       navigation.navigate('FriendBucket', { userId, friendData: data });
     } catch (error) {
       console.error('Error fetching friend bucket data:', error);

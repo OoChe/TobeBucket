@@ -29,14 +29,15 @@ export const patchFriendList = async (data: FriendRequest): Promise<Response> =>
 // 친구 버킷 피드 가져오기 함수
 export const getFriendBucket = async (userId: string): Promise<FriendBucketResponse> => {
 
-  const response = await apiClient.get<FriendBucketResponse>('/friendlist/bucket', {
+  const response = await apiClient.get<FriendBucketResponse>('friendlist/bucket', {
     params: { userId }, // 쿼리 파라미터로 전달
   });
+  console.log(response.data);
 
   if (response.data.code === 'SU') {
     return response.data;
   } else {
-    throw new Error(response.data.message || '친구 목록을 불러오는 중 오류가 발생했습니다.');
+    throw new Error(response.data.message || '친구 피드를 불러오는 중 오류가 발생했습니다.');
   }
 };
 

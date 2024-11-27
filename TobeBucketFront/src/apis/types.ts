@@ -96,7 +96,7 @@ export interface Bucket {
   bucketName: string;
   bucketContent: string;
   achieveDate: string;
-  profileImage: string;
+  achievementMedia: string;
 }
 
 export interface FriendBucketResponse {
