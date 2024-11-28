@@ -147,7 +147,13 @@ const styles = StyleSheet.create({
 
   noResultsText: {
     paddingVertical: 10,
-  }
+  },
+
+  noFriendsText: {
+    paddingVertical: 10,
+    marginLeft: 20
+  },
+
 });
 
 export default styles;

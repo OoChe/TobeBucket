@@ -30,8 +30,12 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
   },
 
-
-
+  except: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginLeft: 30
+  },
 
 });
 
