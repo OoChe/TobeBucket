@@ -18,10 +18,7 @@ import PageSmallTitle from '../../components/PageSmallTitle';
 import {dateToStr, getToday} from '../../components/dateFunc';
 import StickerSelector from '../../components/StickerSelector';
 import styles from '../../styles/AchievementRecordScreen.styles';
-import {
-  getUnlockedSticker,
-  achieveRecord,
-} from '../../apis/bucket/achieveService';
+import {getUnlockedSticker, achieveRecord} from '../../apis/bucket/achieveService';
 import {achieveRecordData} from '../../apis/types';
 
 interface bucketProps {
@@ -135,7 +132,8 @@ const AchievementRecordScreen = () => {
   }, [bucketId]);
 
   return (
-    <ScrollView>
+  <View style={{ flex: 1, backgroundColor: '#FBFBFB' }}>
+    <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
       <View style={{flexDirection: 'row'}}>
         <TouchableOpacity
           onPress={() => navigation.goBack()}
@@ -238,10 +236,11 @@ const AchievementRecordScreen = () => {
             textAlign: 'center',
             marginLeft: -15,
           }}>
-          저장 완료 시 수정이 불가능합니다.
+          저장 완료 시 달성 날짜 수정이 불가능합니다.
         </Text>
       </View>
     </ScrollView>
+   </View>
   );
 };
 
