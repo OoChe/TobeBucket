@@ -37,44 +37,43 @@ import styles from '../../styles/EditBucketScreen.styles';
 import PageTitle from '../../components/PageTitle';
 import CategoryButton from '../../components/CategoryButton';
 import {categories} from '../../data/bucketCategories';
-import {getEditBucketDetail} from '../../apis/bucket/bucketService';
-import { BucketDetail } from '../../apis/types';
+import {
+  getEditBucketDetail,
+  submitEditData,
+} from '../../apis/bucket/bucketService';
+import {BucketDetail, EditBucketSubmit} from '../../apis/types';
 
 const EditMyBucketScreen = () => {
   const route = useRoute();
   const {bucketId} = route.params as {bucketId: number};
-  const [bucketList, setBucketList] = useState<BucketDetail>();
-  const [goals, setGoals] = useState([]);
-  const [selectedFriends, setSelectedFriends] = useState<string[]>(
-    bucketList.friendNickname.map(friend => friend),
-  );
-  const [friendTags, setFriendTags] = useState<string[]>(
-    bucketList.friendNickname.map(friend => friend),
-  );
+
+  // BucketDetail 초기값 설정
+  const initialBucketDetail: BucketDetail = {
+    bucketId: 0,
+    bucketName: '',
+    bucketContent: '',
+    goalDate: '',
+    category: 0,
+    createDate: '',
+    achievementDate: '',
+    friendNickname: [],
+    semiGoalData: new Map(),
+    goalReview: '',
+    achievementMedia: '',
+    stickerId: 0,
+    publicStatus: false,
+  };
+
+  const [bucketList, setBucketList] =
+    useState<BucketDetail>(initialBucketDetail);
+  const [selectedFriends, setSelectedFriends] = useState<string[]>([]);
+  const [friendTags, setFriendTags] = useState<string[]>([]);
+  const [showFriendPicker, setShowFriendPicker] = useState(false);
   const navigation = useNavigation();
+
   // 카테고리 선택 함수
   const handleCategorySelect = (categoryId: string) => {
     setBucketList(prevData => ({...prevData, category: categoryId}));
-  };
-  // 중간 목표 함수
-  const addGoal = () => {
-    const updatedGoals = [...goals, {semiGoalTitle: ''}];
-    setGoals(updatedGoals);
-    setBucketList(prevData => ({...prevData, semiGoalData: updatedGoals}));
-  };
-
-  const removeGoal = (index: number) => {
-    const updatedGoals = goals.filter((_, idx) => idx !== index);
-    setGoals(updatedGoals);
-    setBucketList(prevData => ({...prevData, semiGoalData: updatedGoals}));
-  };
-
-  const handleGoalChange = (text: string, index: number) => {
-    const updatedGoals = goals.map((goal, idx) =>
-      idx === index ? {semiGoalTitle: text} : goal,
-    );
-    setGoals(updatedGoals);
-    setBucketList(prevData => ({...prevData, semiGoalData: updatedGoals}));
   };
 
   // 친구 태그 함수
@@ -92,7 +91,6 @@ const EditMyBucketScreen = () => {
       ...selectedFriends.filter(f => !friendTags.includes(f)),
     ];
     setFriendTags(newFriends);
-    setSelectedFriends([]);
     setBucketList(prevData => ({...prevData, friendNickNameList: newFriends}));
     setShowFriendPicker(false);
   };
@@ -108,26 +106,34 @@ const EditMyBucketScreen = () => {
 
   const openFriendPicker = () => {
     setSelectedFriends(friendTags);
+    console.log('선택했어요');
     setShowFriendPicker(true);
   };
   // 제출 함수
-  const handleSubmit = () => {
-    const filteredGoals = goals.filter(
-      goal => goal.semiGoalTitle.trim() !== '',
-    );
-    const updatedBucketInfo = {
-      ...bucketInfo,
-      semiGoalData: filteredGoals,
+  const handleSubmit = async () => {
+    const finalBucketInfo: EditBucketSubmit = {
+      bucketContent: bucketList.bucketContent,
+      category: bucketList.category,
+      publicStatus: bucketList.publicStatus,
     };
-    setBucketList(updatedBucketInfo);
-    navigation.navigate('MyBucketDetail'); // 이전 화면으로 돌아가기
+    try {
+      const response = await submitEditData(finalBucketInfo, bucketId);
+      Alert.alert('성공', '버킷리스트가 성공적으로 수정되었습니다.');
+      navigation.navigate('MyBucketDetail', {bucketId: bucketId}); // 이전 화면으로 돌아가기
+    } catch (error: any) {
+      console.error('버킷 수정 오류:', error);
+      const errorMessage =
+        error.response?.data?.message ||
+        '버킷리스트 수정 중 오류가 발생했습니다.';
+      Alert.alert('오류', errorMessage);
+    }
   };
+
   const getEditBucket = async () => {
     try {
       const data = await getEditBucketDetail(bucketId);
-      setBucketList(data.BucketListDetail);
-      setFriendTags(data.friendNicknameList);
-      setGoals(data.BucketListDetail.semiGoalData);
+      setBucketList(data.bucketListDetail);
+      setSelectedFriends(data.bucketListDetail.friendNickname);
     } catch (err: any) {
       console.error('달성 예정 로드 오류:', err);
       setError(
@@ -150,7 +156,7 @@ const EditMyBucketScreen = () => {
         <TextInput
           style={[styles.input, styles.textArea]}
           placeholder="버킷 리스트 설명"
-          value={bucketInfo.bucketContent}
+          value={bucketList.bucketContent}
           onChangeText={text =>
             setBucketList(prevData => ({...prevData, bucketContent: text}))
           }
@@ -159,98 +165,29 @@ const EditMyBucketScreen = () => {
 
         <Text style={styles.sectionTitle}>2. 카테고리 선택</Text>
         <View style={styles.categoryContainer}>
-          {categories.map((category, index) => (
-            <CategoryButton
-              key={category.id}
-              icon={category.icon}
-              label={category.label}
-              borderColor={category.borderColor}
-              onPress={() => handleCategorySelect(category.id)}
-              isSelected={bucketInfo.category === category.id}
-            />
-          ))}
+          {categories.map(
+            (category, index) =>
+              category.id !== 6 && (
+                <CategoryButton
+                  key={category.id}
+                  icon={category.icon}
+                  label={category.label}
+                  borderColor={category.borderColor}
+                  onPress={() => handleCategorySelect(category.id)}
+                  isSelected={bucketList.category === category.id}
+                />
+              ),
+          )}
         </View>
 
         <Text style={styles.sectionTitle}>3. 버킷리스트 공유하기</Text>
         <Switch
-          value={bucketInfo.publicStatus}
+          value={bucketList.publicStatus}
           onValueChange={value =>
             setBucketList(prevData => ({...prevData, publicStatus: value}))
           }
           style={styles.switch}
         />
-        {/* 중간 목표 설정 */}
-        <Text style={styles.sectionTitle}>4. 버킷리스트 중간 목표 설정</Text>
-        {goals.map((goal, index) => (
-          <View key={index} style={styles.goalContainer}>
-            <TouchableOpacity
-              onPress={() => removeGoal(index)}
-              style={styles.removeButton}>
-              <Text style={styles.removeButtonText}>ㅡ</Text>
-            </TouchableOpacity>
-            <TextInput
-              style={styles.goalInput}
-              placeholder="중간 목표 입력"
-              value={goal.semiGoalTitle}
-              onChangeText={text => handleGoalChange(text, index)}
-            />
-          </View>
-        ))}
-
-        <TouchableOpacity onPress={addGoal} style={styles.addButton}>
-          <Text style={styles.addButtonText}> + 단계 별 중간 목표</Text>
-        </TouchableOpacity>
-
-        {/* 친구 태그 목록 */}
-        <Text style={styles.sectionTitle}>5. 친구 태그</Text>
-        {friendTags.length > 0 && (
-          <View style={styles.friendTagsContainer}>
-            {friendTags.map((friend, index) => (
-              <View key={index} style={styles.friendTag}>
-                <Text style={styles.friendTagText}>@{friend}</Text>
-                <TouchableOpacity
-                  onPress={() => removeFriendTag(index)}
-                  style={styles.removeTagButton}>
-                  <Text style={styles.removeTagText}>X</Text>
-                </TouchableOpacity>
-              </View>
-            ))}
-          </View>
-        )}
-
-        {/* 친구 추가 모달 */}
-        <TouchableOpacity onPress={openFriendPicker} style={styles.addButton}>
-          <Text style={styles.addButtonText}>친구 추가</Text>
-        </TouchableOpacity>
-
-        <Modal
-          visible={showFriendPicker}
-          transparent={true}
-          animationType="slide">
-          <View style={styles.modalOverlay}>
-            <View style={styles.modalContent}>
-              <Text style={styles.modalTitle}>친구 선택</Text>
-              {DUMMY_FRIEND_LIST.map(friend => (
-                <TouchableOpacity
-                  key={friend}
-                  onPress={() => handleFriendSelect(friend)}
-                  style={[
-                    styles.friendItem,
-                    selectedFriends.includes(friend) &&
-                      styles.selectedFriendItem,
-                  ]}>
-                  <Text style={styles.friendItemText}>{friend}</Text>
-                </TouchableOpacity>
-              ))}
-              <TouchableOpacity
-                onPress={confirmFriendSelection}
-                style={styles.confirmButton}>
-                <Text style={styles.buttonText}>확인</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </Modal>
-
         {/* 버튼 */}
         <View style={styles.buttonContainer}>
           {/* 뒤로 가기 */}
@@ -260,9 +197,9 @@ const EditMyBucketScreen = () => {
             <Text style={styles.backButtonText}>뒤로 가기</Text>
           </TouchableOpacity>
 
-          {/* 작성 완료 */}
+          {/* 수정 완료 */}
           <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
-            <Text style={styles.submitButtonText}>작성 완료</Text>
+            <Text style={styles.submitButtonText}>수정 완료</Text>
           </TouchableOpacity>
         </View>
       </ScrollView>

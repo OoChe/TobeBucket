@@ -9,8 +9,10 @@ import {
   upcomingBucketResponse,
   achievedBucket,
   BucketDetail,
-  editBucketData,
+  EditBucketDataResponse,
   Response,
+  EditBucketSubmit,
+  EditBucketResponse,
 } from '../types';
 
 // 버킷 작성하기 결과 전송 함수
@@ -153,17 +155,15 @@ export const getMyBucketDetail = async (
 // 버킷 수정할 목록 불러오기
 export const getEditBucketDetail = async (
   bucketId: number,
-): Promise<editBucketData> => {
+): Promise<EditBucketDataResponse> => {
   try {
     // 서버에서 데이터 가져오기
-    const response = await apiClient.get<{
-      code: string;
-      message: string;
-      bucketDetail: editBucketData;
-    }>(`/bucket-edit/${bucketId}`, {
-      params: {bucketId},
-    });
-
+    const response = await apiClient.get<EditBucketDataResponse>(
+      `/bucket-edit/${bucketId}`,
+      {
+        params: {bucketId},
+      },
+    );
     // 응답 코드 확인
     if (response.data.code !== 'SU') {
       throw new Error(
@@ -171,10 +171,33 @@ export const getEditBucketDetail = async (
           '버킷 수정 정보를 불러오는 중 오류가 발생했습니다.',
       );
     }
-    console.log(response.data.bucketDetail);
-    return response.data.bucketDetail;
+    return response.data;
   } catch (error) {
     console.error('버킷 수정 정보 요청 오류:', error);
+    throw error; // 에러 재발생
+  }
+};
+
+// 수정 내용 제출하기
+export const submitEditData = async (
+  data: EditBucketSubmit,
+  bucketId: number,
+): Promise<EditBucketResponse> => {
+  try {
+    const response = await apiClient.patch(
+      `bucket-edit/${bucketId}`,
+      data,
+      {
+        params: {bucketId},
+      }, // 요청 본문에 데이터 추가
+    );
+    if (response.data.code === 'SU') return response.data;
+    else
+      throw new Error(
+        response.data.message || '버킷 수정 중 오류가 발생했습니다.',
+      );
+  } catch (error) {
+    console.error('버킷 수정 요청 오류:', error);
     throw error; // 에러 재발생
   }
 };
@@ -189,7 +212,7 @@ export const deleteBucket = async (bucketId: number): Promise<Response> => {
       },
     );
     console.log(bucketId);
-    return response; // 삭제 성공 시 응답 반환
+    return response.data; // 삭제 성공 시 응답 반환
   } catch (error) {
     console.error('버킷 삭제 요청 오류:', error);
     throw error; // 에러 재발생
