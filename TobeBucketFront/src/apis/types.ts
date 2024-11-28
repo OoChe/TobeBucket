@@ -71,11 +71,29 @@ export interface BucketDetail {
   goalReview: string;
   achievementMedia: string;
   stickerId: number;
+  publicStatus: boolean;
 }
-
 export interface editBucketData {
   friendNicknameList: string[];
   BucketListDetail: BucketDetail;
+}
+
+export interface EditBucketDataResponse {
+  code: string;
+  message: string;
+  friendNicknameList: string[];
+  bucketListDetail: BucketDetail; // 기존 BucketDetail 타입 사용
+}
+
+export interface EditBucketSubmit {
+  bucketContent: string;
+  category: number;
+  publicStatus: boolean;
+  friendNickNameList?: string[];
+}
+export interface EditBucketResponse {
+  code: string;
+  message: string;
 }
 
 export interface achieveRecordData {

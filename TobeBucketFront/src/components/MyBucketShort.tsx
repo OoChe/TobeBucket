@@ -43,7 +43,7 @@ const MyBucketShort = ({
   };
 
   const handleEditBucket = () => {
-    console.log('수정 선택');
+    console.log('수정 눌렀어요!');
     navigation.navigate('EditBucket', {bucketId: bucketId});
   };
 

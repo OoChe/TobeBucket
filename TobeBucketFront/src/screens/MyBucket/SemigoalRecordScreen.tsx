@@ -185,7 +185,7 @@ const SemigoalRecordScreen = () => {
             textAlign: 'center',
             marginLeft: -15,
           }}>
-          저장 완료 시 달성 날짜 수정이 불가능합니다.
+          저장 완료 시 수정이 불가능합니다.
         </Text>
       </View>
     </ScrollView>
