@@ -12,12 +12,18 @@ import {
   editBucketData,
   Response,
 } from '../types';
+
 // 버킷 작성하기 결과 전송 함수
 export const writeBucket = async (
   data: WriteBucketRequest,
 ): Promise<WriteBucketResponse> => {
   const response = await apiClient.post('/bucket/write', data);
-  return response.data;
+
+  if (response.data.code === 'SU') {
+    return response.data;
+  } else {
+    throw new Error(response.data.message || '템플릿을 불러오는 중 오류가 발생했습니다.');
+  }
 };
 
 // 템플릿 목록 가져오기 함수

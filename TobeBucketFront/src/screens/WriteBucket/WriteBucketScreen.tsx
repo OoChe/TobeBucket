@@ -4,13 +4,10 @@
  - 함수
  1) 템플릿 업데이트
  - useEffect 내 로직: 전달된 템플릿이 존재하는 경우, 입력 값에 업데이트
-
  2) 카테고리 선택
  - handleCategorySelect: 선택된 카테고리를 bucketInfo의 category에 저장
-
  2) 필수 입력 확인
  - validateInputs: 누락된 필드 확인/Alert 메시지 출력
-
  3) 제출
  - handleNextStep: bucketInfo를 전송 후 다음 화면 이동
  */
@@ -57,6 +54,7 @@ const WriteBucketScreen = ({ bucketInfo, setBucketInfo }) => {
   {/* 필수 항목 입력 확인 및 예외 처리 */}
   const validateInputs = () => {
     const missingFields = [];
+    console.log(bucketInfo);
     if (!bucketInfo.bucketName) missingFields.push("제목");
     if (!bucketInfo.bucketContent) missingFields.push("설명");
     if (!bucketInfo.category) missingFields.push("카테고리 선택");
@@ -73,7 +71,6 @@ const WriteBucketScreen = ({ bucketInfo, setBucketInfo }) => {
   const handleNextStep = () => {
     if (validateInputs()) {
       navigation.navigate('WriteBucketOptional', { bucketInfo });
-
     }
   };
 

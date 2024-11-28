@@ -16,13 +16,25 @@ interface SearchFriendShortProps {
   mbti: string;
   nickname: string;
   onAdd: () => void;
+  isRequested: () => void;
 }
 
-const SearchFriendShort: React.FC<SearchFriendShortProps> = ({ profileImage, mbti, nickname, onAdd }) => {
+const SearchFriendShort: React.FC<SearchFriendShortProps> = ({ profileImage, mbti, nickname, onAdd, isRequested }) => {
+
+  const isValidUri = typeof profileImage === 'string' && profileImage.startsWith('http');
+
   return (
     <View style={styles.container}>
       {/* 프로필 이미지 */}
-      <Image source={profileImage} style={styles.profileImage} />
+      <Image
+        source={
+          isValidUri
+            ? { uri: profileImage } // URI가 유효하면 해당 이미지 사용
+            : require('../assets/images/defaultProfile.png') // 기본 이미지
+        }
+        style={styles.profileImage}
+      />
+
 
       {/* 사용자 프로필 */}
       <View style={styles.userInfo}>
@@ -33,9 +45,17 @@ const SearchFriendShort: React.FC<SearchFriendShortProps> = ({ profileImage, mbt
       </View>
 
       {/* 친구 신청 */}
-      <TouchableOpacity onPress={onAdd} style={styles.addFriendButton}>
-        <Text style={styles.addFriendButtonText}>친구 신청</Text>
+
+      <TouchableOpacity
+        onPress={onAdd}
+        disabled={isRequested}
+        style={[styles.addFriendButton, isRequested && styles.disabledButton]}
+      >
+        <Text style={[styles.addFriendButtonText, isRequested && styles.disabledButtonText]}>
+          {isRequested ? '신청 완료' : '친구 신청'}
+        </Text>
       </TouchableOpacity>
+
     </View>
   );
 };
@@ -90,6 +110,20 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#6A82FF',
   },
+
+  disabledButton: {
+    borderWidth: 1,
+    borderColor: '#6C7278',
+    borderRadius: 10,
+    paddingVertical: 6,
+    paddingHorizontal: 12,
+  },
+  disabledButtonText: {
+    fontSize: 14,
+    fontWeight: 'bold',
+    color: '#6C7278',
+  },
+
 });
 
 export default SearchFriendShort;

@@ -1,28 +1,22 @@
 /*
- NOTICE : Test 필수
- [UPDATE]
- 24.11.13 - 달성 날짜 형식 변경(YY-MM-DD 문자열), 이전 날짜 선택 불가
- 24.11.23 - 작성 완료 후 나의 버킷 페이지로 이동 설정
-
  [버킷리스트 작성하기(선택) 스크린]
  - 구성 : 헤더, 중간 목표, 달성 날짜, 친구 태그 입력, 버튼(뒤로, 작성 완료)
  - 함수
- 1) 중간 목표
+ 1) 친구 목록 가져오기
+  - loadFriendList: 태그할 친구 목록 가져오기
+ 2) 중간 목표
   - addGoal: 새로운 빈 중간 목표를 추가/semiGoalTitleList 업데이트
   - removeGoal: 선택한 중간 목표를 삭제/ semiGoalTitleList 업데이트
   - handleGoalChange: 중간 목표 변경 시 semiGoalTitleList 업데이트
-
- 2) 친구 태그
+ 3) 친구 태그
   - handleFriendSelect: selectedFriends에 추가/제거
   - confirmFriendSelection: friendTags 배열 추가/friendNickNameList 업데이트
   - removeFriendTag: 친구 태그 삭제
   - openFriendPicker: friendPicker 모달 열기/선택된 친구 목록 초기 값 설정
-
- 3) 목표 달성 날짜 선택 :
+ 4) 목표 달성 날짜 선택 :
   - handleDateChange: 목표 달성 날짜 설정 시 dateString으로 저장
-
- 4) 제출
-  - handleSubmit: 입력된 모든 데이터를 확인하여 공백이 아닌 중간 목표만을 bucketInfo에 저장 후 전송
+ 5) 제출
+  - handleSubmit: 입력된 모든 데이터를 확인하여 공백이 아닌 중간 목표만을 bucketInfo에 저장 후 마이 버킷 페이지로 이동
  */
 
 import React, { useState, useEffect } from 'react';
@@ -33,8 +27,6 @@ import DatePicker from '../../components/DatePicker';
 import PageTitle from '../../components/PageTitle';
 import { writeBucket, getFriendNickNames } from '../../apis/bucket/bucketService';
 
-const DUMMY_FRIEND_LIST = ["햄햄일", "햄햄이", "햄햄삼", "햄햄사"];
-
 const WriteBucketOptionalScreen = ({ route, bucketInfo, setBucketInfo }) => {
   const initialBucketInfo = route.params?.bucketInfo || bucketInfo;
   const [goals, setGoals] = useState(initialBucketInfo.semiGoalData || []);
@@ -44,23 +36,23 @@ const WriteBucketOptionalScreen = ({ route, bucketInfo, setBucketInfo }) => {
   const [friendTags, setFriendTags] = useState<string[]>([]);
   const navigation = useNavigation();
 
-  useEffect(() => {
-    const loadFriendList = async () => {
-      try {
-        const friends = await getFriendNickNames();
-        setFriendList(friends);
-      } catch (error: any) {
-        console.error('친구 목록 로드 오류:', error);
-        Alert.alert('오류', error.message || '친구 목록을 불러오는 중 오류가 발생했습니다.');
-      }
-    };
+  {/* 친구 목록 가져오기 */}
+  const loadFriendList = async () => {
+    try {
+      const friends = await getFriendNickNames();
+      setFriendList(friends);
+    } catch (error: any) {
+      console.error('친구 목록 로드 오류:', error);
+      Alert.alert('오류', error.message || '친구 목록을 불러오는 중 오류가 발생했습니다.');
+    }
+  };
 
+  useEffect(() => {
     loadFriendList();
   }, []);
 
 
-
-  // 중간 목표 함수
+  {/* 중간 목표 */}
   const addGoal = () => {
     const updatedGoals = [...goals, { semiGoalTitle: '' }];
     setGoals(updatedGoals);
@@ -81,7 +73,7 @@ const WriteBucketOptionalScreen = ({ route, bucketInfo, setBucketInfo }) => {
     setBucketInfo((prevData) => ({ ...prevData, semiGoalData: updatedGoals }));
   };
 
-  // 친구 태그 함수
+  {/* 친구 태그 */}
   const handleFriendSelect = (friend: string) => {
     if (selectedFriends.includes(friend)) {
       setSelectedFriends(selectedFriends.filter((f) => f !== friend));
@@ -109,15 +101,14 @@ const WriteBucketOptionalScreen = ({ route, bucketInfo, setBucketInfo }) => {
     setShowFriendPicker(true);
   };
 
-  // 목표 달성 날짜 선택
+  {/* 목표 달성 날짜 선택 */}
   const handleDateChange = (date) => {
     const dateString = date.toISOString().split("T")[0];
     setBucketInfo((prevData) => ({ ...prevData, goalDate: dateString }));
   };
 
-  // 제출 함수
+  {/* 제출 함수 */}
   const handleSubmit = async () => {
-    // 중간 목표 필터링
     const filteredGoals = goals.filter((goal) => goal.semiGoalTitle.trim() !== '');
     const finalBucketInfo: WriteBucketRequest = {
       bucketName: bucketInfo.bucketName || bucketInfo.title,
@@ -130,13 +121,13 @@ const WriteBucketOptionalScreen = ({ route, bucketInfo, setBucketInfo }) => {
       semiGoalData: filteredGoals,
     };
 
-    // 데이터 확인을 위한 로그 출력
+    // 데이터 확인 용
     console.log('최종 버킷 데이터:', JSON.stringify(finalBucketInfo, null, 2));
 
     try {
-      // 버킷 생성 API 호출
-      //const response = await writeBucket(finalBucketInfo);
-      Alert.alert('성공', '버킷리스트가 성공적으로 생성되었습니다.');
+      // 버킷 생성 API 호출 후 마이 버킷 페이지 이동
+      const response = await writeBucket(finalBucketInfo);
+      Alert.alert('성공', '버킷리스트가 추가되었습니다.');
       navigation.navigate('MyBucket', {screen : 'MyBucketList'});
     } catch (error: any) {
       console.error('버킷 생성 오류:', error);
@@ -204,7 +195,7 @@ const WriteBucketOptionalScreen = ({ route, bucketInfo, setBucketInfo }) => {
           <View style={styles.modalOverlay}>
             <View style={styles.modalContent}>
               <Text style={styles.modalTitle}>친구 선택</Text>
-              {DUMMY_FRIEND_LIST.map((friend) => (
+              {friendList.map((friend) => (
                 <TouchableOpacity
                   key={friend}
                   onPress={() => handleFriendSelect(friend)}
