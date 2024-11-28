@@ -2,6 +2,7 @@ package com.example.ToBeBucket.Controller;
 
 import com.example.ToBeBucket.DTO.EditBucketDTO;
 import com.example.ToBeBucket.DTO.WriteBucketDTO;
+import com.example.ToBeBucket.Service.GetBucketDetailsService;
 import com.example.ToBeBucket.Service.ManageBucketService;
 import com.example.ToBeBucket.Service.UserFriendService;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +24,7 @@ public class ManageBucketController {
 
     private final ManageBucketService manageBucketService;
     private final UserFriendService userFriendService;
+    private final GetBucketDetailsService getBucketDetailsService;
     //버킷 작성 페이지 접근 시
     @GetMapping("/tobebucket/bucket/write")
     public ResponseEntity<Map<String,Object>> getFriendListsForCreateBucket(){
@@ -90,10 +92,12 @@ public class ManageBucketController {
             String userId = SecurityContextHolder.getContext().getAuthentication().getName();
             // 서비스 호출해서 DB에 저장
             List<String> friendNicknameList = userFriendService.getFriendLists(userId);
+            Map<String, Object> bucketListDetail = getBucketDetailsService.getBucketDetail(userId, bucketId);
             //response해주기
             response.put("code", "SU");
             response.put("message", "Success.");
             response.put("friendNicknameList",friendNicknameList);
+            response.put("bucketListDetail",bucketListDetail);
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             response.put("code", "DE");
