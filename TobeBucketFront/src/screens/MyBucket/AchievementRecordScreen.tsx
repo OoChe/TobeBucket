@@ -17,7 +17,9 @@ import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import PageSmallTitle from '../../components/PageSmallTitle';
 import {dateToStr, getToday} from '../../components/dateFunc';
 import StickerSelector from '../../components/StickerSelector';
-import styles from '../../styles/AchievementRecordScreen.styles'
+import styles from '../../styles/AchievementRecordScreen.styles';
+import {getUnlockedSticker, achieveRecord} from '../../apis/bucket/achieveService';
+import {achieveRecordData} from '../../apis/types';
 
 interface bucketProps {
   bucketId: number;
@@ -30,7 +32,7 @@ const AchievementRecordScreen = () => {
   const {bucketId, bucketName} = route.params as bucketProps;
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
-  const [stickerProcess, setStickerProcess] = useState(3);
+  const [stickerProcess, setStickerProcess] = useState(0);
   const [bucketAchieveInfo, setBucketAchieveInfo] = useState({
     bucketId: bucketId,
     stickerId: -1,
@@ -80,24 +82,46 @@ const AchievementRecordScreen = () => {
     hideDatePicker();
   };
 
-  const submitAchievement = () => {
+  const submitAchievement = async () => {
     validateInputs();
-    console.log(bucketAchieveInfo);
+    // 중간 목표 필터링
+    const achievementRecordInfo: achieveRecordData = {
+      bucketId: bucketAchieveInfo.bucketId,
+      stickerId: bucketAchieveInfo.stickerId,
+      achieveDate: bucketAchieveInfo.achieveDate,
+      goalReview: bucketAchieveInfo.goalReview,
+      achievementMedia: bucketAchieveInfo.achievementMedia,
+    };
+
+    // 데이터 확인을 위한 로그 출력
+    console.log(
+      '목표 달성 기록 데이터:',
+      JSON.stringify(achievementRecordInfo, null, 2),
+    );
+
+    try {
+      // 목표 달성 기록 API 호출
+      const response = await achieveRecord(achievementRecordInfo);
+      Alert.alert('성공', '목표를 달성하였습니다.');
+      navigation.navigate('MyBucket', {screen: 'MyBucketList'});
+    } catch (error: any) {
+      console.error('목표 달성 기록 오류:', error);
+      const errorMessage =
+        error.response?.data?.message ||
+        '목표 달성 기록 중 오류가 발생했습니다.';
+      Alert.alert('오류', errorMessage);
+    }
+  };
+
+  const getStickerNum = async () => {
+    const data = await getUnlockedSticker();
+    setStickerProcess(data);
+    console.log('받아온 데이터: ', data);
   };
 
   useEffect(() => {
-    const fetchUnlockedIndex = async () => {
-      console.log(stickerProcess);
-      // try {
-      //   const response = await axios.get('https://your-api-url.com/unlocked-sticker-index');
-      //   setUnlockedIndex(response.data.unlockedIndex);
-      // } catch (error) {
-      //   console.error('Error fetching unlocked index:', error);
-      // }
-    };
-    fetchUnlockedIndex();
+    getStickerNum();
     if (bucketId) {
-      console.log('bucketId:', bucketId); // bucketId 값 확인
       setBucketAchieveInfo(prevData => ({
         ...prevData,
         bucketId: bucketId, // bucketId 설정
@@ -219,4 +243,3 @@ const AchievementRecordScreen = () => {
 };
 
 export default AchievementRecordScreen;
-

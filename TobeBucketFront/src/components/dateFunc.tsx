@@ -14,7 +14,7 @@ const dateToStr = (date: Date) => {
   return year + '. ' + month + '. ' + day + '. (' + dayName + ') ';
 };
 
-function calculateDDay(targetDateStr: Date) {
+function calculateDDay(targetDateStr: string) {
   const targetDate = new Date(targetDateStr);
 
   // 밀리초 단위 차이 계산

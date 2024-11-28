@@ -1,78 +1,40 @@
-/* [버킷리스트 상세 정보 화면]
-
- */
+/* [버킷리스트 상세 정보 화면] */
 import React, {useEffect, useState} from 'react';
-import {
-  View,
-  Text,
-  Image,
-  ScrollView,
-  StyleSheet,
-  TouchableOpacity,
-} from 'react-native';
+import {View, Text, Image, ScrollView, TouchableOpacity} from 'react-native';
 import {useRoute, useNavigation} from '@react-navigation/native';
 import BucketDetailDropdown from '../../components/BucketDetailDropdown';
 import CategoryButton from '../../components/CategoryButton';
 import StickerEmpty from '../../components/StickerEmpty';
 import MilestoneShort from '../../components/MilestoneShort';
 import PageTitle from '../../components/PageTitle';
-import {achievedDetailData} from '../../data/tempBucketData';
+import {calculateDDay} from '../../components/dateFunc';
 import {getCategoryById} from '../../data/bucketCategories';
-import {dateToStr, calculateDDay} from '../../components/dateFunc';
+import {getStickerById} from '../../data/StickerData';
+import styles from '../../styles/MyBucketDetailScreen.styles';
+import {getMyBucketDetail} from '../../apis/bucket/bucketService';
+import {BucketDetail} from '../../apis/types';
 
 const MyBucketDetailScreen = () => {
   const navigation = useNavigation();
   const route = useRoute();
   const {bucketId} = route.params as {bucketId: number};
-
-  interface friendId {
-    friendId: string;
-  }
-
-  const [bucketList, setBucketList] = useState<{
-    bucketId: number;
-    bucketName: string;
-    bucketContent: string;
-    goalDate: Date;
-    category: number;
-    createDate: Date;
-    friendIds: friendId[];
-    semiGoalData: Map<string, number>;
-    goalReview: string;
-    achievementMedia: string;
-    stickerId: number;
-  }>();
-
-  const [editBucketInfo, setEditBucketInfo] = useState<{
-    bucketId: number;
-    bucketContent: string;
-    category: number;
-    friendIds: friendId[];
-    semiGoalData: Map<string, number>;
-    publicStatus: boolean;
-  }>();
+  const [bucketList, setBucketList] = useState<BucketDetail>();
+  const getMyBucket = async () => {
+    try {
+      const data = await getMyBucketDetail(bucketId);
+      setBucketList(data);
+    } catch (err: any) {
+      console.error('달성 예정 로드 오류:', err);
+      setError(
+        err.message ||
+          '스크린에서 버킷 목록을 불러오는 중 오류가 발생했습니다.',
+      );
+    }
+  };
 
   useEffect(() => {
-    // 서버에서 bucketID를 사용하여 데이터 요청
-    // fetch(`/buckets/${bucketId}`)
-    //   .then(response => response.json())
-    //   .then(data => setBucketDetail(data))
-    //   .catch(error => console.error('Error fetching bucket detail:', error));
-    // 서버 적용 시 아래 내용 삭제
-    setBucketList(achievedDetailData);
-    if (bucketList) {
-      setEditBucketInfo({
-        bucketId: bucketList.bucketId,
-        bucketContent: bucketList.bucketContent,
-        category: bucketList.category,
-        friendIds: bucketList.friendIds,
-        semiGoalData: bucketList.semiGoalData,
-        publicStatus: false, // publicStatus는 기본값 또는 필요에 따라 설정
-      });
-    }
-    console.log('useEffect 적용된 후의 버킷 : ');
-    console.log(bucketList, '\n', editBucketInfo);
-  }, [bucketId]);
+    getMyBucket();
+  }, []);
 
   if (!bucketList) {
     return <Text>Loading...</Text>;
@@ -91,17 +53,8 @@ const MyBucketDetailScreen = () => {
     });
   };
   const handleEditBucket = () => {
-    setEditBucketInfo({
-      bucketId: bucketList.bucketId,
-      bucketContent: bucketList.bucketContent,
-      category: bucketList.category,
-      friendIds: bucketList.friendIds,
-      semiGoalData: bucketList.semiGoalData,
-      publicStatus: false, // publicStatus는 기본값 또는 필요에 따라 설정
-    });
     console.log('수정 선택');
-    navigation.navigate('EditBucket', {editBucketInfo});
-    console.log('navgiate 요청 보낸 후의 결과', editBucketInfo);
+    navigation.navigate('EditBucket', {bucketId: bucketId});
   };
 
   return (
@@ -143,11 +96,17 @@ const MyBucketDetailScreen = () => {
                   color: '#878787',
                   marginBottom: 10,
                 }}>
-                생성일 - {dateToStr(bucketList.createDate)}
+                생성일 - {bucketList.createDate}
               </Text>
             </View>
-            {/* 스티커 정보가 안보임 */}
-            <StickerEmpty />
+            {bucketList.stickerId ? (
+              <Image
+                source={getStickerById(bucketList.stickerId)?.stickerPath}
+                style={styles.sticker}
+              />
+            ) : (
+              <StickerEmpty />
+            )}
           </View>
           <View style={styles.contentContainer}>
             <View
@@ -155,23 +114,36 @@ const MyBucketDetailScreen = () => {
                 flexDirection: 'row',
                 marginTop: 12,
               }}>
-              <Text
-                style={{
-                  fontFamily: 'Pretendard-ExtraBold',
-                  fontSize: 28,
-                }}>
-                D-{calculateDDay(bucketList.goalDate)}
-              </Text>
-              <Text
-                style={{
-                  fontFamily: 'Pretendard-Bold',
-                  fontSize: 14,
-                  color: '#1e6969',
-                  marginTop: 15,
-                  marginLeft: 10,
-                }}>
-                {dateToStr(bucketList.goalDate)} 목표
-              </Text>
+              {bucketList.achievementDate ? (
+                <Text
+                  style={{
+                    fontFamily: 'Pretendard-ExtraBold',
+                    fontSize: 28,
+                    color: '#1e6969',
+                  }}>
+                  {bucketList.achievementDate} 달성!
+                </Text>
+              ) : (
+                <>
+                  <Text
+                    style={{
+                      fontFamily: 'Pretendard-ExtraBold',
+                      fontSize: 28,
+                    }}>
+                    D-{calculateDDay(bucketList.goalDate)}
+                  </Text>
+                  <Text
+                    style={{
+                      fontFamily: 'Pretendard-Bold',
+                      fontSize: 14,
+                      color: '#1e6969',
+                      marginTop: 15,
+                      marginLeft: 10,
+                    }}>
+                    {bucketList.goalDate} 목표
+                  </Text>
+                </>
+              )}
               <View style={{position: 'absolute', right: 20, marginTop: 10}}>
                 <BucketDetailDropdown
                   bucketId={bucketList.bucketId}
@@ -194,23 +166,26 @@ const MyBucketDetailScreen = () => {
             />
             <Text style={styles.middleText}>함께하는 친구</Text>
             {/* 함께 하는 친구 목록 */}
+
             <View
               style={{
                 flexDirection: 'row',
                 alignItems: 'center',
                 flexWrap: 'wrap',
               }}>
-              {bucketList.friendIds.map(friendId => (
-                <View key={friendId.friendId} style={styles.friendBox}>
+              {bucketList?.friendNickname?.map(friendId => (
+                <View key={friendId} style={styles.friendBox}>
                   <Text style={styles.friendText}>@{friendId}</Text>
                 </View>
-              ))}
+              )) || (
+                <Text style={styles.friendText}>친구 목록이 없습니다.</Text>
+              )}
             </View>
-            {bucketList.semiGoalData ? (
+            {bucketList?.semiGoalData && bucketList.semiGoalData.size > 0 ? (
               <View>
                 <Text style={styles.middleText}>중간 목표</Text>
                 <View>
-                  {Array.from(bucketList.semiGoalData).map(
+                  {Array.from(bucketList.semiGoalData.entries()).map(
                     ([semiGoalName, stickerNum], index) => (
                       <TouchableOpacity
                         key={semiGoalName}
@@ -252,87 +227,4 @@ const MyBucketDetailScreen = () => {
     </View>
   );
 };
-
 export default MyBucketDetailScreen;
-
-const styles = StyleSheet.create({
-  main: {
-    backgroundColor: '#FBFBFB',
-  },
-  titleContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginTop: 10,
-    paddingRight: 20,
-  },
-  contentContainer: {
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
-    backgroundColor: '#EDF7F2',
-    paddingLeft: 15,
-  },
-  textContainer: {
-    width: 363,
-    minHeight: 60, // 기본 높이 설정
-    backgroundColor: '#ffffff',
-    borderRadius: 10,
-    position: 'relative',
-    paddingHorizontal: 4, // 텍스트 좌우 간격을 위해 추가
-    paddingVertical: 1, // 텍스트 상하 간격을 위해 추가
-    marginBottom: 10,
-  },
-  friendBox: {
-    alignSelf: 'flex-start',
-    paddingHorizontal: 8,
-    paddingVertical: 1,
-    backgroundColor: '#fafafa',
-    borderRadius: 5,
-    borderWidth: 1,
-    borderColor: '#3f6262',
-    marginRight: 10,
-  },
-  middleText: {
-    fontFamily: 'Pretendard-Bold',
-    fontSize: 18,
-    position: 'relative',
-    marginVertical: 5,
-  },
-  normalText: {
-    display: 'flex',
-    fontFamily: 'Pretendard-Regular',
-    fontSize: 13,
-    padding: 5,
-  },
-  noDataText: {
-    top: 17,
-    fontFamily: 'Pretendard-Medium',
-    fontSize: 16,
-    color: '#707070',
-    position: 'relative',
-    textAlign: 'center',
-  },
-  friendText: {
-    fontFamily: 'Pretendard-Regular',
-    fontSize: 12,
-    textAlign: 'center',
-  },
-  backButton: {
-    flexDirection: 'row',
-    borderRadius: 20,
-    marginTop: 10,
-    marginLeft: 10,
-  },
-  backIcon: {
-    width: 20,
-    height: 20,
-    resizeMode: 'contain',
-  },
-  imageContainer: {
-    width: 330,
-    height: 200,
-    borderRadius: 10,
-    position: 'relative',
-    marginLeft: 12,
-    marginTop: 5,
-  },
-});

@@ -3,6 +3,7 @@ import {StyleSheet} from 'react-native';
 const styles = StyleSheet.create({
   main: {
     backgroundColor: '#FBFBFB',
+    flex: 1,
   },
   smallText: {
     height: 15,
@@ -30,6 +31,14 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: '700',
     textAlign: 'center',
+  },
+  nobucket: {
+    fontFamily: 'Pretendard-Regular',
+    fontSize: 20,
+    position: 'relative',
+    textAlign: 'center',
+    marginLeft: 15,
+    marginTop: 120,
   },
 });
 

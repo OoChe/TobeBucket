@@ -13,16 +13,7 @@ import {View, Text, Image, TouchableOpacity, StyleSheet} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {CategoryIcon} from './CategoryIcon';
 import {getStickerById} from '../data/StickerData';
-
-interface bucketShortProps {
-  bucketId: number;
-  bucketName: string;
-  achieveDate: string;
-  category: number;
-  achievementMedia: string;
-  goalReview: string;
-  stickerId: number;
-}
+import { achievedBucket } from '../apis/types';
 
 export const BucketShort = ({
   bucketId,
@@ -32,7 +23,7 @@ export const BucketShort = ({
   achievementMedia,
   goalReview,
   stickerId,
-}: bucketShortProps) => {
+}: achievedBucket) => {
   const navigation = useNavigation();
 
   const handleMyBucketInfo = (bucketId: number) => {

@@ -1,6 +1,6 @@
 // src/apis/types.ts
 
-{/* COMMON */}
+/* COMMON */
 export interface Request {
   userId: string;
 }
@@ -10,8 +10,7 @@ export interface Response {
   message: string;
 }
 
-
-{/* AUTH */}
+/* AUTH */
 export interface LoginRequest {
   userId: string;
   pwd: string;
@@ -32,8 +31,66 @@ export interface SignupRequest {
   role: string;
 }
 
+/* BUCKET */
+export interface upcomingBucketResponse {
+  bucketId: number;
+  bucketName: string;
+  bucketContent: string;
+  goalDate: string;
+  category: number;
+  publicStatus: boolean;
+  semiGoalData: {semiGoalTitle: string}[];
+  friendNickname: string[];
+}
+export interface upcomingBucket {
+  bucketId: number;
+  bucketName: string;
+  bucketContent: string;
+  goalDate: string;
+  category: number;
+}
+export interface achievedBucket {
+  bucketId: number;
+  bucketName: string;
+  achieveDate: string;
+  category: number;
+  achievementMedia: string;
+  goalReview: string;
+  stickerId: number;
+}
+export interface BucketDetail {
+  bucketId: number;
+  bucketName: string;
+  bucketContent: string;
+  goalDate: string;
+  category: number;
+  createDate: string;
+  achievementDate: string;
+  friendNickname: string[];
+  semiGoalData: Map<string, number>;
+  goalReview: string;
+  achievementMedia: string;
+  stickerId: number;
+}
 
-{/* BUCKET */}
+export interface editBucketData {
+  friendNicknameList: string[];
+  BucketListDetail: BucketDetail;
+}
+
+export interface achieveRecordData {
+  bucketId: number;
+  stickerId: number;
+  achieveDate: string;
+  goalReview: string;
+  achievementMedia: string;
+}
+
+export interface achieveRecordResponse {
+  code: string;
+  message: string;
+}
+
 export interface WriteBucketRequest {
   bucketName: string;
   bucketContent: string;
@@ -42,7 +99,7 @@ export interface WriteBucketRequest {
   createDate: string;
   goalDate?: string;
   friendNickNameList?: string[];
-  semiGoalData?: { semiGoalTitle: string }[];
+  semiGoalData?: {semiGoalTitle: string}[];
 }
 
 export interface WriteBucketResponse {
@@ -54,7 +111,7 @@ export interface WriteBucketResponse {
 export interface TemplateBucket {
   bucketName: string;
   bucketContent: string;
-  semiGoalData: { semiGoalTitle: string }[];
+  semiGoalData: {semiGoalTitle: string}[];
   category: number;
 }
 
@@ -67,11 +124,32 @@ export interface GetTemplateBucketsResponse {
 export interface FriendNickNameResponse {
   code: string;
   message: string;
-  friendNicknameList:  string[];
+  friendNicknameList: string[];
 }
 
+export interface FriendFeedBucket {
+  nickname: string;
+  mbti: string;
+  profileImage: string;
+  bucketName: string;
+  bucketContent: string;
+  achieveDate: string;
+  achievementMedia: string;
+}
 
-{/* FRIEND */}
+export interface MbtiBucket {
+  bucketName: string;
+  bucketContent: string;
+  achieveDate: string;
+}
+export interface MbtiFeedResponse {
+  code: string;
+  message: string;
+  bucketList: MbtiBucket[];
+}
+
+/* FRIEND */
+
 export interface Friend {
   userId: string;
   nickname: string;
@@ -85,7 +163,6 @@ export interface FriendListResponse {
   friendRequest: Friend[];
   friendList: Friend[];
 }
-
 
 export interface FriendRequest {
   friendStatus: number;
@@ -149,12 +226,5 @@ export interface InfoChange {
   intro?: string;
   profileImage?: string;
 }
-
-
-
-
-
-
-
 
 

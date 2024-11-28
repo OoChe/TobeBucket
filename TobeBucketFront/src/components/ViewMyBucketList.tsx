@@ -7,14 +7,7 @@ import React, {useState} from 'react';
 import {View, ScrollView, StyleSheet} from 'react-native';
 import MyBucketShort from './MyBucketShort';
 import HorizontalCategory from './HorizontalCategory';
-
-interface upcomingBucket {
-  bucketId: number;
-  bucketName: string;
-  bucketContent: string;
-  goalDate: Date;
-  category: number;
-}
+import { upcomingBucket } from '../apis/types';
 
 interface upcomingBucketList {
   bucketList: upcomingBucket[]; // 올바른 타입 지정

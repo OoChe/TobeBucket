@@ -13,8 +13,6 @@ const apiClient = axios.create({
 
 const authNotRequired = ['/signup', '/login'];
 
-
-
 // 요청 인터셉터 설정
 apiClient.interceptors.request.use(
   async config => {
