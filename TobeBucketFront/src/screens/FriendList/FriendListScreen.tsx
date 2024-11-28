@@ -178,28 +178,33 @@ const FriendListScreen: React.FC = () => {
       {/* 친구 목록 리스트 */}
       <ScrollView contentContainerStyle={styles.container}>
         {/* 친구 목록 요약 */}
-        {friendList.map((friend, index) => (
-          <View key={index} style={styles.friendItem}>
-            <ListFriendShort
-              profileImage={friend.profileImage}
-              mbti={friend.mbti}
-              nickname={friend.nickname}
-              onMove={() => handleNavigateToFriendBucket(friend.userId)}
-              onDrop={() => toggleDropdown(friend.userId)}
-            />
-            {/* 친구 삭제 드롭 다운 */}
-            {dropdownVisible === friend.userId && (
-              <View style={styles.dropdown}>
-                <TouchableOpacity
-                  onPress={() => confirmDeleteFriend(friend.userId)}
-                  style={styles.dropdownItem}
-                >
-                  <Text style={styles.dropdownItemText}>친구 삭제하기</Text>
-                </TouchableOpacity>
+        {friendList.length > 0 ? (
+            friendList.map((friend, index) => (
+              <View key={index} style={styles.friendItem}>
+                <ListFriendShort
+                  profileImage={friend.profileImage}
+                  mbti={friend.mbti}
+                  nickname={friend.nickname}
+                  onMove={() => handleNavigateToFriendBucket(friend.userId)}
+                  onDrop={() => toggleDropdown(friend.userId)}
+                />
+                {/* 친구 삭제 드롭 다운 */}
+                {dropdownVisible === friend.userId && (
+                  <View style={styles.dropdown}>
+                    <TouchableOpacity
+                      onPress={() => confirmDeleteFriend(friend.userId)}
+                      style={styles.dropdownItem}
+                    >
+                      <Text style={styles.dropdownItemText}>친구 삭제하기</Text>
+                    </TouchableOpacity>
+                  </View>
+                )}
               </View>
-            )}
-          </View>
-        ))}
+            ))
+         ) : (
+             <Text style={[styles.except]}> 친구 ID를 검색해서 추가해보세요</Text>
+         )}
+
       </ScrollView>
     </View>
   );

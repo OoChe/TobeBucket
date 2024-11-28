@@ -43,7 +43,8 @@ const ViewFriendBucketScreen = () => {
       />
 
       <ScrollView>
-        {friendData.bucketList.map((bucket, index) => (
+        {friendData.bucketList.length > 0 ? (
+          friendData.bucketList.map((bucket, index) => (
           <MbtiFeedShort
             key={index}
             bucketName={bucket.bucketName}
@@ -51,7 +52,10 @@ const ViewFriendBucketScreen = () => {
             achieveDate={bucket.achieveDate ? new Date(bucket.achieveDate) : null}
             achievementMedia={bucket.achievementMedia}
           />
-        ))}
+        ))
+       ) : (
+           <Text style={[styles.except]}>친구가 공개한 작성된 버킷이 없어요.</Text>
+        )}
       </ScrollView>
 
     </View>

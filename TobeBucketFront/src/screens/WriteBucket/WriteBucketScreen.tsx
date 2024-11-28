@@ -54,9 +54,10 @@ const WriteBucketScreen = ({ bucketInfo, setBucketInfo }) => {
   {/* 필수 항목 입력 확인 및 예외 처리 */}
   const validateInputs = () => {
     const missingFields = [];
+    console.log(bucketInfo);
     if (!bucketInfo.bucketName) missingFields.push("제목");
     if (!bucketInfo.bucketContent) missingFields.push("설명");
-    if (!(bucketInfo.category>=0)) missingFields.push("카테고리 선택");
+    if (!bucketInfo.category) missingFields.push("카테고리 선택");
 
     if (missingFields.length > 0) {
       const errorMsg = missingFields.join(", ").replace(/,([^,]*)$/, " 및$1");

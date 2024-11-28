@@ -6,10 +6,11 @@
   - handleUploadImage : 이미지 업로드 처리
   - handleOpenLink : MBTI 유형 검사 URL 처리
   - handleSubmit : 입력된 정보 중 수정된 정보만 모아 서버 전송
+  - confirmSubmit : 닉네임 필수 항목 확인
  */
 
 import React, { useState } from 'react';
-import { View, Text, ScrollView, Image, TextInput, TouchableOpacity, Linking } from 'react-native';
+import { View, Text, ScrollView, Image, TextInput, TouchableOpacity, Linking, Alert } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { Picker } from '@react-native-picker/picker';
 import styles from '../../styles/ChangeMyInfoScreen.styles';
@@ -53,6 +54,16 @@ const ChangeMyInfoScreen = () => {
   const handleOpenLink = () => {
     const url = 'https://www.16personalities.com/free-personality-test'; // MBTI 테스트 URL
     Linking.openURL(url).catch((err) => console.error('Failed to open URL:', err));
+  };
+
+  {/* 이름 입력 확인 */}
+  const confirmSubmit = () => {
+      if (!nickname) {
+          Alert.alert('오류', '닉네임은 필수 입력 항목입니다.');
+      }
+      else {
+          handleSubmit();
+      }
   };
 
 
@@ -161,7 +172,7 @@ const ChangeMyInfoScreen = () => {
       </View>
 
       {/* 수정 완료 버튼 */}
-      <TouchableOpacity onPress={handleSubmit} style={styles.submitButton}>
+      <TouchableOpacity onPress={confirmSubmit} style={styles.submitButton}>
         <Text style={styles.submitButtonText}>수정 완료</Text>
       </TouchableOpacity>
     </ScrollView>

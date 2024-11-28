@@ -106,7 +106,7 @@ const SearchFriendScreen = ({ navigation }: any) => {
         } />) :  (
       <View style={styles.noFriendsContainer}>
           <Text style={styles.noFriendsText}>
-            모든 사용자와 친구 상태이거나 친구 요청을 전송하였습니다.
+            모든 사용자와 친구 상태이거나 이미 친구 요청을 전송하였습니다.
           </Text>
         </View>
       )}
