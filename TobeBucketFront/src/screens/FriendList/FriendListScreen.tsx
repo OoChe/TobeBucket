@@ -168,7 +168,7 @@ const FriendListScreen: React.FC = () => {
               key={index}
               friend={friend}
               onAccept={() => handleFriendRequest(friend.userId, 1)}
-              onReject={() => handleFriendRequest(friend.userId, 0)}
+              onReject={() => handleFriendRequest(friend.userId, 2)}
             />
           ))}
         </View>
