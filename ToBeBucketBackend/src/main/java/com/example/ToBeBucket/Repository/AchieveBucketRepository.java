@@ -17,7 +17,7 @@ public interface AchieveBucketRepository extends JpaRepository<BucketAchievement
     List<BucketAchievement> findAllByBucketIn(List<Bucket> buckets);
 
     @Query("SELECT ba.achieveDate FROM BucketAchievement ba WHERE ba.bucketId = :bucketId")
-    LocalDate findAchieveDateByBucketId(@Param("bucketId") Integer bucketId);
+    String findAchieveDateByBucketId(@Param("bucketId") Integer bucketId);
 
     @Query("SELECT new map(ba.bucketId as bucketId, ba.achieveDate as achieveDate) " +
             "FROM BucketAchievement ba WHERE (:bucketIds IS NULL OR ba.bucketId IN :bucketIds)")

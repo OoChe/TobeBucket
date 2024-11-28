@@ -45,10 +45,10 @@ public class FriendBucketService {
                     Boolean achieveStatus = (Boolean) bucket.get("achieveStatus");
 
                     if (Boolean.TRUE.equals(achieveStatus)) {
-                        // findAchieveDateByBucketId는 이미 LocalDate를 반환하므로, 변환 불필요
-                        LocalDate achieveDate = achieveBucketRepository.findAchieveDateByBucketId(bucketId);
-                        // LocalDate → String 변환
-                        bucketMap.put("achieveDate", achieveDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+                        String achieveDate = achieveBucketRepository.findAchieveDateByBucketId(bucketId);
+                        String achievementMedia = achieveBucketRepository.findAchievementMediaByBucketId(bucketId);
+                        bucketMap.put("achieveDate",achieveDate);
+                        bucketMap.put("achievementMedia", achievementMedia);
                     }
                     return bucketMap;
                 })
