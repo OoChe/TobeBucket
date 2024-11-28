@@ -41,8 +41,7 @@ const MyBucketStackNavigator = () => {
         {props => (
           <EditMyBucketScreen
             {...props}
-            bucketInfo={props.route.params?.bucketInfo}
-            sendDataToDB={sendDataToDB}
+            bucketId={props.route.params?.bucketId}
           />
         )}
       </Stack.Screen>

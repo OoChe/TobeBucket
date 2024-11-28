@@ -37,35 +37,36 @@ import styles from '../../styles/EditBucketScreen.styles';
 import PageTitle from '../../components/PageTitle';
 import CategoryButton from '../../components/CategoryButton';
 import {categories} from '../../data/bucketCategories';
+import {getEditBucketDetail} from '../../apis/bucket/bucketService';
+import { BucketDetail } from '../../apis/types';
 
-const DUMMY_FRIEND_LIST = ['햄햄일', '햄햄이', '햄햄삼', '햄햄사'];
-const EditMyBucketScreen = ({sendDataToDB}) => {
+const EditMyBucketScreen = () => {
   const route = useRoute();
-  const {bucketInfo} = route.params;
-
-  const [goals, setGoals] = useState(bucketInfo.semiGoalData || []);
+  const {bucketId} = route.params as {bucketId: number};
+  const [bucketList, setBucketList] = useState<BucketDetail>();
+  const [goals, setGoals] = useState([]);
   const [selectedFriends, setSelectedFriends] = useState<string[]>(
-    bucketInfo.friendIds.map(friend => friend.name),
+    bucketList.friendNickname.map(friend => friend),
   );
   const [friendTags, setFriendTags] = useState<string[]>(
-    bucketInfo.friendIds.map(friend => friend.name),
+    bucketList.friendNickname.map(friend => friend),
   );
   const navigation = useNavigation();
   // 카테고리 선택 함수
   const handleCategorySelect = (categoryId: string) => {
-    setBucketInfo(prevData => ({...prevData, category: categoryId}));
+    setBucketList(prevData => ({...prevData, category: categoryId}));
   };
   // 중간 목표 함수
   const addGoal = () => {
     const updatedGoals = [...goals, {semiGoalTitle: ''}];
     setGoals(updatedGoals);
-    setBucketInfo(prevData => ({...prevData, semiGoalData: updatedGoals}));
+    setBucketList(prevData => ({...prevData, semiGoalData: updatedGoals}));
   };
 
   const removeGoal = (index: number) => {
     const updatedGoals = goals.filter((_, idx) => idx !== index);
     setGoals(updatedGoals);
-    setBucketInfo(prevData => ({...prevData, semiGoalData: updatedGoals}));
+    setBucketList(prevData => ({...prevData, semiGoalData: updatedGoals}));
   };
 
   const handleGoalChange = (text: string, index: number) => {
@@ -73,7 +74,7 @@ const EditMyBucketScreen = ({sendDataToDB}) => {
       idx === index ? {semiGoalTitle: text} : goal,
     );
     setGoals(updatedGoals);
-    setBucketInfo(prevData => ({...prevData, semiGoalData: updatedGoals}));
+    setBucketList(prevData => ({...prevData, semiGoalData: updatedGoals}));
   };
 
   // 친구 태그 함수
@@ -92,14 +93,14 @@ const EditMyBucketScreen = ({sendDataToDB}) => {
     ];
     setFriendTags(newFriends);
     setSelectedFriends([]);
-    setBucketInfo(prevData => ({...prevData, friendNickNameList: newFriends}));
+    setBucketList(prevData => ({...prevData, friendNickNameList: newFriends}));
     setShowFriendPicker(false);
   };
 
   const removeFriendTag = (index: number) => {
     const updatedFriends = friendTags.filter((_, idx) => idx !== index);
     setFriendTags(updatedFriends);
-    setBucketInfo(prevData => ({
+    setBucketList(prevData => ({
       ...prevData,
       friendNickNameList: updatedFriends,
     }));
@@ -118,19 +119,25 @@ const EditMyBucketScreen = ({sendDataToDB}) => {
       ...bucketInfo,
       semiGoalData: filteredGoals,
     };
-    setBucketInfo(updatedBucketInfo);
-    sendDataToDB(updatedBucketInfo); // 수정된 bucketInfo를 서버로 전송
+    setBucketList(updatedBucketInfo);
     navigation.navigate('MyBucketDetail'); // 이전 화면으로 돌아가기
   };
-
+  const getEditBucket = async () => {
+    try {
+      const data = await getEditBucketDetail(bucketId);
+      setBucketList(data.BucketListDetail);
+      setFriendTags(data.friendNicknameList);
+      setGoals(data.BucketListDetail.semiGoalData);
+    } catch (err: any) {
+      console.error('달성 예정 로드 오류:', err);
+      setError(
+        err.message ||
+          '스크린에서 버킷 목록을 불러오는 중 오류가 발생했습니다.',
+      );
+    }
+  };
   useEffect(() => {
-    // 서버에서 bucketID를 사용하여 데이터 요청
-    // fetch(`/buckets/${bucketId}`)
-    //   .then(response => response.json())
-    //   .then(data => setBucketDetail(data))
-    //   .catch(error => console.error('Error fetching bucket detail:', error));
-    // 서버 적용 시 아래 내용 삭제
-    console.log('받아온 bucketInfo: ', bucketInfo);
+    getEditBucket();
   }, []);
   return (
     <View style={styles.main}>
@@ -145,7 +152,7 @@ const EditMyBucketScreen = ({sendDataToDB}) => {
           placeholder="버킷 리스트 설명"
           value={bucketInfo.bucketContent}
           onChangeText={text =>
-            setBucketInfo(prevData => ({...prevData, bucketContent: text}))
+            setBucketList(prevData => ({...prevData, bucketContent: text}))
           }
           multiline={true}
         />
@@ -168,7 +175,7 @@ const EditMyBucketScreen = ({sendDataToDB}) => {
         <Switch
           value={bucketInfo.publicStatus}
           onValueChange={value =>
-            setBucketInfo(prevData => ({...prevData, publicStatus: value}))
+            setBucketList(prevData => ({...prevData, publicStatus: value}))
           }
           style={styles.switch}
         />

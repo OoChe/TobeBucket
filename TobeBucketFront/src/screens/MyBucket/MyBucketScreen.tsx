@@ -23,7 +23,7 @@ const MyBucketScreen = () => {
     navigation.navigate('WriteBucket');
   };
   const handleViewTemplate = () => {
-    // navigation.navigate('ViewTemplate');
+    navigation.navigate('ViewTemplate');
   };
   const getMyBucketList = async (mode: typeof viewMode) => {
     try {

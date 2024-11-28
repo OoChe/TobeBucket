@@ -9,6 +9,8 @@ import {
   upcomingBucketResponse,
   achievedBucket,
   BucketDetail,
+  editBucketData,
+  Response,
 } from '../types';
 // 버킷 작성하기 결과 전송 함수
 export const writeBucket = async (
@@ -67,18 +69,18 @@ export const getMyUpcomingBucketList = async (
       );
     }
     // 데이터를 필요한 형태로 변환
-    const bucketList = response.data.bucketList.map(
-      (bucket): upcomingBucket => ({
-        bucketId: bucket.bucketId,
-        bucketName: bucket.bucketName,
-        bucketContent: bucket.bucketContent,
-        goalDate: bucket.goalDate, // 문자열을 Date 객체로 변환
-        category: bucket.category,
-      }),
-    );
-    console.log(bucketList);
-
-    return bucketList; // 변환된 버킷 목록 반환
+    // const bucketList = response.data.bucketList.map(
+    //   (bucket): upcomingBucket => ({
+    //     bucketId: bucket.bucketId,
+    //     bucketName: bucket.bucketName,
+    //     bucketContent: bucket.bucketContent,
+    //     goalDate: bucket.goalDate, // 문자열을 Date 객체로 변환
+    //     category: bucket.category,
+    //   }),
+    // );
+    // console.log(bucketList);
+    // return bucketList; // 변환된 버킷 목록 반환
+    return response.data.bucketList;
   } catch (error) {
     console.error('버킷 목록 요청 오류:', error);
     throw error; // 에러 재발생
@@ -123,7 +125,7 @@ export const getMyBucketDetail = async (
       code: string;
       message: string;
       bucketList: BucketDetail;
-    }>('/bucketlists/${bucketId}', {
+    }>(`/bucketlists/${bucketId}`, {
       params: {bucketId},
     });
 
@@ -142,3 +144,48 @@ export const getMyBucketDetail = async (
   }
 };
 
+// 버킷 수정할 목록 불러오기
+export const getEditBucketDetail = async (
+  bucketId: number,
+): Promise<editBucketData> => {
+  try {
+    // 서버에서 데이터 가져오기
+    const response = await apiClient.get<{
+      code: string;
+      message: string;
+      bucketDetail: editBucketData;
+    }>(`/bucket-edit/${bucketId}`, {
+      params: {bucketId},
+    });
+
+    // 응답 코드 확인
+    if (response.data.code !== 'SU') {
+      throw new Error(
+        response.data.message ||
+          '버킷 수정 정보를 불러오는 중 오류가 발생했습니다.',
+      );
+    }
+    console.log(response.data.bucketDetail);
+    return response.data.bucketDetail;
+  } catch (error) {
+    console.error('버킷 수정 정보 요청 오류:', error);
+    throw error; // 에러 재발생
+  }
+};
+
+// 버킷 삭제하기
+export const deleteBucket = async (bucketId: number): Promise<Response> => {
+  try {
+    const response = await apiClient.delete<Response>(
+      `/bucket-delete/${bucketId}`,
+      {
+        params: {bucketId},
+      },
+    );
+    console.log(bucketId);
+    return response; // 삭제 성공 시 응답 반환
+  } catch (error) {
+    console.error('버킷 삭제 요청 오류:', error);
+    throw error; // 에러 재발생
+  }
+};

@@ -1,14 +1,16 @@
 // [친구 버킷 피드 화면]
 import React, {useState, useEffect} from 'react';
-import {View, ScrollView} from 'react-native';
+import {View, Text, ScrollView} from 'react-native';
 import PageTitle from '../../components/PageTitle';
 import FriendFeedShort from '../../components/FriendFeedShort';
 import styles from '../../styles/FriendBucketFeedScreen.styles';
-import { FriendFeedBucket } from '../../apis/types';
-import { getFriendFeedList } from '../../apis/bucket/feedService';
+import {FriendFeedBucket} from '../../apis/types';
+import {getFriendFeedList} from '../../apis/bucket/feedService';
 
 const FriendBucketFeedScreen = () => {
-  const [FriendBucketList, setFriendBucketList] = useState<FriendFeedBucket[]>([]);
+  const [FriendBucketList, setFriendBucketList] = useState<FriendFeedBucket[]>(
+    [],
+  );
 
   const getFriendFeedBucketList = async () => {
     try {
@@ -33,20 +35,28 @@ const FriendBucketFeedScreen = () => {
       <View>
         <PageTitle title="친구 버킷 피드" colorCode="#ff8736" />
       </View>
-      <ScrollView>
-        {FriendBucketList.map((bucket, index) => (
-          <FriendFeedShort
-            key={index}
-            nickname={bucket.nickname}
-            mbti={bucket.mbti}
-            profileImage={bucket.profileImage}
-            bucketName={bucket.bucketName}
-            bucketContent={bucket.bucketContent}
-            achieveDate={bucket.achieveDate}
-            achievementMedia={bucket.achievementMedia}
-          />
-        ))}
-      </ScrollView>
+      {FriendBucketList.length > 0 ? (
+        <ScrollView>
+          {FriendBucketList.map((bucket, index) => (
+            <FriendFeedShort
+              key={index}
+              nickname={bucket.nickname}
+              mbti={bucket.mbti}
+              profileImage={bucket.profileImage}
+              bucketName={bucket.bucketName}
+              bucketContent={bucket.bucketContent}
+              achieveDate={bucket.achieveDate}
+              achievementMedia={bucket.achievementMedia}
+            />
+          ))}
+        </ScrollView>
+      ) : (
+        <ScrollView>
+          <Text style={styles.nobucket}>
+            친구가 없거나 공개된 버킷이 없어요.
+          </Text>
+        </ScrollView>
+      )}
     </View>
   );
 };

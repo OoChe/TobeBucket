@@ -80,6 +80,10 @@ const styles = StyleSheet.create({
     marginLeft: 12,
     marginTop: 5,
   },
+  sticker: {
+    width: 40,
+    height: 40,
+  },
 });
 
 export default styles;

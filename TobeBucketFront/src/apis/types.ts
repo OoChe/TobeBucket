@@ -65,11 +65,17 @@ export interface BucketDetail {
   goalDate: string;
   category: number;
   createDate: string;
-  friendIds: string[];
+  achievementDate: string;
+  friendNickname: string[];
   semiGoalData: Map<string, number>;
   goalReview: string;
   achievementMedia: string;
   stickerId: number;
+}
+
+export interface editBucketData {
+  friendNicknameList: string[];
+  BucketListDetail: BucketDetail;
 }
 
 export interface achieveRecordData {

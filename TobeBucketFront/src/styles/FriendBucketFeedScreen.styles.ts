@@ -32,6 +32,14 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     textAlign: 'center',
   },
+  nobucket: {
+    fontFamily: 'Pretendard-Regular',
+    fontSize: 20,
+    position: 'relative',
+    textAlign: 'center',
+    marginLeft: 15,
+    marginTop: 120,
+  },
 });
 
 export default styles;

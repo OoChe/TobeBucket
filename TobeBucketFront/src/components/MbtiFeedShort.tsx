@@ -45,7 +45,9 @@ export const MbtiFeedShort = ({
             </Text>
             {achieveDate ? (
               <Text style={styles.dateText}>{achieveDate} &nbsp;달성</Text>
-            ) : null}
+            ) : (
+              <Text style={styles.dateText}> 진행 중 </Text>
+            )}
           </View>
         </View>
         {achievementMedia ? (
