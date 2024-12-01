@@ -1,6 +1,5 @@
 package com.example.ToBeBucket.Service;
 
-import com.example.ToBeBucket.DTO.GetBucketDTO;
 import com.example.ToBeBucket.Entity.*;
 import com.example.ToBeBucket.Repository.*;
 import lombok.RequiredArgsConstructor;
@@ -60,12 +59,18 @@ public class GetBucketlistsService {
                             if (!bucketFriendLists.isEmpty()) {
                                 List<String> friendNicknameLists = new ArrayList<>();
                                 for (BucketFriend bucketFriend : bucketFriendLists) {
-                                    Optional<UserProfile> userProfileOpt = userProfileRepository.findByUserId(bucketFriend.getFriend().getUserId());
-                                    userProfileOpt.ifPresent(userProfile -> {
-                                        friendNicknameLists.add(userProfile.getNickname());
-                                    });
+                                    UserLogin friendLogin = bucketFriend.getFriend();
+                                    // 친구의 닉넴 가져오고 + 자기 제외시키기
+                                    if (!friendLogin.getUserId().equals(userId)) {
+                                        Optional<UserProfile> userProfileOpt = userProfileRepository.findByUserId(friendLogin.getUserId());
+                                        userProfileOpt.ifPresent(userProfile -> {
+                                            friendNicknameLists.add(userProfile.getNickname());
+                                        });
+                                    }
                                 }
-                                map.put("friendNickname", friendNicknameLists);
+
+                                Set<String> uniqueFriends = new HashSet<>(friendNicknameLists);
+                                map.put("friendNickname", new ArrayList<>(uniqueFriends));
                             }
                             return map;
                         }
@@ -82,7 +87,7 @@ public class GetBucketlistsService {
                         }
 
                         // Bucket에 해당하는 모든 BucketAchievement 조회
-                        List<BucketAchievement> bucketAchievements = acheiveBucketRepository.findByBucket(bucket); // 수정 부분
+                        List<BucketAchievement> bucketAchievements = acheiveBucketRepository.findByBucket(bucket);
                         if (bucketAchievements.isEmpty()) {
                             return null; // BucketAchievement가 없으면 null 반환
                         }
