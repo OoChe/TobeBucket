@@ -60,8 +60,8 @@ const MyPageScreen = () => {
            ...prev,
            profile: { ...prev.profile, ...updatedProfile },
          }));
-       } else {
-         loadMyInfo();
+         // updatedProfile 사용 후 초기화 (중복 로딩 방지)
+         navigation.setParams({ updatedProfile: null });
        }
      }, [route.params])
    );

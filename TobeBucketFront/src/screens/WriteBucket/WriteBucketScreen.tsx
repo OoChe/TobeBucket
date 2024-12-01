@@ -57,7 +57,7 @@ const WriteBucketScreen = ({ bucketInfo, setBucketInfo }) => {
     console.log(bucketInfo);
     if (!bucketInfo.bucketName) missingFields.push("제목");
     if (!bucketInfo.bucketContent) missingFields.push("설명");
-    if (bucketInfo.category === null || bucketInfo.category === undefined) {
+    if (bucketInfo.category === -1 || bucketInfo.category === undefined) {
       missingFields.push("카테고리 선택");
     }
     if (missingFields.length > 0) {
