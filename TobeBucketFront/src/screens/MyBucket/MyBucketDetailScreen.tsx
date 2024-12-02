@@ -1,7 +1,20 @@
-/* [버킷리스트 상세 정보 화면] */
-import React, {useEffect, useState} from 'react';
+/* [버킷리스트 상세 정보 화면] 
+1) 파라미터
+- bucketId: 상세정보를 보고자 하는 버킷 ID -> router로 받아옴
+- bucketList: 특정 버킷리스트의 상세 정보 포함
+2) 메소드
+- getMyBucket(): 서버로부터 버킷리스트 상세 정보를 받아오는 함수 
+- handleSemiGoalRecord(): 중간 목표 클릭 시 중간 목표 달성 화면으로 이동
+- handleEditBucket(): 오른쪽 위 상세 버튼에서 수정하기 버튼을 누르는 경우, 수정 화면으로 이동
+- formatDDay(): 목표 날짜 설정 시 해당 날짜에 따른 디데이 표시
+*/
+import React, {useCallback, useState} from 'react';
 import {View, Text, Image, ScrollView, TouchableOpacity} from 'react-native';
-import {useRoute, useNavigation} from '@react-navigation/native';
+import {
+  useRoute,
+  useNavigation,
+  useFocusEffect,
+} from '@react-navigation/native';
 import BucketDetailDropdown from '../../components/BucketDetailDropdown';
 import CategoryButton from '../../components/CategoryButton';
 import StickerEmpty from '../../components/StickerEmpty';
@@ -20,6 +33,7 @@ const MyBucketDetailScreen = () => {
   const route = useRoute();
   const {bucketId} = route.params as {bucketId: number};
   const [bucketList, setBucketList] = useState<BucketDetail>();
+
   const getMyBucket = async () => {
     try {
       const data = await getMyBucketDetail(bucketId);
@@ -33,12 +47,22 @@ const MyBucketDetailScreen = () => {
     }
   };
 
-  useEffect(() => {
-    getMyBucket();
-  }, []);
+  useFocusEffect(
+    useCallback(() => {
+      getMyBucket();
+    }, []),
+  );
 
   if (!bucketList) {
-    return <Text>Loading...</Text>;
+    return (
+      <View
+        style={[
+          styles.main,
+          {flex: 1, justifyContent: 'center', alignItems: 'center'},
+        ]}>
+        <Text>Loading...</Text>
+      </View>
+    );
   }
   const handleSemiGoalRecord = ({
     bucketId,
@@ -58,11 +82,16 @@ const MyBucketDetailScreen = () => {
     navigation.navigate('EditBucket', {bucketId: bucketId});
   };
 
+  const formatDDay = (goalDate: string): string => {
+    const dDay = calculateDDay(goalDate);
+    return dDay < 0 ? `D+${Math.abs(dDay)}` : `D-${dDay}`;
+  };
+
   return (
     <View style={styles.main}>
       <ScrollView
-        scrollEnabled={true}
-        contentInsetAdjustmentBehavior="automatic">
+        contentContainerStyle={{flexGrow: 1, paddingBottom: 20}}
+        showsVerticalScrollIndicator={false}>
         <View>
           <View style={{flexDirection: 'row'}}>
             <TouchableOpacity
@@ -124,14 +153,14 @@ const MyBucketDetailScreen = () => {
                   }}>
                   {bucketList.achievementDate} 달성!
                 </Text>
-              ) : (
+              ) : bucketList.goalDate ? (
                 <>
                   <Text
                     style={{
                       fontFamily: 'Pretendard-ExtraBold',
                       fontSize: 28,
                     }}>
-                    D-{calculateDDay(bucketList.goalDate)}
+                    {formatDDay(bucketList.goalDate)}
                   </Text>
                   <Text
                     style={{
@@ -144,7 +173,7 @@ const MyBucketDetailScreen = () => {
                     {bucketList.goalDate} 목표
                   </Text>
                 </>
-              )}
+              ) : null}
               <View style={{position: 'absolute', right: 20, marginTop: 10}}>
                 {bucketList.achievementDate ? (
                   <AchieveDetailDropdown bucketId={bucketList.bucketId} />
@@ -183,48 +212,55 @@ const MyBucketDetailScreen = () => {
                   <Text style={styles.friendText}>@{friendId}</Text>
                 </View>
               )) || (
-                <Text style={styles.friendText}>친구 목록이 없습니다.</Text>
+                <Text style={styles.friendText}>함께하는 친구가 없습니다.</Text>
               )}
             </View>
-            {bucketList?.semiGoalData && bucketList.semiGoalData.size > 0 ? (
+            {bucketList.semiGoalData && bucketList.semiGoalData.length > 0 ? (
               <View>
                 <Text style={styles.middleText}>중간 목표</Text>
                 <View>
-                  {Array.from(bucketList.semiGoalData.entries()).map(
-                    ([semiGoalName, stickerNum], index) => (
-                      <TouchableOpacity
-                        key={semiGoalName}
-                        onPress={() =>
-                          handleSemiGoalRecord({
-                            bucketId: bucketList.bucketId,
-                            bucketName: bucketList.bucketName,
-                            semiGoalId: index,
-                            semiGoalName: semiGoalName,
-                          })
-                        }>
-                        <MilestoneShort
-                          title={semiGoalName}
-                          stickerNum={stickerNum}
-                        />
-                      </TouchableOpacity>
-                    ),
-                  )}
+                  {bucketList.semiGoalData.map((semiGoal, index) => (
+                    <TouchableOpacity
+                      key={`${semiGoal.stickerId}-${index}`}
+                      onPress={() =>
+                        handleSemiGoalRecord({
+                          bucketId: bucketList.bucketId,
+                          bucketName: bucketList.bucketName,
+                          semiGoalId: index,
+                          semiGoalName: semiGoal.semiGoalTitle,
+                        })
+                      }>
+                      <MilestoneShort
+                        title={semiGoal.semiGoalTitle}
+                        stickerNum={semiGoal.stickerId}
+                      />
+                    </TouchableOpacity>
+                  ))}
                 </View>
               </View>
             ) : null}
+
             <View>
-              <Text style={styles.middleText}>달성 후기</Text>
-              <View style={styles.textContainer}>
-                {bucketList.achievementMedia ? (
-                  <Image
-                    source={{uri: bucketList.achievementMedia}}
-                    style={styles.imageContainer}></Image>
-                ) : null}
-                {bucketList.goalReview ? (
-                  <Text style={styles.normalText}>{bucketList.goalReview}</Text>
-                ) : null}
-                {}
-              </View>
+              {bucketList.achievementDate ? (
+                <>
+                  <Text style={styles.middleText}>달성 후기</Text>
+                  <View style={styles.textContainer}>
+                    {bucketList.achievementMedia ? (
+                      <Image
+                        source={{uri: bucketList.achievementMedia}}
+                        style={styles.imageContainer}
+                      />
+                    ) : null}
+                    {bucketList.goalReview ? (
+                      <Text style={styles.normalText}>
+                        {bucketList.goalReview}
+                      </Text>
+                    ) : null}
+                  </View>
+                </>
+              ) : bucketList.goalReview ? (
+                <Text style={styles.normalText}>{bucketList.goalReview}</Text>
+              ) : null}
             </View>
           </View>
         </View>

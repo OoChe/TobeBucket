@@ -21,7 +21,7 @@ const WriteBucketStackNavigator = () => {
   const [bucketInfo, setBucketInfo] = useState({
       bucketName: '',
       bucketContent: '',
-      category: '',
+      category: -1,
       publicStatus: false,
       semiGoalData: [{ semiGoalTitle: "" }] as { semiGoalTitle: string }[],
       goalDate: null as string | null,
@@ -32,6 +32,7 @@ const WriteBucketStackNavigator = () => {
 
   return (
     <Stack.Navigator
+        initialRouteName="WriteBucketRequired"
         screenOptions={{
             cardStyle: { backgroundColor: '#FBFBFB' },
         }}

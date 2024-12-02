@@ -32,10 +32,10 @@ const LoginScreen = ({ navigation }: any) => {
         await AsyncStorage.setItem('authToken', response.token);
         navigation.navigate('Main');
       } else {
-        Alert.alert('로그인 실패', response.message);
+        Alert.alert('로그인 실패', "네트워크 연결을 확인해주세요.");
       }
     } catch (error: any) {
-      Alert.alert('로그인 실패', error.response?.data?.message || '로그인 중 오류가 발생했습니다.');
+      Alert.alert('로그인 실패', error.response?.data?.message || '아이디와 비밀번호를 확인해주세요.');
       console.error('로그인 에러:', error);
     }
   };

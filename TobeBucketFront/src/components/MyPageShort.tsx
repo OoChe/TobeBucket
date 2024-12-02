@@ -26,7 +26,7 @@ interface MyPageShortProps {
 const MyPageShort: React.FC<MyPageShortProps> = ({ profileImage, mbti, nickname, intro, onPress }) => {
 
   const navigation = useNavigation();
-  const isValidUri = typeof profileImage === 'string' && profileImage.startsWith('http');
+  const isValidUri = typeof profileImage === 'string' && (profileImage.startsWith('http')|| profileImage.startsWith('file'));
 
   return (
     <View style={styles.container}>

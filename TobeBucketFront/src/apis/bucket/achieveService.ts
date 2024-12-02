@@ -1,5 +1,8 @@
 import apiClient from '../apiClient';
-import {achieveRecordData, achieveRecordResponse} from '../types';
+import {
+  achieveRecordResponse,
+  semiGoalRecordData,
+} from '../types';
 
 // 목표 달성 기록에 필요한 스티커 목록 가져오기 함수
 export const getUnlockedSticker = async (): Promise<number> => {
@@ -23,11 +26,22 @@ export const getUnlockedSticker = async (): Promise<number> => {
     throw error; // 에러 재발생
   }
 };
+// 중간 목표 달성 기록 내용 전송 함수
+export const semiAchieveRecord = async (
+  data: semiGoalRecordData,
+): Promise<achieveRecordResponse> => {
+  const response = await apiClient.put('/home/semigoal-record', data);
+  return response.data;
+};
 
 // 버킷 달성 기록 내용 전송 함수
 export const achieveRecord = async (
-  data: achieveRecordData,
+  formData: FormData,
 ): Promise<achieveRecordResponse> => {
-  const response = await apiClient.put('/home/achievement-record', data);
+  const response = await apiClient.put('/home/achievement-record', formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
   return response.data;
 };
