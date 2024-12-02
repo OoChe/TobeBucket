@@ -95,6 +95,12 @@ export interface EditBucketResponse {
   code: string;
   message: string;
 }
+export interface semiGoalRecordData {
+  bucketId: number;
+  stickerId: number;
+  semiGoalId: number;
+  achieveDate: string;
+}
 
 export interface achieveRecordData {
   bucketId: number;

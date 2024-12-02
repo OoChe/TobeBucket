@@ -86,7 +86,6 @@ const AchievementRecordScreen = () => {
   };
 
   const submitAchievement = async () => {
-    validateInputs();
     if (validateInputs()) {
       // 중간 목표 필터링
       const achievementRecordInfo: achieveRecordData = {
