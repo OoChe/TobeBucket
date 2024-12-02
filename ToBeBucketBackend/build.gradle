@@ -21,6 +21,7 @@ configurations {
 
 repositories {
 	mavenCentral()
+	maven { url 'https://repo.spring.io/release' } // Spring Cloud 저장소 추가
 }
 
 dependencies {
@@ -29,24 +30,30 @@ dependencies {
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-	//spring security
+
+	// spring security
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	testImplementation 'org.springframework.security:spring-security-test'
 
-	//jwt 의존성 추가
+	// jwt 의존성 추가
 	implementation 'io.jsonwebtoken:jjwt-api:0.12.3'
 	implementation 'io.jsonwebtoken:jjwt-impl:0.12.3'
 	implementation 'io.jsonwebtoken:jjwt-jackson:0.12.3'
 
 	// mysql
-	implementation 'mysql:mysql-connector-java:8.0.31' // 최신 버전 사용
+	implementation 'mysql:mysql-connector-java:8.0.31'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 
 	// swagger
 	implementation group: 'org.springdoc', name: 'springdoc-openapi-starter-webmvc-ui', version: '2.6.0'
 
 	// devtool
-	runtimeOnly('org.springframework.boot:spring-boot-devtools')
+	runtimeOnly 'org.springframework.boot:spring-boot-devtools'
+
+	// spring-cloud-starter-aws 의존성 수정
+	implementation 'com.amazonaws:aws-java-sdk-s3:1.11.238'
+	implementation 'javax.xml.bind:jaxb-api:2.3.1'
+	implementation 'org.glassfish.jaxb:jaxb-runtime:2.3.3'
 }
 
 tasks.named('test') {

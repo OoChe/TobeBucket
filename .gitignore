@@ -78,3 +78,5 @@ yarn-error.log
 ._.DS_Store
 **/.DS_Store
 **/._.DS_Store
+
+ToBeBucketBackend/src/main/resources/application.yml

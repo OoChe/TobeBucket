@@ -1,5 +1,6 @@
 package com.example.ToBeBucket.Service;
 
+import com.amazonaws.services.s3.AmazonS3;
 import com.example.ToBeBucket.DTO.AchieveBucketDTO;
 import com.example.ToBeBucket.DTO.SemiGoalDTO;
 import com.example.ToBeBucket.Entity.*;
@@ -7,6 +8,7 @@ import com.example.ToBeBucket.Repository.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
 
 import java.util.List;
 import java.util.Optional;
@@ -22,6 +24,7 @@ public class AchieveBucketService {
     private final StickerRepository stickerRepository;
     private final UserProfileRepository userProfileRepository;
     private final UserPointRepository userPointRepository;
+
 
     //달성기록 데이터베이스에 저장
     public void saveAchieveBucket(String userId, AchieveBucketDTO achieveBucketDTO) {
