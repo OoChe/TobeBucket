@@ -38,7 +38,15 @@ const MyBucketDetailScreen = () => {
   }, []);
 
   if (!bucketList) {
-    return <Text>Loading...</Text>;
+    return (
+      <View
+        style={[
+          styles.main,
+          {flex: 1, justifyContent: 'center', alignItems: 'center'},
+        ]}>
+        <Text>Loading...</Text>
+      </View>
+    );
   }
   const handleSemiGoalRecord = ({
     bucketId,
@@ -58,11 +66,16 @@ const MyBucketDetailScreen = () => {
     navigation.navigate('EditBucket', {bucketId: bucketId});
   };
 
+  const formatDDay = (goalDate: string): string => {
+    const dDay = calculateDDay(goalDate);
+    return dDay < 0 ? `D+${Math.abs(dDay)}` : `D-${dDay}`;
+  };
+
   return (
     <View style={styles.main}>
       <ScrollView
-        scrollEnabled={true}
-        contentInsetAdjustmentBehavior="automatic">
+        contentContainerStyle={{flexGrow: 1, paddingBottom: 20}}
+        showsVerticalScrollIndicator={false}>
         <View>
           <View style={{flexDirection: 'row'}}>
             <TouchableOpacity
@@ -124,14 +137,14 @@ const MyBucketDetailScreen = () => {
                   }}>
                   {bucketList.achievementDate} 달성!
                 </Text>
-              ) : (
+              ) : bucketList.goalDate ? (
                 <>
                   <Text
                     style={{
                       fontFamily: 'Pretendard-ExtraBold',
                       fontSize: 28,
                     }}>
-                    D-{calculateDDay(bucketList.goalDate)}
+                    {formatDDay(bucketList.goalDate)}
                   </Text>
                   <Text
                     style={{
@@ -144,7 +157,7 @@ const MyBucketDetailScreen = () => {
                     {bucketList.goalDate} 목표
                   </Text>
                 </>
-              )}
+              ) : null}
               <View style={{position: 'absolute', right: 20, marginTop: 10}}>
                 {bucketList.achievementDate ? (
                   <AchieveDetailDropdown bucketId={bucketList.bucketId} />
@@ -183,48 +196,55 @@ const MyBucketDetailScreen = () => {
                   <Text style={styles.friendText}>@{friendId}</Text>
                 </View>
               )) || (
-                <Text style={styles.friendText}>친구 목록이 없습니다.</Text>
+                <Text style={styles.friendText}>함께하는 친구가 없습니다.</Text>
               )}
             </View>
-            {bucketList?.semiGoalData && bucketList.semiGoalData.size > 0 ? (
+            {bucketList.semiGoalData && bucketList.semiGoalData.length > 0 ? (
               <View>
                 <Text style={styles.middleText}>중간 목표</Text>
                 <View>
-                  {Array.from(bucketList.semiGoalData.entries()).map(
-                    ([semiGoalName, stickerNum], index) => (
-                      <TouchableOpacity
-                        key={semiGoalName}
-                        onPress={() =>
-                          handleSemiGoalRecord({
-                            bucketId: bucketList.bucketId,
-                            bucketName: bucketList.bucketName,
-                            semiGoalId: index,
-                            semiGoalName: semiGoalName,
-                          })
-                        }>
-                        <MilestoneShort
-                          title={semiGoalName}
-                          stickerNum={stickerNum}
-                        />
-                      </TouchableOpacity>
-                    ),
-                  )}
+                  {bucketList.semiGoalData.map((semiGoal, index) => (
+                    <TouchableOpacity
+                      key={`${semiGoal.stickerId}-${index}`}
+                      onPress={() =>
+                        handleSemiGoalRecord({
+                          bucketId: bucketList.bucketId,
+                          bucketName: bucketList.bucketName,
+                          semiGoalId: index,
+                          semiGoalName: semiGoal.semiGoalTitle,
+                        })
+                      }>
+                      <MilestoneShort
+                        title={semiGoal.semiGoalTitle}
+                        stickerNum={semiGoal.stickerId}
+                      />
+                    </TouchableOpacity>
+                  ))}
                 </View>
               </View>
             ) : null}
+
             <View>
-              <Text style={styles.middleText}>달성 후기</Text>
-              <View style={styles.textContainer}>
-                {bucketList.achievementMedia ? (
-                  <Image
-                    source={{uri: bucketList.achievementMedia}}
-                    style={styles.imageContainer}></Image>
-                ) : null}
-                {bucketList.goalReview ? (
-                  <Text style={styles.normalText}>{bucketList.goalReview}</Text>
-                ) : null}
-                {}
-              </View>
+              {bucketList.achievementDate ? (
+                <>
+                  <Text style={styles.middleText}>달성 후기</Text>
+                  <View style={styles.textContainer}>
+                    {bucketList.achievementMedia ? (
+                      <Image
+                        source={{uri: bucketList.achievementMedia}}
+                        style={styles.imageContainer}
+                      />
+                    ) : null}
+                    {bucketList.goalReview ? (
+                      <Text style={styles.normalText}>
+                        {bucketList.goalReview}
+                      </Text>
+                    ) : null}
+                  </View>
+                </>
+              ) : bucketList.goalReview ? (
+                <Text style={styles.normalText}>{bucketList.goalReview}</Text>
+              ) : null}
             </View>
           </View>
         </View>

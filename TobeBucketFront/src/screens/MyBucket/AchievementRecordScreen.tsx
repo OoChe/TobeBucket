@@ -87,32 +87,34 @@ const AchievementRecordScreen = () => {
 
   const submitAchievement = async () => {
     validateInputs();
-    // 중간 목표 필터링
-    const achievementRecordInfo: achieveRecordData = {
-      bucketId: bucketAchieveInfo.bucketId,
-      stickerId: bucketAchieveInfo.stickerId,
-      achieveDate: bucketAchieveInfo.achieveDate,
-      goalReview: bucketAchieveInfo.goalReview,
-      achievementMedia: bucketAchieveInfo.achievementMedia,
-    };
+    if (validateInputs()) {
+      // 중간 목표 필터링
+      const achievementRecordInfo: achieveRecordData = {
+        bucketId: bucketAchieveInfo.bucketId,
+        stickerId: bucketAchieveInfo.stickerId,
+        achieveDate: bucketAchieveInfo.achieveDate,
+        goalReview: bucketAchieveInfo.goalReview,
+        achievementMedia: bucketAchieveInfo.achievementMedia,
+      };
 
-    // 데이터 확인을 위한 로그 출력
-    console.log(
-      '목표 달성 기록 데이터:',
-      JSON.stringify(achievementRecordInfo, null, 2),
-    );
+      // 데이터 확인을 위한 로그 출력
+      console.log(
+        '목표 달성 기록 데이터:',
+        JSON.stringify(achievementRecordInfo, null, 2),
+      );
 
-    try {
-      // 목표 달성 기록 API 호출
-      const response = await achieveRecord(achievementRecordInfo);
-      Alert.alert('성공', '목표를 달성하였습니다.');
-      navigation.navigate('MyBucket', {screen: 'MyBucketList'});
-    } catch (error: any) {
-      console.error('목표 달성 기록 오류:', error);
-      const errorMessage =
-        error.response?.data?.message ||
-        '목표 달성 기록 중 오류가 발생했습니다.';
-      Alert.alert('오류', errorMessage);
+      try {
+        // 목표 달성 기록 API 호출
+        const response = await achieveRecord(achievementRecordInfo);
+        Alert.alert('성공', '목표를 달성하였습니다.');
+        navigation.navigate('MyBucket', {screen: 'MyBucketList'});
+      } catch (error: any) {
+        console.error('목표 달성 기록 오류:', error);
+        const errorMessage =
+          error.response?.data?.message ||
+          '목표 달성 기록 중 오류가 발생했습니다.';
+        Alert.alert('오류', errorMessage);
+      }
     }
   };
 
