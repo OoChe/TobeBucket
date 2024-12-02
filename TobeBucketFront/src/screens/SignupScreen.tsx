@@ -12,7 +12,7 @@ const SignupScreen = ({ navigation }: any) => {
     pwd: '',
     confirmPassword: '',
     nickname: '',
-    mbti: '',
+    mbti: null,
     intro: '',
     role: 'USER',
   });
@@ -49,13 +49,13 @@ const handleSignup = async () => {
       const response = await signup(requestBody);
 
       if (response.code === 'SU') {
-        Alert.alert('성공', response.message);
+        Alert.alert('성공', "회원 가입이 완료되었습니다.");
         navigation.navigate('Login');
       } else {
-        Alert.alert('오류', response.message);
+        Alert.alert('실패', '네트워크 연결을 확인해주세요.');
       }
     } catch (error: any) {
-      Alert.alert('오류', '디버깅 필요');
+      Alert.alert('실패', '아이디가 기존 사용자와 중복됩니다.');
     }
   };
 

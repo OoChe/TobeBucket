@@ -128,7 +128,19 @@ const WriteBucketOptionalScreen = ({ route, bucketInfo, setBucketInfo }) => {
       // 버킷 생성 API 호출 후 마이 버킷 페이지 이동
       const response = await writeBucket(finalBucketInfo);
       Alert.alert('성공', '버킷리스트가 추가되었습니다.');
+      setBucketInfo(()=>({
+         bucketName: '',
+         bucketContent: '',
+         category: -1,
+         publicStatus: false,
+         semiGoalData: [{ semiGoalTitle: "" }] as { semiGoalTitle: string }[],
+         goalDate: null as string | null,
+         friendNickNameList : [] as string[]
+      }));
+
+      navigation.goBack();
       navigation.navigate('MyBucket', {screen : 'MyBucketList'});
+
     } catch (error: any) {
       console.error('버킷 생성 오류:', error);
       const errorMessage = error.response?.data?.message || '버킷리스트 생성 중 오류가 발생했습니다.';
@@ -137,7 +149,7 @@ const WriteBucketOptionalScreen = ({ route, bucketInfo, setBucketInfo }) => {
   };
 
   return (
-    <View style={styles.main}>
+    <ScrollView style={styles.main}>
       {/* 헤더 */}
       <PageTitle title="버킷리스트 작성하기" colorCode="#EE4963" />
       <ScrollView contentContainerStyle={styles.container}>
@@ -227,7 +239,7 @@ const WriteBucketOptionalScreen = ({ route, bucketInfo, setBucketInfo }) => {
           </TouchableOpacity>
         </View>
       </ScrollView>
-    </View>
+    </ScrollView>
   );
 };
 

@@ -21,7 +21,7 @@ interface SearchFriendShortProps {
 
 const SearchFriendShort: React.FC<SearchFriendShortProps> = ({ profileImage, mbti, nickname, onAdd, isRequested }) => {
 
-  const isValidUri = typeof profileImage === 'string' && profileImage.startsWith('http');
+  const isValidUri = typeof profileImage === 'string' && (profileImage.startsWith('http') || profileImage.startsWith('file'));
 
   return (
     <View style={styles.container}>
@@ -29,7 +29,7 @@ const SearchFriendShort: React.FC<SearchFriendShortProps> = ({ profileImage, mbt
       <Image
         source={
           isValidUri
-            ? { uri: profileImage } // URI가 유효하면 해당 이미지 사용
+            ? { uri: profileImage } // URI가 유효하면 해당 이미지 사용워니
             : require('../assets/images/defaultProfile.png') // 기본 이미지
         }
         style={styles.profileImage}

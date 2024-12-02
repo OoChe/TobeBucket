@@ -49,7 +49,7 @@ const ViewFriendBucketScreen = () => {
             key={index}
             bucketName={bucket.bucketName}
             bucketContent={bucket.bucketContent}
-            achieveDate={bucket.achieveDate ? new Date(bucket.achieveDate) : null}
+            achieveDate={bucket.achieveDate ? bucket.achieveDate : null}
             achievementMedia={bucket.achievementMedia}
           />
         ))

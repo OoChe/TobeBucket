@@ -9,7 +9,7 @@
   - confirmSubmit : 닉네임 필수 항목 확인
  */
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, ScrollView, Image, TextInput, TouchableOpacity, Linking, Alert } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { Picker } from '@react-native-picker/picker';
@@ -27,7 +27,11 @@ const ChangeMyInfoScreen = () => {
   const [mbti, setMbti] = useState(profile.mbti);
   const [intro, setIntro] = useState(profile.intro);
   const [profileImage, setProfileImage] = useState(profile.profileImage);
-  const isValidUri = typeof profileImage === 'string' && profileImage.startsWith('http');
+  const isValidUri = typeof profileImage === 'string' && (profileImage.startsWith('http') || profileImage.startsWith('file'));
+
+  useEffect(() => {
+    console.log('프로필 이미지 변경됨:', profileImage);
+  }, [profileImage]);
 
   {/* 이미지 업로드 */}
   const handleUploadImage = () => {

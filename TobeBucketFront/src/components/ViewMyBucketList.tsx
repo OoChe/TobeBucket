@@ -28,7 +28,7 @@ const ViewMyBucketList = ({bucketList}: upcomingBucketList) => {
   return (
     <View style={styles.bucketListContainer}>
       <HorizontalCategory onSelectCategory={handleCategorySelect}/>
-      <ScrollView>
+      <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
         {filteredBucketList.map(item => (
           <View key={item.bucketId}>
             <MyBucketShort
@@ -54,7 +54,8 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   bucketListContainer: {
-    flexDirection: 'column',
-    height: 480,
+    flex: 1,
+    padding: 10,
+    backgroundColor: '#fff',
   },
 });

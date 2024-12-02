@@ -13,6 +13,7 @@ import {getStickerById} from '../../data/StickerData';
 import styles from '../../styles/MyBucketDetailScreen.styles';
 import {getMyBucketDetail} from '../../apis/bucket/bucketService';
 import {BucketDetail} from '../../apis/types';
+import AchieveDetailDropdown from '../../components/AchieveDetailDropdown';
 
 const MyBucketDetailScreen = () => {
   const navigation = useNavigation();
@@ -145,11 +146,15 @@ const MyBucketDetailScreen = () => {
                 </>
               )}
               <View style={{position: 'absolute', right: 20, marginTop: 10}}>
-                <BucketDetailDropdown
-                  bucketId={bucketList.bucketId}
-                  bucketName={bucketList.bucketName}
-                  handleEditBucket={handleEditBucket}
-                />
+                {bucketList.achievementDate ? (
+                  <AchieveDetailDropdown bucketId={bucketList.bucketId} />
+                ) : (
+                  <BucketDetailDropdown
+                    bucketId={bucketList.bucketId}
+                    bucketName={bucketList.bucketName}
+                    handleEditBucket={handleEditBucket}
+                  />
+                )}
               </View>
             </View>
             <Text style={styles.middleText}>세부 설명</Text>

@@ -132,7 +132,8 @@ const AchievementRecordScreen = () => {
   }, [bucketId]);
 
   return (
-    <ScrollView>
+  <View style={{ flex: 1, backgroundColor: '#FBFBFB' }}>
+    <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
       <View style={{flexDirection: 'row'}}>
         <TouchableOpacity
           onPress={() => navigation.goBack()}
@@ -239,6 +240,7 @@ const AchievementRecordScreen = () => {
         </Text>
       </View>
     </ScrollView>
+   </View>
   );
 };
 

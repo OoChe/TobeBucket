@@ -3,24 +3,23 @@ import {StyleSheet} from 'react-native';
 const styles = StyleSheet.create({
   Container: {
     marginTop: 10,
-    marginLeft: 15,
+    marginHorizontal: 15, // 좌우 마진 조정
+    flex: 1, // 전체 화면 공간 활용
   },
   itemContainer: {
-    flexDirection: 'row', // 가로 정렬
-    justifyContent: 'space-between', // 양 끝에 배치
-    alignItems: 'center', // 세로 정렬 기준 맞춤
-    paddingRight: 10, // 좌우 여백
-    marginVertical: 10, // 위아래 여백
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginVertical: 10,
   },
   imageContainer: {
-    width: 328,
-    height: 109,
+    width: '90%', // 화면에 맞게 크기 조정
+    aspectRatio: 3 / 1, // 이미지 박스 비율 유지
     backgroundColor: '#ececec',
     borderRadius: 10,
-    position: 'relative',
-    marginTop: 6,
-    marginLeft: 15,
-    marginBottom: 10,
+    alignSelf: 'center',
+    justifyContent: 'center',
+    marginVertical: 10,
   },
   titleText: {
     fontFamily: 'Pretendard-ExtraBold',
