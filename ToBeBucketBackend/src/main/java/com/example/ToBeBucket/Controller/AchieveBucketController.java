@@ -5,6 +5,7 @@ import com.example.ToBeBucket.DTO.SemiGoalDTO;
 import com.example.ToBeBucket.Service.AchieveBucketService;
 import com.example.ToBeBucket.Service.S3FileUploadService;
 import com.example.ToBeBucket.Service.UserProfileService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -46,11 +47,14 @@ public class AchieveBucketController {
     // 버킷 목표 달성 기록
     @PutMapping("/tobebucket/home/achievement-record")
     public ResponseEntity<Map<String,Object>> recordBucketAchievement(
-            @RequestPart("achieveBucketDTO") AchieveBucketDTO achieveBucketDTO,
+            @RequestPart("achieveBucketDTO") String achieveRequest,
             @RequestPart(value = "file", required = false) MultipartFile file){
         Map<String,Object> response = new LinkedHashMap<>();
         String userId = SecurityContextHolder.getContext().getAuthentication().getName();
         try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            AchieveBucketDTO achieveBucketDTO = objectMapper.readValue(achieveRequest, AchieveBucketDTO.class);
+
             //request한 것 DTO로 가져오기
             Integer bucketId = achieveBucketDTO.getBucketId();
             String fileUrl = null;

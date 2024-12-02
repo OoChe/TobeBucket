@@ -3,6 +3,7 @@ package com.example.ToBeBucket.Controller;
 import com.example.ToBeBucket.DTO.UserProfileDTO;
 import com.example.ToBeBucket.Service.S3FileUploadService;
 import com.example.ToBeBucket.Service.UserProfileService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -26,18 +27,22 @@ public class ModifyMypageController {
 
     @PatchMapping("/tobebucket/mypage/modify")
     public ResponseEntity<Map<String, Object>> updateUserProfile(
-            @RequestPart("updateRequest") UserProfileDTO updateRequest,
+            @RequestPart("updateRequest") String updateRequest,
             @RequestPart(value = "file", required = false) MultipartFile file) {
         Map<String, Object> response = new LinkedHashMap<>();
         try {
+            // JSON String -> DTO 변환
+            ObjectMapper objectMapper = new ObjectMapper();
+            UserProfileDTO userProfileDTO = objectMapper.readValue(updateRequest, UserProfileDTO.class);
+
             String userId = SecurityContextHolder.getContext().getAuthentication().getName();
             String fileUrl = null;
             // 파일이 존재하는 경우에만 S3 업로드 수행
             if (file != null && !file.isEmpty()) {
                 fileUrl = s3FileUploadService.saveFileToS3(file);
-                updateRequest.setProfileImage(fileUrl);  // 파일 URL을 DTO에 설정
+                userProfileDTO.setProfileImage(fileUrl);  // 파일 URL을 DTO에 설정
             }
-            userProfileService.updateUserProfile(userId, updateRequest);
+            userProfileService.updateUserProfile(userId, userProfileDTO);
 
             response.put("code", "SU");
             response.put("message", "Success.");
