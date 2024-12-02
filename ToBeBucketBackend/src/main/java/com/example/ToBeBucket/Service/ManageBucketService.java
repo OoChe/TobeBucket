@@ -10,7 +10,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.awt.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -32,49 +32,76 @@ public class ManageBucketService {
 
         UserProfile userProfile = userProfileRepository.findByUserId(userId)
                 .orElseThrow(() -> new RuntimeException("사용자 프로필 정보 없음"));
+
         Bucket bucket = getBucket(userId, writeBucketDTO, userProfile);
         bucketRepository.save(bucket);
+        saveUserBucket(user, bucket);
 
-        // UserBucket에 userId와 friendId 추가
-        UserBucket userBucket = new UserBucket();
-        userBucket.setUserId(user);  // 현재 사용자 추가
-        userBucket.setBucketId(bucket); // 버킷 추가
-        userBucketRepository.save(userBucket);  // userId와 bucketId 관계 저장
-
-        //BucketFriend 생성할지 말지 결정
+        List<UserLogin> friends = new ArrayList<>();
         if (writeBucketDTO.getFriendNickNameList() != null) {
-                for (String friendNickName : writeBucketDTO.getFriendNickNameList()) {
-                    // UserProfile에서 친구의 nickname으로 UserLogin에 있는 id가져오기 위한 과정임.
-                    UserProfile friendProfile = userProfileRepository.findByNickname(friendNickName)
-                            .orElseThrow(() -> new RuntimeException("존재하지 않는 친구 닉네임입니다."));
-                    UserLogin friend = friendProfile.getUserLogin();
-
-                    BucketFriend bucketFriend = new BucketFriend();
-                    bucketFriend.setUserLogin(user);
-                    bucketFriend.setBucket(bucket);
-                    bucketFriend.setFriend(friend);
-
-                    bucketFriendRepository.save(bucketFriend);
-
-                    // UserBucket 저장 (userId와 friendId 연결)
-                    UserBucket friendUserBucket = new UserBucket();
-                    friendUserBucket.setUserId(friend);
-                    friendUserBucket.setBucketId(bucket);
-                    userBucketRepository.save(friendUserBucket);
-                }
+            for (String friendNickName : writeBucketDTO.getFriendNickNameList()) {
+                UserProfile friendProfile = userProfileRepository.findByNickname(friendNickName)
+                        .orElseThrow(() -> new RuntimeException("존재하지 않는 친구 닉네임입니다."));
+                friends.add(friendProfile.getUserLogin());
+            }
         }
-        //SemiGoalBucket 생성할지 말지 결정
-        if (writeBucketDTO.getSemiGoalData()!= null) {
+
+        // 사용자와 친구 간 관계
+        for (UserLogin friend : friends) {
+            saveBucketFriend(user, friend, bucket);
+            saveBucketFriend(friend, user, bucket);
+            // 친구의 UserBucket 저장
+            saveUserBucket(friend, bucket);
+        }
+        // 친구들 간 관계
+        for (int i = 0; i < friends.size(); i++) {
+            for (int j = i + 1; j < friends.size(); j++) {
+                UserLogin friend1 = friends.get(i);
+                UserLogin friend2 = friends.get(j);
+
+                saveBucketFriend(friend1, friend2, bucket);
+                saveBucketFriend(friend2, friend1, bucket);
+            }
+        }
+
+        // SemiGoalBucket 생성
+        if (writeBucketDTO.getSemiGoalData() != null) {
             for (SemiGoalTitleDTO semiGoalTitleDTO : writeBucketDTO.getSemiGoalData()) {
                 String semiGoalTitle = semiGoalTitleDTO.getSemiGoalTitle();
                 BucketSemiGoal bucketSemiGoal = new BucketSemiGoal();
                 bucketSemiGoal.setSemiGoalTitle(semiGoalTitle);
-                bucketSemiGoal.setBucket(bucket); //여기서 id가 저장됨
+                bucketSemiGoal.setBucket(bucket); // 여기서 id가 저장됨
                 bucketSemiGoalRepository.save(bucketSemiGoal);
             }
         }
+
         return bucket.getBucketId();
     }
+
+    // UserBucket 저장 메서드
+    private void saveUserBucket(UserLogin user, Bucket bucket) {
+        // 중복 저장 방지
+        if (!userBucketRepository.existsByUserIdAndBucketId(user, bucket)) {
+            UserBucket userBucket = new UserBucket();
+            userBucket.setUserId(user);
+            userBucket.setBucketId(bucket);
+            userBucketRepository.save(userBucket);
+        }
+    }
+
+    // BucketFriend 저장 메서드
+    private void saveBucketFriend(UserLogin user, UserLogin friend, Bucket bucket) {
+        // 중복 저장 방지
+        if (!bucketFriendRepository.existsByUserLoginAndFriendAndBucket(user, friend, bucket)) {
+            BucketFriend bucketFriend = new BucketFriend();
+            bucketFriend.setUserLogin(user);
+            bucketFriend.setFriend(friend);
+            bucketFriend.setBucket(bucket);
+            bucketFriendRepository.save(bucketFriend);
+        }
+    }
+
+
     private static Bucket getBucket(String  userId, WriteBucketDTO writeBucketDTO, UserProfile userProfile) {
         String userMbti = userProfile.getMbti();
 

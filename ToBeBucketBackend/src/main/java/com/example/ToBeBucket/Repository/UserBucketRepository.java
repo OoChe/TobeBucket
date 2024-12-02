@@ -10,5 +10,7 @@ import java.util.List;
 public interface UserBucketRepository extends JpaRepository<UserBucket,Integer> {
     List<UserBucket> findByUserIdAndBucketId(UserLogin user, Bucket bucket);
     List<UserBucket> findByUserId(UserLogin user);
+    boolean existsByUserIdAndBucketId(UserLogin userId, Bucket bucketId);
+
 
 }
