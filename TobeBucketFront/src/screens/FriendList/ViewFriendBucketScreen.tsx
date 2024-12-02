@@ -5,60 +5,24 @@
  - 구성 : 헤더, 친구 프로필 정보, 버킷 피드(추가 예정)
  */
 
-import React, { useState, useEffect } from 'react'; // react에서 useState, useEffect 임포트
-import { View, Text, TouchableOpacity, Image } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, TouchableOpacity, Image, ScrollView } from 'react-native';
 import styles from '../../styles/ViewFriendBucketScreen.styles';
 import PageTitle from '../../components/PageTitle';
 import FriendProfileShort from '../../components/FriendProfileShort';
+import MbtiFeedShort from '../../components/MbtiFeedShort';
 import { useNavigation, useRoute } from '@react-navigation/native';
-import { FriendBucketResponse, getFriendBucket } from '../../apis/friend/friendService';
-
-
-
-const DUMMY_FRIEND_BUCKET_INFO = {
-    profile: {
-       nickname: "iloveham",
-       mbti: "ENFP",
-       intro: "럭키비키자나",
-       profileImage: '../../assets/images/hamsterProfile.png'
-    },
-    bucketList: [
-  	 {
-  	   bucketName: "제주도 한달 살이",
-  	   bucketContent: "재밌당.",
-  	   achieveDate: "24.12.08"
-  	 },
-  	 {
-  	   bucketName: "제주도 한달 살이",
-  	   bucketContent: "재밌당.",
-  	   achieveDate: "24.12.08"
-  	 },
-    ]
-};
 
 
 const ViewFriendBucketScreen = () => {
-  const [friendInfo, setFriendInfo] = useState<FriendBucketResponse>();
+  const navigation = useNavigation();
+  const [friendInfo, setFriendInfo] = useState<FriendBucketResponse | null>(null);
   const route = useRoute();
-  const { userId } = route.params as { userId: string };
-
-  const loadFriendBucket = async (friendId) => {
-    console.log(`Fetching data for userId: ${friendId}`);
-
-    try {
-      const data = await getFriendBucket(friendId);
-      console.log(data)
-      setFriendInfo(data);
-    } catch (err: any) {
-      console.error('친구 버킷 피드 로드 오류:', err);
-      setError(err.message || '친구 피드를 불러오는 중 오류가 발생했습니다.');
-    }
+  const { userId, friendData } = route.params as {
+    userId: string;
+    friendData: FriendBucketResponse;
   };
 
-  useEffect(() => {
-    console.log('Received userId in FriendBucket:', userId);
-    loadFriendBucket(userId);
-  }, [userId]);
 
   return (
     <View style={styles.main}>
@@ -72,11 +36,27 @@ const ViewFriendBucketScreen = () => {
 
       {/* 친구 프로필 정보 */}
       <FriendProfileShort
-        profileImage={DUMMY_FRIEND_BUCKET_INFO.profile.profileImage}
-        mbti={DUMMY_FRIEND_BUCKET_INFO.profile.mbti}
-        nickname={DUMMY_FRIEND_BUCKET_INFO.profile.nickname}
-        intro={DUMMY_FRIEND_BUCKET_INFO.profile.intro}
+        profileImage={friendData.profile.profileImage}
+        mbti={friendData.profile.mbti}
+        nickname={friendData.profile.nickname}
+        intro={friendData.profile.intro}
       />
+
+      <ScrollView>
+        {friendData.bucketList.length > 0 ? (
+          friendData.bucketList.map((bucket, index) => (
+          <MbtiFeedShort
+            key={index}
+            bucketName={bucket.bucketName}
+            bucketContent={bucket.bucketContent}
+            achieveDate={bucket.achieveDate ? new Date(bucket.achieveDate) : null}
+            achievementMedia={bucket.achievementMedia}
+          />
+        ))
+       ) : (
+           <Text style={[styles.except]}>친구가 공개한 작성된 버킷이 없어요.</Text>
+        )}
+      </ScrollView>
 
     </View>
 

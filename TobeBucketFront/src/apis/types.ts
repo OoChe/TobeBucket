@@ -95,13 +95,18 @@ export interface EditBucketResponse {
   code: string;
   message: string;
 }
+export interface semiGoalRecordData {
+  bucketId: number;
+  stickerId: number;
+  semiGoalId: number;
+  achieveDate: string;
+}
 
 export interface achieveRecordData {
   bucketId: number;
   stickerId: number;
   achieveDate: string;
   goalReview: string;
-  achievementMedia: string;
 }
 
 export interface achieveRecordResponse {
@@ -191,7 +196,7 @@ export interface Bucket {
   bucketName: string;
   bucketContent: string;
   achieveDate: string;
-  profileImage: string;
+  achievementMedia: string;
 }
 
 export interface FriendBucketResponse {
@@ -199,4 +204,47 @@ export interface FriendBucketResponse {
   message: string;
   profile: Friend;
   bucketList: Bucket[];
+}
+
+export interface UserListResponse {
+  code: string;
+  message: string;
+  userList: Friend[];
+}
+
+export interface FriendAdd {
+  friendId: string;
+}
+
+export interface FriendDelete {
+  friendId: string;
+}
+
+export interface MyInfoResponse {
+  code: string;
+  message: string;
+  profile?: {
+    nickname: string;
+    mbti: string;
+    intro: string;
+    profileImage: string;
+  };
+  point?: number;
+  achieveRate?: number;
+  achieveGraph?: {
+    year: number;
+    first: number;
+    second: number;
+  }[];
+  categoryRate?: {
+    category: number;
+    rate: number;
+  }[];
+}
+
+export interface InfoChange {
+  nickname?: string;
+  mbti?: string;
+  intro?: string;
+  profileImage?: string;
 }

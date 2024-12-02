@@ -1,62 +1,68 @@
 /*
- NOTICE : handleAddFriend 함수 내에서 추가 후 서버 전송, response 받은 friendStatus에 따라 예외 처리 필요
-
  [친구 검색 스크린]
  - 구성 : 헤더, 검색 안내 문구, 검색 입력, 친구 목록
  - 함수
  1) 친구 신청 함수
  - handleAddFriend: 선택된 친구 신청 전송 (보완 필요)
+ 2) 친구 목록 렌더링 함수
+ - renderFriendItem: 자기와 친구가 아닌 친구 리스트 출력
  */
 
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Image, FlatList, Alert } from 'react-native';
 import styles from '../../styles/SearchFriendScreen.styles';
 import SearchFriendShort from '../../components/SearchFriendShort';
-
-const MY_USER_ID = "meee"
-
-const DUMMY_FRIENDS = [
-  { id: 'ham2', nickname: '햄햄이', mbti: 'ENFP', profileImage: require('../../assets/images/hamsterProfile.png') },
-  { id: 'ham3', nickname: '햄햄삼', mbti: 'ENFP', profileImage: require('../../assets/images/hamsterProfile.png') },
-  { id: 'ham4', nickname: '햄햄사', mbti: 'ENFP', profileImage: require('../../assets/images/hamsterProfile.png') },
-  { id: 'ham5', nickname: '햄햄오', mbti: 'ENFP', profileImage: require('../../assets/images/hamsterProfile.png') },
-  { id: 'ham6', nickname: '햄햄육', mbti: 'ENFP', profileImage: require('../../assets/images/hamsterProfile.png') },
-  { id: 'ham7', nickname: '햄햄칠', mbti: 'ENFP', profileImage: require('../../assets/images/hamsterProfile.png') },
-];
+import { useRoute } from '@react-navigation/native';
+import { Friend, addFriend } from '../../apis/friend/friendService';
 
 const SearchFriendScreen = ({ navigation }: any) => {
   const [searchText, setSearchText] = useState<string>('');
-  const filteredFriends = DUMMY_FRIENDS.filter((friend) =>
-    friend.id.toLowerCase().includes(searchText.toLowerCase())
+  const [requestedFriends, setRequestedFriends] = useState<string[]>([]);
+  const route = useRoute();
+  const { userData = [] } = route.params as { userData: Friend[] | [] };
+  const filteredFriends = userData.filter((friend) =>
+    friend.userId.toLowerCase().includes(searchText.toLowerCase())
   );
 
   {/* 친구 신청 함수 */}
-  const handleAddFriend = (id: string) => {
+  const handleAddFriend = async (id: string) => {
     const requestBody = {
-          targetUserId: id,
-          userId: MY_USER_ID,
-        };
-
-    console.log(requestBody);
-    console.log(`${id}에게 친구 신청을 보냈습니다.`);
-
+        friendId: id,
+    };
+    try {
+      await addFriend(requestBody);
+      setRequestedFriends((prev) => [...prev, id]);
+      Alert.alert(
+        "친구 신청 완료",
+        `${id}에게 친구 신청을 보냈습니다.`,
+        [{ text: "확인", onPress: () => console.log("확인 버튼 눌림") }]
+      );
+    } catch (err: any) {
+      console.error('친구 추가하기 오류:', err);
+      setError(err.message || '친구를 추가하는 중 오류가 발생했습니다.');
+    }
     Alert.alert(
       "친구 신청 완료",
       `${id}에게 친구 신청을 보냈습니다.`,
       [{ text: "확인", onPress: () => console.log("확인 버튼 눌림") }]
     );
-
   };
 
-  {/* 친구 목록 */}
-  const renderFriendItem = ({ item }: { item: typeof DUMMY_FRIENDS[0] }) => (
-    <SearchFriendShort
-      profileImage={item.profileImage}
-      mbti={item.mbti}
-      nickname={item.nickname}
-      onAdd={() => handleAddFriend(item.id)}
-    />
-  );
+  {/* 친구 목록 렌더링 */}
+  const renderFriendItem = ({ item, index }: { item: typeof userData[0] }) => {
+    const isRequested = requestedFriends.includes(item.userId);
+
+    return (
+      <SearchFriendShort
+        key={index}
+        profileImage={item.profileImage}
+        mbti={item.mbti}
+        nickname={item.nickname}
+        onAdd={() => handleAddFriend(item.userId)}
+        isRequested={isRequested}
+      />
+    );
+  };
 
   return (
     <View style={styles.main}>
@@ -89,15 +95,22 @@ const SearchFriendScreen = ({ navigation }: any) => {
       </View>
 
       {/* 친구 목록 */}
+      {userData.length > 0 ? (
       <FlatList
         data={filteredFriends}
         renderItem={renderFriendItem}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item) => item.userId}
         contentContainerStyle={styles.friendList}
         ListEmptyComponent={
           <Text style={styles.noResultsText}>검색 결과가 없습니다.</Text>
-        }
-      />
+        } />) :  (
+      <View style={styles.noFriendsContainer}>
+          <Text style={styles.noFriendsText}>
+            모든 사용자와 친구 상태이거나 이미 친구 요청을 전송하였습니다.
+          </Text>
+        </View>
+      )}
+
     </View>
   );
 };

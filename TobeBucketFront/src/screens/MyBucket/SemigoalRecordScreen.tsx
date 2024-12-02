@@ -16,6 +16,11 @@ import PageSmallTitle from '../../components/PageSmallTitle';
 import {dateToStr, getToday} from '../../components/dateFunc';
 import StickerSelector from '../../components/StickerSelector';
 import styles from '../../styles/AchievementRecordScreen.styles';
+import {
+  getUnlockedSticker,
+  semiAchieveRecord,
+} from '../../apis/bucket/achieveService';
+import {semiGoalRecordData} from '../../apis/types';
 
 interface semiGoalProps {
   bucketId: number;
@@ -31,8 +36,8 @@ const SemigoalRecordScreen = () => {
     route.params as semiGoalProps;
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
-  const [stickerProcess, setStickerProcess] = useState(3);
-  const [bucketAchieveInfo, setBucketAchieveInfo] = useState({
+  const [stickerProcess, setStickerProcess] = useState(0);
+  const [semiAchieveInfo, setsemiAchieveInfo] = useState({
     bucketId: bucketId,
     stickerId: -1,
     semiGoalId: semiGoalId,
@@ -55,12 +60,12 @@ const SemigoalRecordScreen = () => {
   const validateInputs = () => {
     const missingFields = [];
     if (
-      bucketAchieveInfo.stickerId === null ||
-      bucketAchieveInfo.stickerId === undefined
+      semiAchieveInfo.stickerId === null ||
+      semiAchieveInfo.stickerId === undefined
     ) {
       missingFields.push('스티커');
     }
-    if (!bucketAchieveInfo.achieveDate) missingFields.push('달성 날짜');
+    if (!semiAchieveInfo.achieveDate) missingFields.push('달성 날짜');
 
     if (missingFields.length > 0) {
       const errorMsg = missingFields.join(', ').replace(/,([^,]*)$/, ' 및$1');
@@ -73,32 +78,57 @@ const SemigoalRecordScreen = () => {
   const handleConfirm = (date: Date) => {
     const formattedDate =
       date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate();
-    setBucketAchieveInfo(prevData => ({
+    setsemiAchieveInfo(prevData => ({
       ...prevData,
       achieveDate: formattedDate,
     }));
     hideDatePicker();
   };
 
-  const submitAchievement = () => {
-    validateInputs();
-    console.log(bucketAchieveInfo);
+  const submitSemiAchievement = async () => {
+    if (validateInputs()) {
+      // 중간 목표 필터링
+      const semiRecordInfo: semiGoalRecordData = {
+        bucketId: semiAchieveInfo.bucketId,
+        stickerId: semiAchieveInfo.stickerId,
+        semiGoalId: semiAchieveInfo.semiGoalId,
+        achieveDate: semiAchieveInfo.achieveDate,
+      };
+
+      // 데이터 확인을 위한 로그 출력
+      console.log(
+        '중간 목표 달성 기록 데이터:',
+        JSON.stringify(semiRecordInfo, null, 2),
+      );
+
+      try {
+        // 중간 목표 달성 기록 API 호출
+        const response = await semiAchieveRecord(semiRecordInfo);
+        Alert.alert('성공', '중간 목표를 달성하였습니다!');
+        navigation.navigate('MyBucketDetail', {
+          screen: 'MyBucketDetail',
+          params: {bucketId},
+        });
+      } catch (error: any) {
+        console.error('중간 목표 달성 기록 오류:', error);
+        const errorMessage =
+          error.response?.data?.message ||
+          '중간 목표 달성 기록 중 오류가 발생했습니다.';
+        Alert.alert('오류', errorMessage);
+      }
+    }
+  };
+
+  const getStickerNum = async () => {
+    const data = await getUnlockedSticker();
+    setStickerProcess(data);
+    console.log('받아온 데이터: ', data);
   };
 
   useEffect(() => {
-    const fetchUnlockedIndex = async () => {
-      console.log(stickerProcess);
-      // try {
-      //   const response = await axios.get('https://your-api-url.com/unlocked-sticker-index');
-      //   setUnlockedIndex(response.data.unlockedIndex);
-      // } catch (error) {
-      //   console.error('Error fetching unlocked index:', error);
-      // }
-    };
-    fetchUnlockedIndex();
+    getStickerNum();
     if (bucketId) {
-      console.log('bucketId:', bucketId); // bucketId 값 확인
-      setBucketAchieveInfo(prevData => ({
+      setsemiAchieveInfo(prevData => ({
         ...prevData,
         bucketId: bucketId, // bucketId 설정
       }));
@@ -142,7 +172,7 @@ const SemigoalRecordScreen = () => {
           <StickerSelector
             unlockedIndex={stickerProcess}
             onSelectSticker={stickerId => {
-              setBucketAchieveInfo(prevData => ({
+              setsemiAchieveInfo(prevData => ({
                 ...prevData,
                 stickerId: stickerId, // 선택된 스티커 ID 업데이트
               }));
@@ -175,7 +205,7 @@ const SemigoalRecordScreen = () => {
         </View>
         <TouchableOpacity
           style={styles.saveButton}
-          onPress={() => submitAchievement()}>
+          onPress={() => submitSemiAchievement()}>
           <Text style={styles.saveText}>저장하기</Text>
         </TouchableOpacity>
         <Text

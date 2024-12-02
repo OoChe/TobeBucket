@@ -93,7 +93,9 @@ const MyBucketShort = ({
             <Text style={styles.descriptionText} numberOfLines={1}>
               {bucketContent}
             </Text>
-            <Text style={styles.dateText}>목표 날짜 : {goalDate}</Text>
+            {goalDate ? (
+              <Text style={styles.dateText}>목표 날짜 : {goalDate}</Text>
+            ) : null}
           </View>
         </View>
         {/* 아래 버튼 영역 */}
