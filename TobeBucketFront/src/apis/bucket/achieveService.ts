@@ -1,6 +1,5 @@
 import apiClient from '../apiClient';
 import {
-  achieveRecordData,
   achieveRecordResponse,
   semiGoalRecordData,
 } from '../types';
@@ -39,6 +38,10 @@ export const semiAchieveRecord = async (
 export const achieveRecord = async (
   formData: FormData,
 ): Promise<achieveRecordResponse> => {
-  const response = await apiClient.put('/home/achievement-record', formData);
+  const response = await apiClient.put('/home/achievement-record', formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
   return response.data;
 };

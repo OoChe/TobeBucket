@@ -37,6 +37,7 @@ const AchievementRecordScreen = () => {
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
   const [stickerProcess, setStickerProcess] = useState(0);
+  const [achievementMedia, setAchevementMedia] = useState();
   const [bucketAchieveInfo, setBucketAchieveInfo] = useState({
     bucketId: bucketId,
     stickerId: -1,
@@ -100,10 +101,8 @@ const AchievementRecordScreen = () => {
         console.error('이미지 선택 에러: ', response.errorMessage);
       } else {
         console.log('이미지 선택 완료: ', response.assets[0].uri);
-        setBucketAchieveInfo(prevData => ({
-          ...prevData,
-          achievementMedia: response.assets[0].uri,
-        }));
+        setAchevementMedia(response.assets[0].uri);
+        Alert.alert('이미지가 선택되었습니다');
       }
     });
   };
@@ -112,9 +111,9 @@ const AchievementRecordScreen = () => {
     if (validateInputs()) {
       const formData = new FormData();
       // 이미지 추가하기
-      if (bucketAchieveInfo.achievementMedia) {
+      if (achievementMedia) {
         const file = {
-          uri: bucketAchieveInfo.achievementMedia,
+          uri: achievementMedia,
           type: 'image/jpeg', // MIME 타입 (예: 'image/jpeg', 'image/png')
           name: 'file.jpg', // 서버에 업로드할 때 사용할 파일 이름
         };
@@ -130,13 +129,13 @@ const AchievementRecordScreen = () => {
         goalReview: bucketAchieveInfo.goalReview,
       };
       formData.append(
-        'achievementRecordInfo',
+        'achieveBucketDTO',
         JSON.stringify(achievementRecordInfo), // JSON 데이터로 변환
       );
       console.log('전송할 FormData:', formData);
       try {
         // 목표 달성 기록 API 호출
-        const response = await achieveRecord(formData);
+        await achieveRecord(formData);
         Alert.alert('성공', '목표를 달성하였습니다.');
         navigation.navigate('MyBucket', {screen: 'MyBucketList'});
       } catch (error: any) {
