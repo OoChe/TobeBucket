@@ -3,20 +3,17 @@ package com.example.ToBeBucket.Controller;
 import com.example.ToBeBucket.DTO.AchieveBucketDTO;
 import com.example.ToBeBucket.DTO.SemiGoalDTO;
 import com.example.ToBeBucket.Service.AchieveBucketService;
+import com.example.ToBeBucket.Service.S3FileUploadService;
 import com.example.ToBeBucket.Service.UserProfileService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.time.LocalDate;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -25,6 +22,7 @@ import java.util.Map;
 public class AchieveBucketController {
     private final AchieveBucketService achieveBucketService; // 서비스 클래스를 주입
     private final UserProfileService userProfileService;
+    private final S3FileUploadService s3FileUploadService;
 
     // 프론트에 sticker process 반환용 Get mapping
     @GetMapping("/tobebucket/home/achievement-record")
@@ -48,12 +46,20 @@ public class AchieveBucketController {
     // 버킷 목표 달성 기록
     @PutMapping("/tobebucket/home/achievement-record")
     public ResponseEntity<Map<String,Object>> recordBucketAchievement(
-            @RequestBody AchieveBucketDTO achieveBucketDTO){
+            @RequestPart("achieveBucketDTO") AchieveBucketDTO achieveBucketDTO,
+            @RequestPart(value = "file", required = false) MultipartFile file){
         Map<String,Object> response = new LinkedHashMap<>();
         String userId = SecurityContextHolder.getContext().getAuthentication().getName();
         try {
             //request한 것 DTO로 가져오기
             Integer bucketId = achieveBucketDTO.getBucketId();
+            String fileUrl = null;
+
+            // 파일이 존재하는 경우에만 S3 업로드 수행
+            if (file != null && !file.isEmpty()) {
+                fileUrl = s3FileUploadService.saveFileToS3(file);
+                achieveBucketDTO.setAchievementMedia(fileUrl);  // 파일 URL을 DTO에 설정
+            }
 
             // 서비스 호출해서 DB에 저장
             achieveBucketService.saveAchieveBucket(userId, achieveBucketDTO);
