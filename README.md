@@ -4,7 +4,15 @@
 
 ## 🍀럭키버킷팀🍀
 MBTI별 버킷리스트 관리 프로그램 'ToBucket'입니다.
+<br><br>
 
-아래는 ToBucket의 Usecase Diagram입니다.
 
+### 1. 실행 방법
+Release의 v1.0.0/app-release.apk 파일을 다운 받아 안드로이드 휴대폰에서 설치하면 사용할 수 있습니다.
+
+<br>
+
+
+### 2. 유스케이스 다이어그램
+아래는 ToBucket의 유스케이스 다이어그램입니다.
 <img src="https://github.com/OoChe/TobeBucket/blob/main/assets/usecase.png">
