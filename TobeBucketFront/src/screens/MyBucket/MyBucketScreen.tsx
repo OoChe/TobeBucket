@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { ScrollView, Text, View, Image, ActivityIndicator } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import React, {useState, useCallback} from 'react';
+import {ScrollView, Text, View, Image, ActivityIndicator} from 'react-native';
+import {useNavigation, useFocusEffect} from '@react-navigation/native';
 import ViewMyBucketToggle from '../../components/ViewMyBucketToggle';
 import PageTitle from '../../components/PageTitle';
 import CustomButton from '../../components/CustomButton';
@@ -9,12 +9,19 @@ import ViewBucketList from '../../components/ViewBucketList';
 import CryingBucket from '../../assets/images/CryingBucketImg.png';
 import noAchievedBucket from '../../assets/images/noAchievedBucket.png';
 import styles from '../../styles/MyBucketScreen.styles';
-import {getMyUpcomingBucketList, getMyAchievedBucketList} from '../../apis/bucket/bucketService';
-import { upcomingBucket, achievedBucket } from '../../apis/types';
+import {
+  getMyUpcomingBucketList,
+  getMyAchievedBucketList,
+} from '../../apis/bucket/bucketService';
+import {upcomingBucket, achievedBucket} from '../../apis/types';
 
 const MyBucketScreen = () => {
-  const [upcomingBucketList, setUpcomingBucketList] = useState<upcomingBucket[]>([]);
-  const [achievedBucketList, setAchievedBucketList] = useState<achievedBucket[]>([]);
+  const [upcomingBucketList, setUpcomingBucketList] = useState<
+    upcomingBucket[]
+  >([]);
+  const [achievedBucketList, setAchievedBucketList] = useState<
+    achievedBucket[]
+  >([]);
   const [loading, setLoading] = useState(true);
   const [viewMode, setViewMode] = useState<false | true>(false);
   const navigation = useNavigation();
@@ -27,26 +34,31 @@ const MyBucketScreen = () => {
   };
   const getMyBucketList = async (mode: typeof viewMode) => {
     try {
-        setLoading(true);
-        if (viewMode === false) {
-          const data = await getMyUpcomingBucketList(false);
-          setUpcomingBucketList(data);
-        } else {
-          const data = await getMyAchievedBucketList(true);
-          setAchievedBucketList(data);
-          console.log(achievedBucketList);
-        }
-    setLoading(false);
+      setLoading(true);
+      if (viewMode === false) {
+        const data = await getMyUpcomingBucketList(false);
+        setUpcomingBucketList(data);
+      } else {
+        const data = await getMyAchievedBucketList(true);
+        setAchievedBucketList(data);
+        console.log(achievedBucketList);
+      }
+      setLoading(false);
     } catch (err: any) {
       console.error('달성 예정 로드 오류:', err);
-      setError(err.message || '스크린에서 버킷 목록을 불러오는 중 오류가 발생했습니다.');
+      setError(
+        err.message ||
+          '스크린에서 버킷 목록을 불러오는 중 오류가 발생했습니다.',
+      );
     }
   };
 
-  useEffect(() => {
-    getMyBucketList(viewMode);
-    renderBucketList();
-  }, [viewMode]);
+  useFocusEffect(
+    useCallback(() => {
+      getMyBucketList(viewMode);
+      renderBucketList();
+    }, [viewMode]),
+  );
 
   const renderBucketList = () => {
     if (viewMode === false) {
@@ -78,8 +90,10 @@ const MyBucketScreen = () => {
         <ScrollView contentInsetAdjustmentBehavior="automatic">
           <Text style={styles.smallText}>아직 달성한 버킷이 없어요</Text>
           <Image source={noAchievedBucket} style={styles.imageStyle} />
-          <Text style={styles.largeText}>열심히 노력해서 
-          {"\n"} 버킷을 달성해봐요!</Text>
+          <Text style={styles.largeText}>
+            열심히 노력해서
+            {'\n'} 버킷을 달성해봐요!
+          </Text>
         </ScrollView>
       );
     }

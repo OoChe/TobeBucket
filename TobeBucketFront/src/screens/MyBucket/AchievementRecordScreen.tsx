@@ -14,6 +14,7 @@ import {
   Alert,
 } from 'react-native';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
+import {launchImageLibrary} from 'react-native-image-picker';
 import PageSmallTitle from '../../components/PageSmallTitle';
 import {dateToStr, getToday} from '../../components/dateFunc';
 import StickerSelector from '../../components/StickerSelector';
@@ -33,6 +34,7 @@ const AchievementRecordScreen = () => {
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
   const [stickerProcess, setStickerProcess] = useState(0);
+  const [achievementMedia, setAchevementMedia] = useState();
   const [bucketAchieveInfo, setBucketAchieveInfo] = useState({
     bucketId: bucketId,
     stickerId: -1,
@@ -82,34 +84,64 @@ const AchievementRecordScreen = () => {
     hideDatePicker();
   };
 
-  const submitAchievement = async () => {
-    validateInputs();
-    // 중간 목표 필터링
-    const achievementRecordInfo: achieveRecordData = {
-      bucketId: bucketAchieveInfo.bucketId,
-      stickerId: bucketAchieveInfo.stickerId,
-      achieveDate: bucketAchieveInfo.achieveDate,
-      goalReview: bucketAchieveInfo.goalReview,
-      achievementMedia: bucketAchieveInfo.achievementMedia,
+  /* 이미지 업로드 */
+  const handleUploadImage = () => {
+    const options = {
+      mediaType: 'photo',
+      quality: 0.8,
     };
 
-    // 데이터 확인을 위한 로그 출력
-    console.log(
-      '목표 달성 기록 데이터:',
-      JSON.stringify(achievementRecordInfo, null, 2),
-    );
+    launchImageLibrary(options, response => {
+      if (response.didCancel) {
+        console.log('이미지 선택 취소');
+      } else if (response.errorMessage) {
+        console.error('이미지 선택 에러: ', response.errorMessage);
+      } else {
+        console.log('이미지 선택 완료: ', response.assets[0].uri);
+        setAchevementMedia(response.assets[0].uri);
+        Alert.alert('이미지가 선택되었습니다');
+      }
+    });
+  };
 
-    try {
-      // 목표 달성 기록 API 호출
-      const response = await achieveRecord(achievementRecordInfo);
-      Alert.alert('성공', '목표를 달성하였습니다.');
-      navigation.navigate('MyBucket', {screen: 'MyBucketList'});
-    } catch (error: any) {
-      console.error('목표 달성 기록 오류:', error);
-      const errorMessage =
-        error.response?.data?.message ||
-        '목표 달성 기록 중 오류가 발생했습니다.';
-      Alert.alert('오류', errorMessage);
+  const submitAchievement = async () => {
+    if (validateInputs()) {
+      const formData = new FormData();
+      // 이미지 추가하기
+      if (achievementMedia) {
+        const file = {
+          uri: achievementMedia,
+          type: 'image/jpeg', // MIME 타입 (예: 'image/jpeg', 'image/png')
+          name: 'file.jpg', // 서버에 업로드할 때 사용할 파일 이름
+        };
+        formData.append('file', file);
+        console.log('파일 추가됨:', file);
+      }
+
+      // 중간 목표 필터링
+      const achievementRecordInfo: achieveRecordData = {
+        bucketId: bucketAchieveInfo.bucketId,
+        stickerId: bucketAchieveInfo.stickerId,
+        achieveDate: bucketAchieveInfo.achieveDate,
+        goalReview: bucketAchieveInfo.goalReview,
+      };
+      formData.append(
+        'achieveBucketDTO',
+        JSON.stringify(achievementRecordInfo), // JSON 데이터로 변환
+      );
+      console.log('전송할 FormData:', formData);
+      try {
+        // 목표 달성 기록 API 호출
+        await achieveRecord(formData);
+        Alert.alert('성공', '목표를 달성하였습니다.');
+        navigation.navigate('MyBucket', {screen: 'MyBucketList'});
+      } catch (error: any) {
+        console.error('목표 달성 기록 오류:', error);
+        const errorMessage =
+          error.response?.data?.message ||
+          '목표 달성 기록 중 오류가 발생했습니다.';
+        Alert.alert('오류', errorMessage);
+      }
     }
   };
 
@@ -197,7 +229,9 @@ const AchievementRecordScreen = () => {
             />
           </View>
           <Text style={styles.subTitleText}>3. 사진 첨부</Text>
-          <TouchableOpacity style={styles.imageContainer}>
+          <TouchableOpacity
+            style={styles.imageContainer}
+            onPress={handleUploadImage}>
             <Image
               source={require('../../assets/icons/image.png')}
               style={{
